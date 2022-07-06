@@ -2,7 +2,7 @@ import React from 'react'
 
 type Props = {}
 
-export const {{pascalCase name}}: React.FC<Props> = () => {
+export const Hero: React.FC<Props> = () => {
 
 	return (<>
 

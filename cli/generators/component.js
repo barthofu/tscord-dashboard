@@ -26,13 +26,18 @@ module.exports = (plop) => {
         actions: [
             {
                 type: 'add',
-                path: '../src/components/{{camelCase category}}/{{pascalCase name}}/{{pascalCase name}}.tsx',
+                path: '../src/components/{{camelCase category}}/{{pascalCase name}}.tsx',
                 templateFile: 'templates/component.tsx.hbs',
             },
+            // {
+            //     type: 'add',
+            //     path: '../src/components/{{camelCase category}}/{{pascalCase name}}/{{pascalCase name}}.module.scss',
+            //     template: '',
+            // },
             {
-                type: 'add',
-                path: '../src/components/{{camelCase category}}/{{pascalCase name}}/{{pascalCase name}}.module.scss',
-                template: '',
+                type: 'append',
+                path: '../src/components/{{camelCase category}}/index.ts',
+                template: 'export * from \'./{{pascalCase name}}\'',
             }
         ]
     })

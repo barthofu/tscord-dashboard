@@ -18,15 +18,19 @@
 	"experimentalDecorators": true,
 	"emitDecoratorMetadata": true,
 
+	"baseUrl": ".",
 	"paths": {
 
-		"@config/*": ["./src/config/*"],
-		"@elements/*": ["./src/components/elements/*"],
-		"@layouts/*": ["./src/components/layouts/*"],
-		"@modules/*": ["./src/components/modules/*"],
-		"@templates/*": ["./src/components/templates/*"],
+		"@services": ["src/core/services"],
+		"@elements": ["./src/components/elements"],
+		"@layouts": ["./src/components/layouts"],
+		"@modules": ["./src/components/modules"],
+		"@templates": ["./src/components/templates"],
+		
+		"@config/*": ["src/core/config/*"],
+		"@core/*": ["src/core/*"],
 		"@hooks/*": ["./src/hooks/*"],
-		"@utils/*": ["./src/utils/*"],
+		"@utils/*": ["src/core/utils/*"],
 		"@styles/*": ["./public/styles/*"],
 		"@assets/*": ["./public/assets/*"]
 	}
