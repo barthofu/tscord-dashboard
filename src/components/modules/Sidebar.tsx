@@ -10,7 +10,7 @@ type Props = {
     tabs: {
         name: string
         href: string
-        icon: string
+        icon: React.ReactNode
     }[]
 }
 
