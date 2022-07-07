@@ -1,6 +1,7 @@
 import { Box, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerOverlay, Flex, HStack, Icon, Link, Stack, Text, useColorModeValue, useDisclosure } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
+import Image from 'next/image'
 import React from 'react'
 import { IoMenuOutline } from "react-icons/io5"
 
@@ -18,6 +19,11 @@ const Logo: React.FC = () => {
 
     return (
         <Flex align='center' direction='column'>
+            <Text
+                fontSize='2xl'
+                fontWeight='bold'
+                mb='1em'
+            >TSCord Template</Text>
             <HSeparator mb='20px' />
         </Flex>
     )
@@ -48,7 +54,6 @@ const Tabs: React.FC<Props> = ({ tabs }) => {
     const isActiveTab = (route: string) => router.pathname.includes(route.toLowerCase())
 
     const activeColor = useColorModeValue('gray.700', 'white')
-    const inactiveColor = useColorModeValue('secondaryGray.600', 'secondaryGray.600')
     const activeIcon = useColorModeValue('brand.500', 'white')
     const textColor = useColorModeValue('secondaryGray.500', 'white')
     const brandColor = useColorModeValue('brand.500', 'brand.400')

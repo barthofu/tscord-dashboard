@@ -1,22 +1,12 @@
 import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Flex, Link, useColorModeValue } from '@chakra-ui/react'
 import { AdminNavbarLinks } from '@modules'
-import NextLink from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 type Props = {
     breadcrumbs: string[]
 }
 
 export const AdminNavbar: React.FC<Props> = ({ breadcrumbs }) => {
-
-    const [scrolled, setScrolled] = useState(false)
-    const toggleScroll = () => setScrolled(window.scrollY > 1)
-
-    useEffect(() => {
-
-        window.addEventListener('scroll', toggleScroll)
-        return () => window.removeEventListener('scroll', toggleScroll)
-    }, [])
 
     const mainText = useColorModeValue('navy.700', 'white'),
           secondaryText = useColorModeValue('gray.700', 'white')
@@ -26,9 +16,10 @@ export const AdminNavbar: React.FC<Props> = ({ breadcrumbs }) => {
         <Box
             position='fixed'
             boxShadow='none'
-            bg={useColorModeValue('rgba(244, 247, 254, 0.2)', 'rgba(11,20,55,0.5)')}
+            bg='transparent'
             borderColor='transparent'
             filter='none'
+            zIndex={10}
             backdropFilter='blur(20px)'
             backgroundPosition='center'
             backgroundSize='cover'
@@ -44,8 +35,8 @@ export const AdminNavbar: React.FC<Props> = ({ breadcrumbs }) => {
             minH='75px'
             justifyContent={{ xl: 'center' }}
             lineHeight='25.6px'
-            mx='auto'
-            mt='0px'
+            // mx='auto'
+            // mt='0px'
             pb='8px'
             right={{ base: '12px', md: '30px', lg: '30px', xl: '30px' }}
             px={{
@@ -61,7 +52,7 @@ export const AdminNavbar: React.FC<Props> = ({ breadcrumbs }) => {
                 base: 'calc(100vw - 6%)',
                 md: 'calc(100vw - 8%)',
                 lg: 'calc(100vw - 6%)',
-                xl: 'calc(100vw - 350px)',
+                xl: 'calc(100vw - 355px)',
                 '2xl': 'calc(100vw - 365px)',
             }}
         >
@@ -91,14 +82,14 @@ export const AdminNavbar: React.FC<Props> = ({ breadcrumbs }) => {
                     </Breadcrumb>
 
                     {/* Here we create navbar brand, based on route name */}
+                    
                     <Link
-                        as={NextLink}
                         color={mainText}
                         href='#'
                         bg='inherit'
                         borderRadius='inherit'
                         fontWeight='bold'
-                        fontSize='34px'
+                        fontSize='3xl'
                         _hover={{ color: { mainText } }}
                         _active={{ bg: 'inherit', transform: 'none', borderColor: 'transparent' }}
                         _focus={{ boxShadow: 'none' }}
@@ -109,13 +100,7 @@ export const AdminNavbar: React.FC<Props> = ({ breadcrumbs }) => {
                 </Box>
 
                 <Box ms='auto' w={{ sm: '100%', md: 'unset' }}>
-                    <AdminNavbarLinks
-                        // onOpen={props.onOpen}
-                        // logoText={props.logoText}
-                        // secondary={props.secondary}
-                        // fixed={props.fixed}
-                        // scrolled={scrolled}
-                    />
+                    <AdminNavbarLinks/>
                 </Box>
             </Flex>
         </Box>

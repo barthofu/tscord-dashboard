@@ -29,7 +29,17 @@ export const AdminDashboard: React.FC<Props> = ({ breadcrumbs, children }) => {
                 transitionTimingFunction='linear, linear, ease'
             >
                 <AdminNavbar breadcrumbs={breadcrumbs}/>
-                {children}
+                <Box
+                    mx='auto'
+                    p={{ base: "20px", md: "30px" }}
+                    pe='20px'
+                    minH='100vh'
+                    pt='50px'
+                >
+                    <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
+                        {children}
+                    </Box>
+                </Box>
             </Box>
         </Box>
     </>)

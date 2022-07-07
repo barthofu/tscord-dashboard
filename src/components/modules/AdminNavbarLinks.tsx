@@ -13,12 +13,12 @@ export const AdminNavbarLinks: React.FC<Props> = () => {
 
     const { colorMode, toggleColorMode } = useColorMode()
 
-    let menuBg = useColorModeValue("white", "navy.800");
+    let menuBg = useColorModeValue("white", "gray.800");
     const navbarIcon = useColorModeValue("gray.400", "white");
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const shadow = useColorModeValue(
         "14px 17px 40px 4px rgba(112, 144, 176, 0.18)",
-        "14px 17px 40px 4px rgba(112, 144, 176, 0.06)"
+        "14px 17px 40px 4px rgba(112, 144, 176, 0.04)"
     );
 
 	return (<>
@@ -118,7 +118,7 @@ export const AdminNavbarLinks: React.FC<Props> = () => {
                         _hover={{ cursor: "pointer" }}
                         color='white'
                         name='Bartholomé Gili'
-                        bg='#11047A'
+                        bg={useColorModeValue('gray.500', 'gray.700')}
                         size='sm'
                         w='40px'
                         h='40px'
