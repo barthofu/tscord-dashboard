@@ -18,7 +18,6 @@ module.exports = (plop) => {
                     'elements',
                     'modules',
                     'layouts',
-                    'templates',
                 ]
             }
         ],

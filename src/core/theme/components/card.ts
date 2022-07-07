@@ -2,7 +2,7 @@ import { mode } from '@chakra-ui/theme-tools'
 
 const styles = {
 
-    baseStyle: {
+    baseStyle: (props: any) => ({
 
         p: "20px",
         display: "flex",
@@ -12,9 +12,9 @@ const styles = {
         borderRadius: "20px",
         minWidth: "0px",
         wordWrap: "break-word",
-        bg: mode("#ffffff", "navy.800"),
-        backgroundClip: "border-box",
-    }
+        bg: mode("white", "gray.700")(props),
+        backgroundCalip: "border-box",
+    })
 }
 
 export default styles

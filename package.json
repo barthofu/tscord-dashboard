@@ -10,6 +10,7 @@
     "plop": "plop --plopfile ./cli/plopfile.js"
   },
   "dependencies": {
+    "@chakra-ui/color-mode": "^2.0.4",
     "@chakra-ui/react": "^2.2.1",
     "@chakra-ui/theme-tools": "^2.0.2",
     "@emotion/react": "^11.9.3",
