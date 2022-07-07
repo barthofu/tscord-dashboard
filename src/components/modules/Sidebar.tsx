@@ -1,7 +1,10 @@
-import { Box, Flex, HStack, Link, Stack, Text, useColorModeValue } from '@chakra-ui/react'
-import { HSeparator } from '@elements'
+import { Box, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerOverlay, Flex, HStack, Icon, Link, Stack, Text, useColorModeValue, useDisclosure } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import NextLink from 'next/link'
 import React from 'react'
+import { IoMenuOutline } from "react-icons/io5"
+
+import { HSeparator } from '@elements'
 
 type Props = {
     tabs: {
@@ -20,6 +23,25 @@ const Logo: React.FC = () => {
     )
 }
 
+const SidebarContent: React.FC<Props> = ({ tabs }) => {
+
+    return (
+        <Flex direction='column' height='100%' pt='25px' borderRadius='30px'>
+
+            <Logo />
+
+            <Stack direction='column' mb='auto' mt='8px'>
+                
+                <Box ps='20px' pe={{ md: '16px', '2xl': '1px' }}>
+                <Tabs tabs={tabs} />
+                </Box>
+            
+            </Stack>
+
+        </Flex>
+    )
+}
+
 const Tabs: React.FC<Props> = ({ tabs }) => {
 
     const router = useRouter()
@@ -34,7 +56,7 @@ const Tabs: React.FC<Props> = ({ tabs }) => {
     return (<>
         {tabs.map((tab, index) => (
 
-            <Link as={Link} to={tab.href} key={index}>
+            <Link as={NextLink} href={tab.href} key={index}>
                 <Box>
                     <HStack
                         spacing={isActiveTab(tab.href) ? '22px' : '26px'}
@@ -71,6 +93,59 @@ const Tabs: React.FC<Props> = ({ tabs }) => {
 }
 
 
+export const SidebarResponsive: React.FC<Props> = ({ tabs }) => {
+
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    // let btnRef = React.useRef()
+  
+    return (
+        <Flex display={{ sm: 'flex', xl: 'none' }} alignItems='center'>
+            <Flex 
+                // ref={btnRef} 
+                w='max-content' 
+                h='max-content' 
+                onClick={onOpen}
+            >
+                <Icon
+                    as={IoMenuOutline}
+                    color={useColorModeValue('gray.400', 'white')}
+                    my='auto'
+                    w='20px'
+                    h='20px'
+                    me='10px'
+                    _hover={{ cursor: 'pointer' }}
+                />
+            </Flex>
+            <Drawer
+                isOpen={isOpen}
+                onClose={onClose}
+                placement={'left'}
+                // finalFocusRef={btnRef}
+            >
+                <DrawerOverlay />
+                <DrawerContent w='285px' maxW='285px' bg={useColorModeValue('white', 'navy.800')}>
+                    <DrawerCloseButton
+                        zIndex='3'
+                        _focus={{ boxShadow: 'none' }}
+                        _hover={{ boxShadow: 'none' }}
+                    />
+                    <DrawerBody maxW='285px' px='0rem' pb='0'>
+                    {/* <Scrollbars
+                        autoHide
+                        renderTrackVertical={renderTrack}
+                        renderThumbVertical={renderThumb}
+                        renderView={renderView}> */}
+                        <SidebarContent tabs={tabs} />
+                    {/* </Scrollbars> */}
+                    </DrawerBody>
+                </DrawerContent>
+            </Drawer>
+        </Flex>
+    )
+
+}
+
+
 
 export const Sidebar: React.FC<Props> = ({ tabs }) => {
 
@@ -92,19 +167,7 @@ export const Sidebar: React.FC<Props> = ({ tabs }) => {
                     renderTrackVertical={renderTrack}
                     renderThumbVertical={renderThumb}
                     renderView={renderView}> */}
-                <Flex direction='column' height='100%' pt='25px' borderRadius='30px'>
-
-                    <Logo />
-
-                    <Stack direction='column' mb='auto' mt='8px'>
-                        
-                        <Box ps='20px' pe={{ md: '16px', '2xl': '1px' }}>
-                        <Tabs tabs={tabs} />
-                        </Box>
-                    
-                    </Stack>
-
-                </Flex>
+                <SidebarContent tabs={tabs} />
                 {/* </Scrollbars> */}
             </Box>
         </Box>

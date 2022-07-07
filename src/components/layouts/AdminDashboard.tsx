@@ -1,14 +1,15 @@
 import React from 'react'
 import { Box, Flex } from '@chakra-ui/react'
 
-import { Sidebar } from '@modules'
+import { Sidebar, AdminNavbar } from '@modules'
 import { sidebarConfig } from '@config/sidebar'
 
 type Props = {
+    breadcrumbs: string[]
     children: React.ReactNode
 }
 
-export const AdminDashboard: React.FC<Props> = ({ children }) => {
+export const AdminDashboard: React.FC<Props> = ({ breadcrumbs, children }) => {
 
 	return (<>
         <Box>
@@ -27,7 +28,8 @@ export const AdminDashboard: React.FC<Props> = ({ children }) => {
                 transitionProperty='top, bottom, width'
                 transitionTimingFunction='linear, linear, ease'
             >
-            {children}
+                <AdminNavbar breadcrumbs={breadcrumbs}/>
+                {children}
             </Box>
         </Box>
     </>)
