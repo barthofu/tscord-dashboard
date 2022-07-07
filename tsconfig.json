@@ -1,40 +1,40 @@
 {
-"compilerOptions": {
+	"compilerOptions": {
 
-	"target": "es5",
-	"lib": ["dom", "dom.iterable", "esnext"],
-	"allowJs": true,
-	"skipLibCheck": true,
-	"strict": true,
-	"forceConsistentCasingInFileNames": true,
-	"noEmit": true,
-	"esModuleInterop": true,
-	"module": "esnext",
-	"moduleResolution": "node",
-	"resolveJsonModule": true,
-	"isolatedModules": true,
-	"jsx": "preserve",
-	"incremental": true,
-	"experimentalDecorators": true,
-	"emitDecoratorMetadata": true,
+		"target": "es5",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"allowJs": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"noEmit": true,
+		"esModuleInterop": true,
+		"module": "esnext",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"jsx": "preserve",
+		"incremental": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
 
-	"baseUrl": ".",
-	"paths": {
+		"baseUrl": ".",
+		"paths": {
 
-		"@services": ["src/core/services"],
-		"@elements": ["./src/components/elements"],
-		"@layouts": ["./src/components/layouts"],
-		"@modules": ["./src/components/modules"],
-		"@templates": ["./src/components/templates"],
-		
-		"@config/*": ["src/core/config/*"],
-		"@core/*": ["src/core/*"],
-		"@hooks/*": ["./src/hooks/*"],
-		"@utils/*": ["src/core/utils/*"],
-		"@styles/*": ["./public/styles/*"],
-		"@assets/*": ["./public/assets/*"]
-	}
-},
+			"@services": ["src/core/services"],
+			"@elements": ["./src/components/elements"],
+			"@layouts": ["./src/components/layouts"],
+			"@modules": ["./src/components/modules"],
+			// "@templates": ["./src/components/templates"],
+			
+			"@config/*": ["src/core/config/*"],
+			"@core/*": ["src/core/*"],
+			"@hooks/*": ["./src/hooks/*"],
+			"@utils/*": ["src/core/utils/*"],
+			"@styles/*": ["./public/styles/*"],
+			"@assets/*": ["./public/assets/*"]
+		}
+	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
 	"exclude": ["node_modules"]
 }
