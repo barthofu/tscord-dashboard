@@ -64,11 +64,7 @@ export const CircularProgressBar: React.FC<Props> = ({ percentage, title, subtit
             <Card 
                 height='100%'
                 width='auto'
-                padding='0px'
-                display='flex'
-                flexDirection='row'
-                alignItems='center'  
-                justifyContent='center' 
+                padding='0px' 
             >
                 <Flex flexDirection='column' justifyContent='center' alignItems='center'>
                     <ApexChart 

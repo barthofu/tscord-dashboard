@@ -11,10 +11,12 @@ type Props = {
         value: number
         unit: string
         text?: string
-    }
+        invert?: boolean
+    },
+    textFirst?: boolean
 }
 
-export const StatCard: React.FC<Props> = ({ title, value, icon, growth }) => {
+export const StatCard: React.FC<Props> = ({ title, value, icon, growth, textFirst }) => {
 
 	return (<>
 
@@ -22,11 +24,11 @@ export const StatCard: React.FC<Props> = ({ title, value, icon, growth }) => {
             <Flex
                 my='auto'
                 h='100%'
-                align={{ base: 'center', xl: 'flex-start' }}
-                justify={{ base: 'center', xl: 'center' }}
+                alignItems='center'
+                justifyContent='center'
             >
 
-                {icon}
+                {!textFirst && <Text fontSize='4xl' mr='0.5em'>{icon}</Text>}
 
                 <Stat my='auto' ms={"18px"}>
 
@@ -40,7 +42,7 @@ export const StatCard: React.FC<Props> = ({ title, value, icon, growth }) => {
 
                     {growth ? (
                         <Flex align='center'>
-                        <Text color={growth.value < 0 ? 'red.500' : 'green.500'} fontSize='xs' fontWeight='700' me='5px'>
+                        <Text color={growth.value < 0 ? (growth.invert ? 'green.500' : 'red.500') : (growth.invert ? 'red.500' : 'green.500')} fontSize='xs' fontWeight='700' me='5px'>
                             {growth.value < 0 ? '-' : '+'}{growth.value}{growth.unit}
                         </Text>
                         <Text color='secondaryGray.600' fontSize='xs' fontWeight='400'>
@@ -49,6 +51,8 @@ export const StatCard: React.FC<Props> = ({ title, value, icon, growth }) => {
                         </Flex>
                     ) : null}
                     </Stat>
+
+                    {textFirst && <Text fontSize='4xl' ml='1em'>{icon}</Text>}
 
             </Flex>
 
