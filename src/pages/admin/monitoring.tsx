@@ -4,7 +4,7 @@ import { FaPowerOff, FaTools } from 'react-icons/fa'
 import { BsFillBarChartFill } from 'react-icons/bs'
 
 import { AdminDashboard } from '@layouts'
-import { Card, StatCard, CircularProgressBar } from '@elements'
+import { Card, StatCard, CircularProgressBar, MultiLineChart } from '@elements'
 
 const MonitoringPage: NextPage = () => {
 
@@ -52,15 +52,15 @@ const MonitoringPage: NextPage = () => {
 					</Flex>
 				</Card>
 			</SimpleGrid>
-			{/* <StatCard 
-				title="Total Users"
-				value="10,000"
-				growth={{
-					value: 10,
-					unit: '%',
-					text: 'since last month'
-				}}
-			/> */}
+
+			<SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px' mb='20px'>
+				<Flex flexDirection='column' gap='20px'>
+					<MultiLineChart />
+					<MultiLineChart />
+				</Flex>
+				<Card />
+			</SimpleGrid>
+			
 		</AdminDashboard>
 	</>)
 }
