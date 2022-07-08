@@ -4,6 +4,7 @@ import { AiFillPieChart } from 'react-icons/ai'
 import { FaUserFriends } from 'react-icons/fa'
 import { SiClubhouse } from 'react-icons/si'
 import { BiStats } from 'react-icons/bi'
+import { TbDatabase } from 'react-icons/tb'
 
 type SidebarConfigType = {
 
@@ -36,6 +37,11 @@ export const sidebarConfig: SidebarConfigType = {
             name: 'Guilds',
             href: '/admin/guilds',
             icon: <SiClubhouse />,
+        },
+        {
+            name: 'Database',
+            href: '/admin/database',
+            icon: <TbDatabase />,
         }
     ]
 }

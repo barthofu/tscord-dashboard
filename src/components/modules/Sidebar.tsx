@@ -62,7 +62,7 @@ const Tabs: React.FC<Props> = ({ tabs }) => {
         {tabs.map((tab, index) => (
 
             <Link as={NextLink} href={tab.href} key={index}>
-                <Box>
+                <Box  _hover={{ cursor: 'pointer' }}>
                     <HStack
                         spacing={isActiveTab(tab.href) ? '22px' : '26px'}
                         py='5px'
