@@ -6,7 +6,7 @@ import { Box, Flex, Text } from '@chakra-ui/react'
 import _ from 'lodash'
 
 import { Card } from '@elements'
-import { lineChartOptions } from '@config/charts'
+import { barChartOptions } from '@config/charts'
 
 type Props = {
 	title: string
@@ -14,12 +14,13 @@ type Props = {
 	options?: ApexOptions
 }
 
-export const LineChart: React.FC<Props> = ({ title, series, options }) => {
+export const BarChart: React.FC<Props> = ({ title, series, options }) => {
 
-	// deep merge default line chart options with additionnal options if provided
-	options = _.merge({}, lineChartOptions, options)
+	// deep merge default bar chart options with additionnal options if provided
+	options = _.merge({}, barChartOptions, options)
 
 	return (<>
+    
         <Card
             justifyContent='flex-start'
             alignItems='flex-start'
@@ -39,7 +40,7 @@ export const LineChart: React.FC<Props> = ({ title, series, options }) => {
 
             <Box minH='300px' minW='100%' mt='auto'>
                 <ApexChart 
-                    type='line'
+                    type='bar'
                     series={series}
                     options={options}
                     width='100%'
