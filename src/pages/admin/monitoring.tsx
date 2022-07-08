@@ -4,7 +4,7 @@ import { FaPowerOff, FaTools } from 'react-icons/fa'
 import { BsFillBarChartFill } from 'react-icons/bs'
 
 import { AdminDashboard } from '@layouts'
-import { Card, StatCard, CircularProgressBar, LineChart } from '@elements'
+import { Card, StatCard, CircularProgressBar, LineChart, ChartCard } from '@elements'
 import { useMonitoringData } from '@core/hooks'
 
 const MonitoringPage: NextPage = () => {
@@ -56,35 +56,41 @@ const MonitoringPage: NextPage = () => {
 
 			<SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px' mb='20px'>
 				<Flex flexDirection='column' gap='20px'>
-					<LineChart 
-						title='Latency'
-						series={[
-							{
-								name: "Discord",
-								data: [50, 64, 48, 66, 49, 68],
-							},
-							{
-								name: "API",
-								data: [150, 152, 160, 161, 170, 200],
-							},
-						]}
-					/>
 
-					<LineChart 
-						title='Usage'
-						series={[
-							{
-								name: "CPU",
-								data: [50, 64, 48, 66, 49, 68],
-							},
-							{
-								name: "RAM",
-								data: [150, 152, 160, 161, 170, 200],
-							},
-						]}
-					/>
+					<ChartCard title='Latency'>
+						<LineChart 
+							series={[
+								{
+									name: "Discord",
+									data: [50, 64, 48, 66, 49, 68],
+								},
+								{
+									name: "API",
+									data: [150, 152, 160, 161, 170, 200],
+								},
+							]}
+						/>
+					</ChartCard>
+
+					<ChartCard title='Usage'>
+						<LineChart 
+							series={[
+								{
+									name: "CPU",
+									data: [50, 64, 48, 66, 49, 68],
+								},
+								{
+									name: "RAM",
+									data: [150, 152, 160, 161, 170, 200],
+								},
+							]}
+						/>
+					</ChartCard>
+
 				</Flex>
+
 				<Card />
+			
 			</SimpleGrid>
 			
 		</AdminDashboard>

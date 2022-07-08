@@ -12,6 +12,7 @@ export const LinkButton: React.FC<Props> = ({ href, text, style = 'secondary', e
 	return (<>
         <a 
             href={href}
+            rel='noreferrer'
             target={external ? '_blank' : '_self'}
         >
             {text}

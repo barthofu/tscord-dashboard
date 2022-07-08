@@ -7,7 +7,7 @@ import { SimpleGrid, Text } from '@chakra-ui/react'
 import { type Cell } from 'react-table'
 
 import { AdminDashboard } from '@layouts'
-import { StatCard, LineChart, SimpleTable, BarChart } from '@elements'
+import { StatCard, LineChart, SimpleTable, BarChart, ChartCard } from '@elements'
 
 const mockupTableData = {
     columns: [
@@ -77,46 +77,52 @@ const StatisticsPage: NextPage = () => {
 			</SimpleGrid>
 
 			<SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px' mb='20px'>
-				<BarChart 
-                    title='Command usage'
-                    series={[
-                        {
-                            name: "Simple commands",
-                            data: [50, 64, 48, 66, 49, 68, 50],
-                        },
-                        {
-                            name: "Context menus",
-                            data: [17, 19, 25, 33, 45, 50, 50],
-                        },
-                        {
-                            name: "Slash commands",
-                            data: [150, 152, 160, 161, 170, 200, 50],
-                        },
-                    ]}
-                />
-                				<LineChart 
-                    title='Command usage'
-                    series={[
-                        {
-                            name: "Simple commands",
-                            data: [50, 64, 48, 66, 49, 68, 50],
-                        },
-                        {
-                            name: "Context menus",
-                            data: [17, 19, 25, 33, 45, 50, 50],
-                        },
-                        {
-                            name: "Slash commands",
-                            data: [150, 152, 160, 161, 170, 200, 50],
-                        },
-                    ]}
-                />
-				{/* <SimpleTable 
+				
+                <ChartCard title='Command usage'>
+                    <BarChart 
+                        series={[
+                            {
+                                name: "Simple commands",
+                                data: [50, 64, 48, 66, 49, 68, 50],
+                            },
+                            {
+                                name: "Context menus",
+                                data: [17, 19, 25, 33, 45, 50, 50],
+                            },
+                            {
+                                name: "Slash commands",
+                                data: [150, 152, 160, 161, 170, 200, 50],
+                            },
+                        ]}
+                    />
+                </ChartCard>
+
+                <ChartCard title='Command usage'>
+                    <LineChart 
+                        series={[
+                            {
+                                name: "Simple commands",
+                                data: [50, 64, 48, 66, 49, 68, 50],
+                            },
+                            {
+                                name: "Context menus",
+                                data: [17, 19, 25, 33, 45, 50, 50],
+                            },
+                            {
+                                name: "Slash commands",
+                                data: [150, 152, 160, 161, 170, 200, 50],
+                            },
+                        ]}
+                    />
+                </ChartCard>
+
+				<SimpleTable 
                     title='Top commands'
                     columnsData={mockupTableData.columns} 
                     tableData={mockupTableData.data}
                     cellsResolvers={mockupTableData.cellsResolvers}   
-                /> */}
+                />
+                
 			</SimpleGrid>
 			
 		</AdminDashboard>

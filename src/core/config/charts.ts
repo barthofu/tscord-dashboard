@@ -9,6 +9,14 @@ export const barChartOptions: ApexOptions = {
 		toolbar: {
 			show: false,
 		},
+		dropShadow: {
+            enabled: true,
+            top: 5,
+            left: 0,
+            blur: 5,
+            opacity: 0.1,
+            color: '#000000',
+        },
 	},
 	tooltip: {
 		style: {

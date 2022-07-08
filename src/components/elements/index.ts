@@ -1,9 +1,15 @@
 export * from './LinkButton'
-export * from './Card'
-export * from './StatCard'
 export * from './Separator'
-export * from './CircularProgressBar'
-export * from './LineChart'
-export * from './SimpleTable'
-export * from './BarChart'
-export * from './Switcher'
+
+export * from './card/Card'
+export * from './card/StatCard'
+export * from './card/ChartCard'
+
+export * from './table/SimpleTable'
+
+export * from './chart/CircularProgressBar'
+export * from './chart/BarChart'
+export * from './chart/LineChart'
+
+export * from './switcher/SimpleSwitcher'
+export * from './switcher/MultiSwitcher'
