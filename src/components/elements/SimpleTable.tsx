@@ -12,12 +12,13 @@ import { Card } from '@elements'
 import { Checkbox, Flex, Table, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from '@chakra-ui/react'
 
 type Props = {
+    title: string
     columnsData: Column<object>[],
     tableData: object[]
     cellsResolvers?: { [key: string]: (cell: Cell<object, any>) => React.ReactNode }
 }
 
-export const SimpleTable: React.FC<Props> = ({ columnsData, tableData, cellsResolvers }) => {
+export const SimpleTable: React.FC<Props> = ({ title, columnsData, tableData, cellsResolvers }) => {
     
     const columns = useMemo(() => columnsData, [columnsData])
     const data = useMemo(() => tableData, [tableData])
@@ -49,7 +50,7 @@ export const SimpleTable: React.FC<Props> = ({ columnsData, tableData, cellsReso
                     fontWeight='700'
                     lineHeight='100%'
                 >
-                Top commands
+                {title}
                 </Text>
             </Flex>
 
