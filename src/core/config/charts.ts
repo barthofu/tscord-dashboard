@@ -1,7 +1,8 @@
 import { type ApexOptions } from 'apexcharts'
 
 const colors = ['#4318FF', '#39B8FF', '#FF9F43', '#FF9F43'],
-	  showGrid = false
+	    showGrid = false,
+      dropShadow= false
 
 export const barChartOptions: ApexOptions = {
 	chart: {
@@ -10,7 +11,7 @@ export const barChartOptions: ApexOptions = {
 			show: false,
 		},
 		dropShadow: {
-            enabled: true,
+            enabled: dropShadow,
             top: 5,
             left: 0,
             blur: 5,
