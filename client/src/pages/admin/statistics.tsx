@@ -41,7 +41,7 @@ const mockupData = {
             { Header: 'Total commands', accessor: 'totalCommands' },
         ],
         data: [
-            { guildName: 'Guild 1', totalCommands: '87' },
+            { guildName: 'Guild 1 Voiture bla', totalCommands: '87' },
             { guildName: 'Guild 2', totalCommands: '45' },
             { guildName: 'Guild 3', totalCommands: '12' },
             { guildName: 'Guild 4', totalCommands: '12' },
@@ -82,7 +82,7 @@ const StatisticsPage: NextPage = () => {
 					icon={<FaUserFriends />}
 				/>
                 <StatCard 
-					title='Total Active Users' 
+					title='Total Real Users' 
 					value='354'
 					icon={<FaUserCheck />}
 				/>
@@ -155,7 +155,7 @@ const StatisticsPage: NextPage = () => {
                     cellsResolvers={mockupData.topCommandsTable.cellsResolvers}   
                 />
 				
-                <SimpleGrid height='450px' columns={{ base: 1, md: 2, xl: 2 }} gap='20px' mb='20px'>
+                <SimpleGrid height='450px' columns={{ base: 1, md: 1, xl: 2 }} gap='20px' mb='20px'>
                     <ChartCard 
                         title='Users'
                         subtitle='Part of active users of the bot inside all the known users'
@@ -213,19 +213,15 @@ const StatisticsPage: NextPage = () => {
 
                 </SimpleGrid>
 
-                <ChartCard title='Command usage'>
+                <ChartCard title='Users and Guilds'>
                     <LineChart 
                         series={[
                             {
-                                name: "Simple commands",
-                                data: [50, 64, 48, 66, 49, 68, 50],
-                            },
-                            {
-                                name: "Context menus",
+                                name: "Guilds",
                                 data: [17, 19, 25, 33, 45, 50, 50],
                             },
                             {
-                                name: "Slash commands",
+                                name: "Users",
                                 data: [150, 152, 160, 161, 170, 200, 50],
                             },
                         ]}

@@ -24,7 +24,7 @@ const Logo: React.FC = () => {
                 fontWeight='bold'
                 mb='1em'
             >TSCord Template</Text>
-            <HSeparator mb='20px' />
+            <HSeparator mb='20px' w='80%'/>
         </Flex>
     )
 }

@@ -41,6 +41,7 @@ export const SimpleTable: React.FC<Props> = ({ title, columnsData, tableData, ce
             w='100%'
             h='450px'
             overflowY='auto'
+            overflowX='hidden'
         >
 
             <Flex px='25px' justify='space-between' alignItems='center' my='1.5em'>
@@ -61,7 +62,6 @@ export const SimpleTable: React.FC<Props> = ({ title, columnsData, tableData, ce
                         {headerGroup.headers.map((column, index) => (
                             <Th
                                 {...column.getHeaderProps(column.getHeaderProps())}
-                                pe='10px'
                                 key={index}
                                 borderColor={borderColor}
                             >
