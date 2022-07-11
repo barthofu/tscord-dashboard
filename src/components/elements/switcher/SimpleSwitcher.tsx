@@ -20,7 +20,8 @@ type Props = {
 export const SimpleSwitcher: React.FC<Props> = ({ title, subtitle, chart1, chart2 }) => {
     
     const [currentChartId, setCurrentChartId] = useState(chart1.id)
-    const getCurrentChart = () => chart1.id === currentChartId ? chart1 : chart2
+    const getCurrentChart = () => chart1.id === currentChartId ? chart1 : chart2,
+          getOtherChart = () => chart1.id === currentChartId ? chart2 : chart1
 
 	return (<>
         <ChartCard 
@@ -41,7 +42,7 @@ export const SimpleSwitcher: React.FC<Props> = ({ title, subtitle, chart1, chart
                     borderRadius='10px'
                     onClick={() => setCurrentChartId(currentChartId === chart1.id ? chart2.id : chart1.id)}
                 >
-                    <Icon as={getCurrentChart().icon} color={useColorModeValue("brand.500", "white")} w='24px' h='24px' />
+                    <Icon as={getOtherChart().icon} color={useColorModeValue("brand.500", "white")} w='24px' h='24px' />
                 </Button>
             </>}    
         >

@@ -16,7 +16,8 @@ export const HSeparator: React.FC<Props> = ({ ...props }) => {
 export const VSeparator: React.FC<Props> = ({ ...props }) => {
 
     return <Flex 
-        w='1px' 
+        w='1px'
+        h='100%'
         bg='rgba(135, 140, 189, 0.3)' 
         {...props} 
     />

@@ -1,4 +1,12 @@
+const fs = require('fs')
+
 module.exports = (plop) => {
+
+    const categories = fs.readdirSync('./src/components/elements').filter(file => fs.statSync(`./src/components/elements/${file}`).isDirectory())
+    
+    plop.setHelper('ifNotEquals', function(arg1, arg2, options) {
+        return (arg1 != arg2) ? options.fn(this) : options.inverse(this);
+    })
 
     plop.setGenerator('component', {
 
@@ -12,12 +20,22 @@ module.exports = (plop) => {
             },
             {
                 type: 'list',
-                name: 'category',
-                message: 'What is the category of the component?',
+                name: 'type',
+                message: 'What is the type of the component?',
                 choices: [
                     'elements',
                     'modules',
                     'layouts',
+                ]
+            },
+            {
+                type: 'list',
+                name: 'category',
+                message: 'What is the category of the component?',
+                choices: [
+                    ...categories,
+                    new plop.inquirer.Separator(),
+                    'No Category'
                 ]
             }
         ],
@@ -25,7 +43,7 @@ module.exports = (plop) => {
         actions: [
             {
                 type: 'add',
-                path: '../src/components/{{camelCase category}}/{{pascalCase name}}.tsx',
+                path: '../src/components/{{camelCase type}}/{{#ifNotEquals category "No Category" }}{{category}}/{{/ifNotEquals}}{{pascalCase name}}.tsx',
                 templateFile: 'templates/component.tsx.hbs',
             },
             // {
@@ -35,8 +53,8 @@ module.exports = (plop) => {
             // },
             {
                 type: 'append',
-                path: '../src/components/{{camelCase category}}/index.ts',
-                template: 'export * from \'./{{pascalCase name}}\'',
+                path: '../src/components/{{camelCase type}}/index.ts',
+                template: 'export * from \'./{{#ifNotEquals category "No Category" }}{{category}}/{{/ifNotEquals}}{{pascalCase name}}\'',
             }
         ]
     })

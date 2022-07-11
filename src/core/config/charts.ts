@@ -4,6 +4,42 @@ const colors = ['#4318FF', '#39B8FF', '#FF9F43', '#FF9F43'],
 	    showGrid = false,
       dropShadow= false
 
+export const pieChartOptions: ApexOptions = {
+	colors: colors,
+
+	states: {
+		hover: {
+		filter: {
+			type: 'none',
+		},
+		},
+	},
+	legend: {
+		show: false,
+	},
+	dataLabels: {
+		enabled: false,
+	},
+	// hover: { mode: null },
+	plotOptions: {
+		// donut: {
+		// 	expandOnClick: false,
+		// 	donut: {
+		// 		labels: {
+		// 			show: false,
+		// 		},
+		// 	},
+		// },
+	},
+	fill: {
+		colors: colors,
+	},
+	tooltip: {
+		enabled: true,
+		theme: 'dark',
+	},
+}
+
 export const barChartOptions: ApexOptions = {
 	chart: {
 		stacked: true,

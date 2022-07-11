@@ -18,7 +18,7 @@ export const LineChart: React.FC<Props> = ({ series, options }) => {
 	options = _.merge({}, lineChartOptions, options)
 
 	return (<>
-        <Box minH='300px' minW='100%' mt='auto'>
+        <Box minH='300px' maxH='450px' minW='100%' mt='auto'>
 
             <ApexChart 
                 type='line'

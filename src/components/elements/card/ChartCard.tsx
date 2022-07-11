@@ -18,6 +18,7 @@ export const ChartCard: React.FC<Props> = ({ title, subtitle, children, header }
             alignItems='flex-start'
             flexDirection='column'
             w='100%'
+            h='450px'
         >
 
             <Flex px='25px' justify='space-between' alignItems='center' my='1.5em' w='100%'>
@@ -29,7 +30,7 @@ export const ChartCard: React.FC<Props> = ({ title, subtitle, children, header }
                     </Text>
 
                     {subtitle && (
-                        <Text fontSize='14px' fontWeight='400' lineHeight='100%'>
+                        <Text fontSize='14px' fontWeight='400' lineHeight='100%' mt='1em'>
                             {subtitle}
                         </Text>
                     )}

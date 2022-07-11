@@ -10,6 +10,7 @@ export * from './table/SimpleTable'
 export * from './chart/CircularProgressBar'
 export * from './chart/BarChart'
 export * from './chart/LineChart'
+export * from './chart/PieChart'
 
 export * from './switcher/SimpleSwitcher'
 export * from './switcher/MultiSwitcher'

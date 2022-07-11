@@ -39,7 +39,7 @@ export const SimpleTable: React.FC<Props> = ({ title, columnsData, tableData, ce
             alignItems='flex-start'
             flexDirection='column'
             w='100%'
-            maxHeight='400px'
+            h='450px'
             overflowY='auto'
         >
 
