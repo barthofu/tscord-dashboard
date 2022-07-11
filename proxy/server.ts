@@ -18,6 +18,12 @@ const io = new Server(server, {
     cors: { origin: '*' }
 })
 
+const broadcastToClients = (event: string, ...args: any[]) => {
+    for (const clientSocket of Object.values(connections.clients)) {
+        clientSocket.emit(event, ...args)
+    }
+}
+
 io.on('connection', (socket: Socket) => {
 
     const { type } = socket.handshake.query
@@ -25,6 +31,7 @@ io.on('connection', (socket: Socket) => {
     if (type === 'bot') {
 
         const { botName } = socket.handshake.query
+
         if (!botName) {
             socket.disconnect()
             return
@@ -35,11 +42,9 @@ io.on('connection', (socket: Socket) => {
 
         socket.on('request', (socketId: string, event: string, ...args) => {
 
-            if (socketId === 'all') {
+            if (socketId === 'broadcast') {
                     
-                for (const clientSocket of Object.values(connections.clients)) {
-                    clientSocket.emit(event, ...args)
-                }
+                broadcastToClients(event, ...args)
             }
             else {
 
@@ -50,9 +55,19 @@ io.on('connection', (socket: Socket) => {
                 }
             }
         })
+
+        socket.on('disconnect', (reason?: string) => {
+
+            console.log('Bot disconnected: ' + botName)
+            delete connections.bots[botName as string]
+
+            broadcastToClients('botDisconnected', botName)
+        })
     } 
     else if (type === 'client') {
 
+        if (connections.clients[socket.id]) return
+        
         connections.clients[socket.id] = socket
         console.log('New client connected')
 
@@ -63,6 +78,12 @@ io.on('connection', (socket: Socket) => {
             if (botSocket) {
                 botSocket.emit(event, socket.id, ...args)
             }
+        })
+
+        socket.on('disconnect', () => {
+
+            console.log('Client disconnected')
+            delete connections.clients[socket.id]
         })
     }
     
