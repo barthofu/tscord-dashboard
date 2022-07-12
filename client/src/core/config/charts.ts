@@ -84,7 +84,7 @@ export const barChartOptions: ApexOptions = {
 			show: true,
 			style: {
 				colors: '#A3AED0',
-				fontSize: '14px',
+				fontSize: '20px',
 				fontWeight: '500',
 			},
 		},
@@ -165,6 +165,7 @@ export const lineChartOptions: ApexOptions = {
     },
     stroke: {
         curve: 'smooth',
+		width: 4,
     },
     yaxis: {
         min: 0,

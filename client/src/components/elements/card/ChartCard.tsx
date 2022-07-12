@@ -7,9 +7,9 @@ type Props = {
     subtitle?: string
     children: React.ReactNode
     header?: React.ReactNode
-}
+} & any
 
-export const ChartCard: React.FC<Props> = ({ title, subtitle, children, header }) => {
+export const ChartCard: React.FC<Props> = ({ title, subtitle, children, header, ...props }) => {
 
 	return (<>
 
@@ -19,6 +19,7 @@ export const ChartCard: React.FC<Props> = ({ title, subtitle, children, header }
             flexDirection='column'
             w='100%'
             h='450px'
+            {...props}
         >
 
             <Flex px='25px' justify='space-between' alignItems='center' my='1.5em' w='100%'>

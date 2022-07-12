@@ -1,70 +1,44 @@
 import { useEffect, useState } from "react"
 import { io, Socket } from "socket.io-client"
-
-type MonitoringData = {
-
-    botStatus: {
-        online: boolean
-        uptime: number | null
-        maintenance: boolean
-    }
-    host: {
-        cpu: number
-        memory: {
-            freeMemPercentage: number
-            usedMemPercentage: number
-        }
-        os: string
-        uptime: number
-        hostname: string
-        platform: string
-    }
-    pid: {
-        memory: {
-            usedInMb: number
-            percentage: number
-        }
-        cpu: number
-        ppid: number
-        pid: number
-        ctime: number
-        elapsed: number
-        timestamp: number
-    }
-}
-
-let socket: Socket
+import { useSocket } from "./useWebSocket"
 
 export const useMonitoringData = () => {
 
+    const socket = useSocket('ws://localhost:3001')
+
     const [monitoringData, setMonitoringData] = useState<MonitoringData[] | null>(null)
+    const [logs, setLogs] = useState<LogsData[] | null>(null)
 
     useEffect(() => {
 
-        socket = io('ws://localhost:3001', {
-            query: {
-                type: 'client'
-            }
-        })
+        if (!socket) return
 
         socket.emit('request', 'tscord', 'getHealth')
 
         socket.on('monitoring', (data: MonitoringData) => {
 
+            data.fetchedAt = new Date()
+
             setMonitoringData((prev) => {
                 if (!prev) return [data]
-                else return [...prev, data]
+                else return [...prev.slice(-12), data]
             })
-
-            console.log(monitoringData?.length)
         })
     
         socket.on('botDisconnected', () => {
                 
             setMonitoringData(null)
         })
-        
-    }, [])
 
-    return monitoringData
+        socket.on('log', (data: LogsData) => {
+            
+            setLogs((prev) => {
+                if (!prev) return [data]
+                else return [...prev, data]
+            })
+        })
+        
+    }, [socket])
+
+    return { monitoringData, logs }
 }

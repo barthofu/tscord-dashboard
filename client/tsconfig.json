@@ -36,5 +36,6 @@
 		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+	"paths": ["node_modules/*", "src/utils/types/*"],
 	"exclude": ["node_modules"]
 }

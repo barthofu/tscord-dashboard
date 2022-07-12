@@ -14,3 +14,4 @@ export * from './chart/PieChart'
 
 export * from './switcher/SimpleSwitcher'
 export * from './switcher/MultiSwitcher'
+export * from './SkeletonLayout'

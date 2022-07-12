@@ -5,8 +5,8 @@ import DiscordProvider from "next-auth/providers/discord";
 export default NextAuth({
     providers: [
         DiscordProvider({
-            clientId: "",
-            clientSecret: ""
+            clientId: process.env['BOT_ID'],
+            clientSecret: process.env['BOT_SECRET']
         })
     ],
     session: { strategy: "jwt" },
