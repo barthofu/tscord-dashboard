@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 import type { AppProps } from 'next/app'
+import { SessionProvider } from "next-auth/react"
 
 import '@fontsource/dm-sans'
 import '@styles/main.scss'
@@ -10,9 +11,11 @@ import { theme } from '@core/theme'
 function App({ Component, pageProps }: AppProps) {
 
 	return (
-		<ChakraProvider theme={theme}>
-			<Component {...pageProps} />
-		</ChakraProvider>
+		<SessionProvider session={pageProps.session}>
+			<ChakraProvider theme={theme}>
+				<Component {...pageProps} />
+			</ChakraProvider>
+		</SessionProvider>
 	)
 }
 
