@@ -1,5 +1,8 @@
 import { Socket } from 'socket.io'
 import DiscordOauth2 from 'discord-oauth2'
+
+import { getBotsForUser } from '../utils'
+
 const Discord = new DiscordOauth2()
 
 type QueryType = { 
@@ -8,15 +11,21 @@ type QueryType = {
 }
 
 export default async function OnConnectionClient(socket : Socket, connections: SocketConnections) {
+
     const { token } = socket.handshake.query as QueryType;
     if (!token) return;
         
-    const user = await Discord.getUser(token);
+    const user = await Discord.getUser(token).catch(() => null);
     if(!user) return;
     
     console.log('New client connected');
 
     connections.clients[socket.id] = { socket, token, discordId: user.id, destroyTimer: setTimeout(() => {socket.disconnect()}, 86400) };
+
+    socket.emit(
+        'botListUpdate',
+        getBotsForUser(user.id, connections)
+    )
 
     socket.on('request', (payload: SocketRequestPayload, ...args) => {
         const botSocket = connections.bots[payload.socketId];

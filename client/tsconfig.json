@@ -25,6 +25,7 @@
 			"@elements": ["./src/components/elements"],
 			"@layouts": ["./src/components/layouts"],
 			"@modules": ["./src/components/modules"],
+			"@store": ["./src/core/store.ts"],
 			// "@templates": ["./src/components/templates"],
 			
 			"@config/*": ["src/core/config/*"],

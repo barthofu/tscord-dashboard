@@ -1,6 +1,7 @@
 import React from 'react'
-import { Flex, Text } from '@chakra-ui/react'
+import { Flex, Text, useColorModeValue } from '@chakra-ui/react'
 import stripAnsi from 'strip-ansi'
+import reactStringReplace from 'react-string-replace'
 
 import { Card} from '@elements'
 
@@ -13,9 +14,10 @@ export const Logs: React.FC<LogsProps> = ({ logs }) => {
 	return (<>
         <Card
             height='100%'
+            minH='500px'
         >
 
-            <Flex height='100%'  width='100%' flexDir='column' justifyContent='space-between'>
+            <Flex width='100%' flexDir='column' justifyContent='space-between'>
 
                 <Flex px='25px' justify='space-between' alignItems='center' my='1.5em' w='100%'>
 
@@ -25,15 +27,24 @@ export const Logs: React.FC<LogsProps> = ({ logs }) => {
 
                 </Flex>
 
-                <Card bg='secondaryGray.300' height='100%'>
+                <Card 
+                    bg={useColorModeValue('secondaryGray.300', 'gray.800')} 
+                    flexDir='column-reverse' 
+                    alignItems='flex-start'
+                    justifyContent='flex-start' 
+                    h='550px' 
+                    overflowY='auto'
+                >
+                    {logs.map((log, index) => {
 
-                    <Flex flexDir='column' justifyContent='flex-end' w='100%' h='100%'>
-                        {logs.map((log, index) => <>
-                            <Text key={index} fontSize='13px'>
-                                {stripAnsi(log.message)}
-                            </Text>
-                        </>)}
-                    </Flex>
+                        const message = stripAnsi(log.message)
+                        let textElement = reactStringReplace(message, /\n/g, (match, i, o) => <br />)
+                        // textElement = reactStringReplace(textElement, /\t/g, (match, i, o) => <span style={{ marginLeft: '10px' }} />)
+
+                        return <Text key={index} fontSize='13px'>
+                            {textElement}
+                        </Text>
+                    })}
                 </Card>
             </Flex>
 

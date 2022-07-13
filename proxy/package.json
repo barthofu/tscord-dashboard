@@ -2,16 +2,18 @@
   "name": "proxy",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/src/index.js",
   "scripts": {
-    "build": "tsc --project tsconfig.json",
-    "start": "node build/server.js",
+    "prebuild": "rimraf build/",
+    "build": "npm run prebuild && tsc --project tsconfig.json",
+    "start": "node build/src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "rimraf": "^3.0.2",
     "typescript": "^4.7.4"
   },
   "dependencies": {

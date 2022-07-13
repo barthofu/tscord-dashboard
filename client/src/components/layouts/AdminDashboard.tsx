@@ -1,5 +1,5 @@
-import React from 'react'
-import { Box, Flex } from '@chakra-ui/react'
+import React, { useEffect } from 'react'
+import { Box } from '@chakra-ui/react'
 
 import { Sidebar, AdminNavbar } from '@modules'
 import { sidebarConfig } from '@config/sidebar'

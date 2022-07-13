@@ -1,23 +1,42 @@
+import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import io, { Socket } from 'socket.io-client'
 
 export const useSocket = (url: string) => {
-    
-  const [socket, setSocket] = useState<Socket | null>(null)
+		
+	const [webSocket, setWebSocket] = useState<Socket | null>(null)
+	const [bots, setBots] = useState<BotsList>([])
 
-  useEffect(() => {
+	const session = useSession()
 
-    const socketIo = io(url, {
-        query: {
-            type: 'client'
-        }
-    })
+	useEffect(() => {
 
-    setSocket(socketIo)
+		if (!session) return
 
-    return () => { socketIo.disconnect() }
+		if (webSocket) webSocket.disconnect()
 
-  }, [])
+		const socketIo = io(url, {
+			query: {
+				type: 'client',
+				token: session.data?.access_token
+			}
+		})
 
-  return socket
+		setWebSocket(socketIo)
+
+		return () => { socketIo.disconnect() }
+
+	}, [session])
+
+	useEffect(() => {
+
+		if (!webSocket) return
+
+		webSocket.on('botListUpdate', (bots) => {
+			setBots(bots)
+		})
+
+	}, [webSocket])
+
+	return { webSocket, bots }
 }

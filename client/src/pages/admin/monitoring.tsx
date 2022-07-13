@@ -13,10 +13,9 @@ import { Logs } from '@modules'
 const MonitoringPage: NextPage = () => {
 
 	const [loading, setLoading] = useState(true)
-	const { monitoringData, logs }= useMonitoringData()
+	const { monitoringData, logs } = useMonitoringData()
 
 	useEffect(() => {
-
 		if (monitoringData && loading) setLoading(false)
 	}, [monitoringData, loading])
 
@@ -50,17 +49,6 @@ const MonitoringPage: NextPage = () => {
 							</Flex>
 						</Card>
 
-						<CircularProgressBar percentage={getLatestData()?.pid.cpu || 0} title='CPU' subtitle='usage'/>
-						
-						<CircularProgressBar percentage={getLatestData()?.pid.memory.percentage || 0} title='RAM' subtitle='usage'/>
-						
-						<StatCard 
-							title='Latency' 
-							value={`${getLatestData()?.latency.ping || 0}ms`}
-							icon={<BsFillBarChartFill />}
-							// growth={{ value: 3.5, unit: 'ms', text: 'since last minute', invert: true}}
-						/>
-
 						<Card>
 							<Text fontSize='4xl' color={getLatestData()?.botStatus.maintenance ? 'green.500' : 'gray.500'}>
 								<FaTools />
@@ -71,17 +59,36 @@ const MonitoringPage: NextPage = () => {
 							</Flex>
 						</Card>
 
+						<CircularProgressBar percentage={getLatestData()?.pid.cpu || 0} title='CPU' subtitle='usage'/>
+						
+						<CircularProgressBar percentage={getLatestData()?.pid.memory.percentage || 0} title='RAM' subtitle='usage'/>
+						
+						<StatCard 
+							title='Discord latency' 
+							value={`${getLatestData()?.latency.ping || 0}ms`}
+							icon={<BsFillBarChartFill />}
+							// growth={{ value: 3.5, unit: 'ms', text: 'since last minute', invert: true}}
+						/>
+
 					</SkeletonLayout>
 
 				</SimpleGrid>
 
 				<SimpleGrid columns={{ base: 1, md: 5, xl: 5 }} gap='20px' mb='20px'>
 
-					<Flex flexDirection='column' gap='20px' gridColumn='1 / 3'>
-
+					<Box gridColumn={{ base: '1', md: '1 / 4' }}>
 						<SkeletonLayout enabled={loading}>
+							
+							<Logs logs={logs || []}/>
+						
+						</SkeletonLayout>
+					</Box>
+						
+					<Flex flexDirection='column' gap='20px' gridColumn={{ base: '1', md: '4 / 6' }}>
 
-							<ChartCard title='Usage' h='350px'>
+						<SkeletonLayout enabled={loading || monitoringData?.length! < 2}>
+
+							<ChartCard title='Process Usage' h='350px'>
 								<LineChart 
 									series={[
 										{
@@ -93,28 +100,35 @@ const MonitoringPage: NextPage = () => {
 											data: monitoringData?.map(d => d.pid.memory.percentage) || [],
 										},
 									]}
+									options={{
+										xaxis: {
+											labels: {
+												show: false
+											}
+										}
+									}}
 								/>
 							</ChartCard>
 
-							<ChartCard title='Latency' h='300px'>
+							<ChartCard title='Host Usage' h='300px'>
 								<LineChart 
 									series={[
 										{
-											name: "Discord WS",
-											data: monitoringData?.map(d => d.latency.ping) || [],
+											name: "CPU",
+											data: monitoringData?.map(d => d.host.cpu) || [],
 										},
-										// {
-										// 	name: "API",
-										// 	data: [],
-										// },
+										{
+											name: "RAM",
+											data: monitoringData?.map(d => d.host.memory.usedMemPercentage) || [],
+										},
 									]}
 									options={{
 										xaxis: {
-											categories: monitoringData?.map(d => dayjs(d.fetchedAt).format('HH:mm:ss')) || [],
-											type: 'category'
+											labels: {
+												show: false
+											}
 										}
 									}}
-									area={false}
 								/>
 							</ChartCard>
 
@@ -122,14 +136,6 @@ const MonitoringPage: NextPage = () => {
 
 					</Flex>
 
-					<Box gridColumn='3 / 6'>
-						<SkeletonLayout enabled={loading}>
-							
-							<Logs logs={logs || []}/>
-						
-						</SkeletonLayout>
-					</Box>
-						
 
 				
 				</SimpleGrid>
