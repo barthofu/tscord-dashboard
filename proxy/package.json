@@ -2,11 +2,11 @@
   "name": "proxy",
   "version": "1.0.0",
   "description": "",
-  "main": "build/src/index.js",
+  "main": "build/index.js",
   "scripts": {
     "prebuild": "rimraf build/",
     "build": "npm run prebuild && tsc --project tsconfig.json",
-    "start": "node build/src/index.js",
+    "start": "node build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

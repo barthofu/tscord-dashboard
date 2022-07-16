@@ -1,5 +1,7 @@
 import { Socket } from 'socket.io'
+
 import { broadcastToClients, getBotsForUser } from '../utils'
+import { connections } from '../store'
 
 type QueryType = { 
     botName: string
@@ -8,14 +10,15 @@ type QueryType = {
     token: string
 }
 
-function updateBotList(socket: Socket, connections: SocketConnections) {
+function updateBotList(socket: Socket) {
+
     socket.emit(
         'botListUpdate', 
         getBotsForUser(socket.id, connections)
     )
 }
 
-export default function onConnectionBot(socket : Socket, connections: SocketConnections) {
+export default function registerBotHandlers(socket : Socket) {
 
     const { botName, botId, authorized, token } = socket.handshake.query as QueryType
     if (!botName || !botId || authorized.length === 0 || !token) return
@@ -36,7 +39,7 @@ export default function onConnectionBot(socket : Socket, connections: SocketConn
         { id: botId, name: botName, socketId: socket.id }
     )
 
-    updateBotList(socket, connections)
+    updateBotList(socket)
 
     socket.on('request', (payload: SocketRequestPayload, ...args) => {
         
@@ -57,7 +60,7 @@ export default function onConnectionBot(socket : Socket, connections: SocketConn
         
         broadcastToClients(connections.clients, authorized, 'botDisconnected', botId)
 
-        updateBotList(socket, connections)
+        updateBotList(socket)
 
     })
 }

@@ -2,6 +2,7 @@ import { Socket } from 'socket.io'
 import DiscordOauth2 from 'discord-oauth2'
 
 import { getBotsForUser } from '../utils'
+import { connections } from '../store'
 
 const Discord = new DiscordOauth2()
 
@@ -10,7 +11,7 @@ type QueryType = {
     discordId: string
 }
 
-export default async function onConnectionClient(socket : Socket, connections: SocketConnections) {
+export default async function registerClientHandlers(socket : Socket) {
 
     const { token } = socket.handshake.query as QueryType
     if (!token) return
