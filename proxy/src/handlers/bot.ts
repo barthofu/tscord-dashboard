@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io'
 
-import { broadcastToClients, getBotsForUser } from '../utils'
-import { connections } from '../store'
+import { broadcastToClients, getBotsForUser } from '../core/utils'
+import { connections } from '../core/store'
 
 type QueryType = { 
     botName: string

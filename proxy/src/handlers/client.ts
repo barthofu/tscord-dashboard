@@ -1,8 +1,8 @@
 import { Socket } from 'socket.io'
 import DiscordOauth2 from 'discord-oauth2'
 
-import { getBotsForUser } from '../utils'
-import { connections } from '../store'
+import { getBotsForUser } from '../core/utils'
+import { connections } from '../core/store'
 
 const Discord = new DiscordOauth2()
 
