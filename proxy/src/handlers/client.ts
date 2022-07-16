@@ -25,7 +25,9 @@ export default async function registerClientHandlers(socket : Socket) {
         socket, 
         token, 
         discordId: user.id, 
-        destroyTimer: setTimeout(() => {socket.disconnect()}, 86400) 
+        destroyTimer: setTimeout(() => {
+            socket.disconnect()
+        }, 24 * 60 * 60 * 1000) 
     })
 
     socket.emit(
