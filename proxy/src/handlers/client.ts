@@ -44,9 +44,9 @@ export default async function registerClientHandlers(socket : Socket) {
         }
     })
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', (reason: string) => {
 
-        console.log('Client disconnected')
+        console.log('Client disconnected :', reason)
         clearTimeout(connections.clients.get(socket.id)?.destroyTimer)
         connections.clients.delete(socket.id)
     })
