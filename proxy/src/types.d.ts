@@ -1,27 +1,23 @@
 interface SocketBot {
-    socket: Socket;
-    name: string;
-    id: string;
-    authorized: string[];
+    socket: Socket
+    name: string
+    id: string
+    authorized: string[]
 }
 
 interface SocketClient {
-    socket: Socket;
-    token: string;
-    discordId: string;
-    destroyTimer: NodeJS.Timeout;
+    socket: Socket
+    token: string
+    discordId: string
+    destroyTimer: NodeJS.Timeout
 }
 
 interface SocketConnections {
-    bots: {
-        [key: string]: SocketBot
-    };
-    clients: {
-        [key: string]: SocketClient
-    }
+    bots: Map<string, SocketBot>
+    clients: Map<string, SocketClient>
 }
 
 interface SocketRequestPayload {
-    socketId: string;
-    event: string;
+    socketId: string
+    event: string
 }

@@ -1,7 +1,9 @@
-export function broadcastToClients(clients: { [key: string]: SocketClient }, authorized: string[], event: string, ...args: any[]) {
-    Object.values(clients)
-        .filter(client => authorized.includes(client.discordId))
-        .forEach(client => client.socket.emit(event, ...args));
+export function broadcastToClients(clients: Map<string, SocketClient>, authorized: string[], event: string, ...args: any[]) {
+    clients.forEach((client) => {
+        if (authorized.includes(client.discordId)) {
+            client.socket.emit(event, ...args)
+        }
+    })
 }
 
 export function getBotsForUser (userId: string, connections: SocketConnections) {
