@@ -1,8 +1,9 @@
 import { tokenToCSSVar } from "@chakra-ui/react";
-import NextAuth from "next-auth"
+import NextAuth, { NextAuthOptions } from "next-auth"
 import DiscordProvider from "next-auth/providers/discord";
 
-export default NextAuth({
+
+export const authOptions: NextAuthOptions = {
     providers: [
         DiscordProvider({
             clientId: process.env['BOT_ID'],
@@ -20,4 +21,5 @@ export default NextAuth({
             return session;
         }
     }
-})
+}
+export default NextAuth(authOptions)

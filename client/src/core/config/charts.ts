@@ -127,7 +127,7 @@ export const barChartOptions: ApexOptions = {
 	plotOptions: {
 		bar: {
 			borderRadius: 10,
-			columnWidth: '20px',
+			columnWidth: '30px',
 		},
 	},
 }

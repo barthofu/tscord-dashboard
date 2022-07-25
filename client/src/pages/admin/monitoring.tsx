@@ -1,5 +1,5 @@
 import { Box, Flex, SimpleGrid, Text } from '@chakra-ui/react'
-import type { NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
 import { FaPowerOff, FaTools } from 'react-icons/fa'
 import { BsFillBarChartFill } from 'react-icons/bs'
 import dayjs from 'dayjs'
@@ -9,6 +9,8 @@ import { Card, StatCard, CircularProgressBar, LineChart, ChartCard, SkeletonLayo
 import { useMonitoringData } from '@core/hooks'
 import { useEffect, useState } from 'react'
 import { Logs } from '@modules'
+import { unstable_getServerSession } from 'next-auth/next'
+import { authOptions } from '../api/auth/[...nextauth]'
 
 const MonitoringPage: NextPage = () => {
 
@@ -127,6 +129,19 @@ const MonitoringPage: NextPage = () => {
 											labels: {
 												show: false
 											}
+										},
+										yaxis: {
+											max: 100,
+											forceNiceScale: false,
+											tickAmount: 5,
+											labels: {
+												formatter: (value) => `${value}%`
+											}
+										},
+										chart: {
+											animations: {
+												easing: 'linear'
+											}
 										}
 									}}
 								/>
@@ -157,6 +172,15 @@ const MonitoringPage: NextPage = () => {
 			
 		</AdminDashboard>
 	</>)
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+
+    return {
+        props: {
+            session: await unstable_getServerSession(ctx.req, ctx.res, authOptions),
+        }
+    }
 }
 
 export default MonitoringPage

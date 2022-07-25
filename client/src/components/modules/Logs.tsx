@@ -29,9 +29,9 @@ export const Logs: React.FC<LogsProps> = ({ logs }) => {
 
                 <Card 
                     bg={useColorModeValue('secondaryGray.300', 'gray.800')} 
-                    flexDir='column-reverse' 
+                    flexDir='column' 
                     alignItems='flex-start'
-                    justifyContent='flex-start' 
+                    justifyContent='flex-end' 
                     h='550px' 
                     overflowY='auto'
                 >

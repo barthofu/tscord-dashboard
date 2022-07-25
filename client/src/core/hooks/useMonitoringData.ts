@@ -4,7 +4,7 @@ import { useSocket } from "./useWebSocket"
 
 export const useMonitoringData = () => {
 
-    const {webSocket, bots} = useSocket('ws://localhost:3001')
+    const { webSocket, bots } = useSocket('ws://localhost:3001')
 
     const [monitoringData, setMonitoringData] = useState<MonitoringData[] | null>(null)
     const [logs, setLogs] = useState<LogsData[] | null>(null)
@@ -14,6 +14,8 @@ export const useMonitoringData = () => {
         if (!webSocket) return
 
         if (bots?.[0]) webSocket.emit('request', { socketId: bots[0].socketId, event: 'getHealth'})
+
+        console.log('events subscribed')
 
         webSocket.on('monitoring', (data: MonitoringData) => {
 
@@ -43,7 +45,7 @@ export const useMonitoringData = () => {
             })
         })
         
-    }, [webSocket, bots])
+    }, [webSocket])
 
     return { monitoringData, logs }
 }

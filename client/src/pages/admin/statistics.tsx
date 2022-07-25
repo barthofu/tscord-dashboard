@@ -1,4 +1,6 @@
-import type { NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
+import { useSession } from 'next-auth/react'
+import { unstable_getServerSession } from 'next-auth/next'
 import { FaUserFriends, FaUserCheck } from 'react-icons/fa'
 import { BiTimeFive } from 'react-icons/bi'
 import { HiOutlineCode } from 'react-icons/hi'
@@ -6,6 +8,10 @@ import { SiClubhouse } from 'react-icons/si'
 import { MdBarChart, MdMultilineChart } from 'react-icons/md'
 import { Box, Flex, SimpleGrid, Text, useColorModeValue } from '@chakra-ui/react'
 import { type Cell } from 'react-table'
+import useSWR from 'swr'
+import axios from 'axios'
+
+import { authOptions } from '../api/auth/[...nextauth]'
 
 import { AdminDashboard } from '@layouts'
 import { StatCard, LineChart, SimpleTable, BarChart, ChartCard, SimpleSwitcher, PieChart, Card, VSeparator } from '@elements'
@@ -54,7 +60,13 @@ const mockupData = {
     
 }
 
+const fetcher = (url: string) => axios.get(`api/bot/${1}/` + url).then(res => res.data)
+
 const StatisticsPage: NextPage = () => {
+
+    const { data: session } = useSession()
+
+    const { data, error } = useSWR('/stats/totals', fetcher)
 
 	return (<>
 
@@ -148,14 +160,14 @@ const StatisticsPage: NextPage = () => {
                     }}
                 />
 
-                <SimpleTable 
+                <SimpleTable
                     title='Top commands'
                     columnsData={mockupData.topCommandsTable.columns} 
                     tableData={mockupData.topCommandsTable.data}
                     cellsResolvers={mockupData.topCommandsTable.cellsResolvers}   
                 />
 				
-                <SimpleGrid height='450px' columns={{ base: 1, md: 1, xl: 2 }} gap='20px' mb='20px'>
+                <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap='20px' mb='20px'>
                     <ChartCard 
                         title='Users'
                         subtitle='Part of active users of the bot inside all the known users'
@@ -232,6 +244,15 @@ const StatisticsPage: NextPage = () => {
 			
 		</AdminDashboard>
 	</>)
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+
+    return {
+        props: {
+            session: await unstable_getServerSession(ctx.req, ctx.res, authOptions),
+        }
+    }
 }
 
 export default StatisticsPage

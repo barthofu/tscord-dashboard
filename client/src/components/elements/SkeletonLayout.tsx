@@ -6,7 +6,7 @@ type SkeletonLayoutProps = {
     enabled: boolean
 }
 
-const CustomSkeleton: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const CustomSkeleton: React.FC<{ children: React.ReactNode, key: number }> = ({ children }) => {
 
     return (<>
         <Skeleton
