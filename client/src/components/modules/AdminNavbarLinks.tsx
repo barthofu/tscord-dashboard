@@ -1,4 +1,4 @@
-import { Avatar, Button, Flex, Icon, Link, Menu, MenuButton, MenuItem, MenuList, Text, useColorMode, useColorModeValue } from '@chakra-ui/react'
+import { Image, Button, Flex, Icon, Link, Menu, MenuButton, MenuItem, MenuList, Text, useColorMode, useColorModeValue } from '@chakra-ui/react'
 import React from 'react'
 import { MdNotificationsNone, MdInfoOutline } from "react-icons/md"
 import { IoMdMoon, IoMdSunny } from "react-icons/io"
@@ -6,10 +6,13 @@ import NextLink from 'next/link'
 
 import { SidebarResponsive } from '@modules'
 import { sidebarConfig } from '@config/sidebar'
+import { useSession } from 'next-auth/react'
 
 type Props = {}
 
 export const AdminNavbarLinks: React.FC<Props> = () => {
+
+    const { data: session } = useSession()
 
     const { colorMode, toggleColorMode } = useColorMode()
 
@@ -26,6 +29,7 @@ export const AdminNavbarLinks: React.FC<Props> = () => {
             w={{ sm: "100%", md: "auto" }}
             alignItems='center'
             flexDirection='row'
+            justifyContent='space-between'
             bg={menuBg}
             flexWrap="unset"
             p='10px'
@@ -114,14 +118,12 @@ export const AdminNavbarLinks: React.FC<Props> = () => {
             <Menu>
 
                 <MenuButton p='0px'>
-                    <Avatar
-                        _hover={{ cursor: "pointer" }}
-                        color='white'
-                        name='Bartholomé Gili'
-                        bg={useColorModeValue('gray.500', 'gray.700')}
-                        size='sm'
+                    <Image
+                        src={session?.user?.image || undefined}
+                        alt={session?.user?.name || undefined}
                         w='40px'
                         h='40px'
+                        borderRadius='50%'
                     />
                 </MenuButton>
 
@@ -145,7 +147,7 @@ export const AdminNavbarLinks: React.FC<Props> = () => {
                             fontWeight='700'
                             color={textColor}
                         >
-                            👋&nbsp; Hey, Bartholomé
+                            👋&nbsp; Hey, {session?.user?.name}
                         </Text>
                     </Flex>
 
