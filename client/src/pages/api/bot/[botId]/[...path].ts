@@ -1,3 +1,4 @@
+import { botsConfig } from "@config/bots"
 import axios from "axios"
 import { NextApiRequest, NextApiResponse } from "next"
 import { getToken } from "next-auth/jwt"
@@ -5,7 +6,7 @@ import { unstable_getServerSession } from "next-auth/next"
 import { getSession } from "next-auth/react"
 import { authOptions } from '../../auth/[...nextauth]'
 
-const baseURL = process.env['NODE_ENV'] === 'production' ? process.env['BOT_API_URL_PROD'] : process.env['BOT_API_URL_DEV']
+// const baseURL = process.env['NODE_ENV'] === 'production' ? process.env['BOT_API_URL_PROD'] : process.env['BOT_API_URL_DEV']
 
 const proxyHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 
@@ -16,6 +17,11 @@ const proxyHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const url = req.query.path instanceof Array ? req.query.path.join('/') : req.query.path
+    const baseURL = botsConfig.find(botConfig => botConfig.id === req.query.botId)?.apiUrl
+    if (!baseURL) {
+        res.status(404).send('Bot not found')
+        return
+    }
     const token = session.access_token
 
     const headers = {
@@ -37,6 +43,7 @@ const proxyHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     } catch (error) {
 
+        console.log(error)
         if (error instanceof Error) return res.json(error.message)
     }
 

@@ -15,6 +15,7 @@ import { authOptions } from '../api/auth/[...nextauth]'
 
 import { AdminDashboard } from '@layouts'
 import { StatCard, LineChart, SimpleTable, BarChart, ChartCard, SimpleSwitcher, PieChart, Card, VSeparator } from '@elements'
+import { botsConfig, getSanitizedBotsConfig } from '@config/bots'
 
 const mockupData = {
 
@@ -60,17 +61,23 @@ const mockupData = {
     
 }
 
-const fetcher = (url: string) => axios.get(`api/bot/${1}/` + url).then(res => res.data)
+const fetcher = (url: string) => axios.get(`/api/bot/${botsConfig[0].id}` + url).then(res => res.data)
 
-const StatisticsPage: NextPage = () => {
+type Props = {
+    bots: SanitizededBotsConfig
+}
+
+const StatisticsPage: NextPage<Props> = ({ bots }) => {
 
     const { data: session } = useSession()
 
     const { data, error } = useSWR('/stats/totals', fetcher)
 
+    console.log(data)
+
 	return (<>
 
-		<AdminDashboard breadcrumbs={['Statistics']}>
+		<AdminDashboard breadcrumbs={['Statistics']} bots={bots}>
 
 			<SimpleGrid
 				columns={{ base: 2, md: 2, lg: 3, "2xl": 6 }}
@@ -251,6 +258,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
         props: {
             session: await unstable_getServerSession(ctx.req, ctx.res, authOptions),
+            bots: getSanitizedBotsConfig()
         }
     }
 }

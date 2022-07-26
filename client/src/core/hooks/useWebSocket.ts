@@ -19,11 +19,7 @@ export const useSocket = (url: string) => {
 
 	useEffect(() => {
 
-		console.log(session.data)
-
 		if (!session.data || webSocket) return
-
-		console.log('connected')
 		
 		const socketIo = io(url, {
 			query: {

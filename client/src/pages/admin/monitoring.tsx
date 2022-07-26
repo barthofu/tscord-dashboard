@@ -11,8 +11,13 @@ import { useEffect, useState } from 'react'
 import { Logs } from '@modules'
 import { unstable_getServerSession } from 'next-auth/next'
 import { authOptions } from '../api/auth/[...nextauth]'
+import { botsConfig, getSanitizedBotsConfig } from '@config/bots'
 
-const MonitoringPage: NextPage = () => {
+type Props = {
+    bots: SanitizededBotsConfig
+}
+
+const MonitoringPage: NextPage<Props> = ({ bots }) => {
 
 	const [loading, setLoading] = useState(true)
 	const { monitoringData, logs } = useMonitoringData()
@@ -29,7 +34,7 @@ const MonitoringPage: NextPage = () => {
 
 	return (<>
 
-		<AdminDashboard breadcrumbs={['Monitoring']}>
+		<AdminDashboard breadcrumbs={['Monitoring']} bots={bots}>
 
 			{(monitoringData && monitoringData.length > 0) || loading ? <>
 			
@@ -179,6 +184,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
         props: {
             session: await unstable_getServerSession(ctx.req, ctx.res, authOptions),
+			bots: getSanitizedBotsConfig()
         }
     }
 }

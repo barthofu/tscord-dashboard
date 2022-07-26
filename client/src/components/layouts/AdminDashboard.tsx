@@ -6,10 +6,11 @@ import { sidebarConfig } from '@config/sidebar'
 
 type Props = {
     breadcrumbs: string[]
+    bots: SanitizededBotsConfig
     children: React.ReactNode
 }
 
-export const AdminDashboard: React.FC<Props> = ({ breadcrumbs, children }) => {
+export const AdminDashboard: React.FC<Props> = ({ breadcrumbs, bots, children }) => {
 
 	return (<>
         <Box>
