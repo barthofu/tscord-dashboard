@@ -1,7 +1,7 @@
 import { type ApexOptions } from 'apexcharts'
 
 // const colors = ['#4318FF', '#39B8FF', '#FF9F43', '#FF9F43'],
-export const colors = ['#6247aa', '#815ac0', '#a06cd5', '#c19ee0', 'dac3e8']
+export const colors = ['#6247aa', '#815ac0', '#a06cd5', '#c19ee0', '#dac3e8']
 const showGrid = false
 const dropShadow= false
 

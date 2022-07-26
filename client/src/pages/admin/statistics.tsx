@@ -98,7 +98,10 @@ const StatisticsPage: NextPage<Props> = ({ bots }) => {
         },
     ]
 
-    const usersActivity = stats.usersActivity.data || {}
+    const usersActivity = {
+        values: stats.usersActivity.data ? Object.values(stats.usersActivity.data) : [0],
+        labels: stats.usersActivity.data ? Object.keys(stats.usersActivity.data) : [],
+    }
 
 	return (<>
 
@@ -193,7 +196,7 @@ const StatisticsPage: NextPage<Props> = ({ bots }) => {
                         subtitle='Part of active users of the bot inside all the known users'
                     >
                         <PieChart 
-                            series={Object.values(usersActivity) as number[]}
+                            series={usersActivity.values as number[]}
                             options={{
                                 fill: {
                                     colors: colors,
@@ -202,7 +205,7 @@ const StatisticsPage: NextPage<Props> = ({ bots }) => {
                                     width: 1,
                                     colors: [useColorModeValue('#fff', '#000')],
                                 },
-                                labels: Object.keys(usersActivity),
+                                labels: usersActivity.labels,
                                 dataLabels: {
                                     enabled: true
                                 }
