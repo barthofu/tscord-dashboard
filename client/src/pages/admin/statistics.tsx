@@ -10,58 +10,62 @@ import { Box, Flex, SimpleGrid, Text, useColorModeValue } from '@chakra-ui/react
 import { type Cell } from 'react-table'
 import useSWR from 'swr'
 import axios from 'axios'
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en'
+
+TimeAgo.addLocale(en)
+const timeAgo = new TimeAgo('en-US')
 
 import { authOptions } from '../api/auth/[...nextauth]'
 
 import { AdminDashboard } from '@layouts'
 import { StatCard, LineChart, SimpleTable, BarChart, ChartCard, SimpleSwitcher, PieChart, Card, VSeparator } from '@elements'
 import { botsConfig, getSanitizedBotsConfig } from '@config/bots'
+import { colors } from '@config/charts'
 
-const mockupData = {
+const typeResolver = {
+    'CHAT_INPUT_COMMAND_INTERACTION': 'Command',
+    'USER_CONTEXT_MENU_COMMAND_INTERACTION': 'Context Menu',
+    'MESSAGE_CONTEXT_MENU_COMMAND_INTERACTION': 'Context Menu',
+    'SIMPLE_COMMAND_MESSAGE': 'Message',
+}
 
-    topCommandsTable: {
+const tables = {
+
+    topCommands: {
         columns: [
-            { Header: 'Command name', accessor: 'commandName' },
+            { Header: 'Command name', accessor: 'name' },
             { Header: 'Type', accessor: 'type' },
-            { Header: 'Total used', accessor: 'totalUsed' },
-        ],
-        data: [
-            { commandName: 'ping', type: 'Command', totalUsed: '87' },
-            { commandName: 'help', type: 'Command', totalUsed: '45' },
-            { commandName: 'help', type: 'Simple Command', totalUsed: '12' },
-            { commandName: 'help', type: 'Simple Command', totalUsed: '12' },
-            { commandName: 'help', type: 'Simple Command', totalUsed: '12' },
-            { commandName: 'help', type: 'Simple Command', totalUsed: '12' },
-            { commandName: 'help', type: 'Simple Command', totalUsed: '12' },
-            { commandName: 'help', type: 'Simple Command', totalUsed: '12' },
+            { Header: 'Total used', accessor: 'count' },
         ],
         cellsResolvers: {
-            commandName: (cell: Cell) => <Text fontSize='lg' fontWeight='bold'>{cell.value}</Text>,
+            name: (cell: Cell) => <Text fontSize='lg' fontWeight='bold'>{cell.value}</Text>,
             type: (cell: Cell) => <Text fontSize='sm' fontWeight='regular'>{cell.value}</Text>,
-            totalUsed: (cell: Cell) => <Text fontSize='sm' fontWeight='regular'>{cell.value}</Text>,
+            count: (cell: Cell) => <Text fontSize='sm' fontWeight='regular'>{cell.value}</Text>,
         }
     },
 
-    topGuildsTable: {
+    topGuilds: {
         columns: [
-            { Header: 'Guild', accessor: 'guildName' },
+            { Header: 'Guild', accessor: 'name' },
             { Header: 'Total commands', accessor: 'totalCommands' },
         ],
-        data: [
-            { guildName: 'Guild 1 Voiture bla', totalCommands: '87' },
-            { guildName: 'Guild 2', totalCommands: '45' },
-            { guildName: 'Guild 3', totalCommands: '12' },
-            { guildName: 'Guild 4', totalCommands: '12' },
-        ],
         cellsResolvers: {
-            guildName: (cell: Cell) => <Text fontSize='lg' fontWeight='bold'>{cell.value}</Text>,
+            name: (cell: Cell) => <Text fontSize='lg' fontWeight='bold'>{cell.value}</Text>,
             totalCommands: (cell: Cell) => <Text fontSize='sm' fontWeight='regular'>{cell.value}</Text>,
         }
     }
-    
 }
 
-const fetcher = (url: string) => axios.get(`/api/bot/${botsConfig[0].id}` + url).then(res => res.data)
+const fetcher = (url: string, args: { [key: string]: any }) => {
+
+    return axios.get(`/api/bot/${botsConfig[0].id}` + url, {
+        params: {
+            logIgnore: true,
+            ...args,
+        }
+    }).then(res => JSON.parse(res.data))
+}
 
 type Props = {
     bots: SanitizededBotsConfig
@@ -69,11 +73,32 @@ type Props = {
 
 const StatisticsPage: NextPage<Props> = ({ bots }) => {
 
-    const { data: session } = useSession()
+    const stats = {
+        totals: useSWR('/stats/totals', fetcher),
+        topCommands: useSWR('/stats/topCommands', fetcher),
+        topGuilds: useSWR('/stats/topGuilds', fetcher),
+        lastInteraction: useSWR('/stats/lastInteraction', fetcher),
+        commandsUsage: useSWR('/stats/commandsUsage', url => fetcher(url, { numberOfDays: 7 })),
+        usersActivity: useSWR('/stats/usersActivity', fetcher),
+        usersAndGuilds: useSWR('/stats/usersAndGuilds', url => fetcher(url, { numberOfDays: 7 })),
+    }
 
-    const { data, error } = useSWR('/stats/totals', fetcher)
+    const commandsUsageSeries = [
+        {
+            name: "Simple commands",
+            data: stats.commandsUsage.data?.map((commandUsage: { [key: string]: any }) => commandUsage.simpleCommands).reverse(),
+        },
+        {
+            name: "Context menus",
+            data: stats.commandsUsage.data?.map((commandUsage: { [key: string]: any }) => commandUsage.contextMenus).reverse(),
+        },
+        {
+            name: "Slash commands",
+            data: stats.commandsUsage.data?.map((commandUsage: { [key: string]: any }) => commandUsage.slashCommands).reverse(),
+        },
+    ]
 
-    console.log(data)
+    const usersActivity = stats.usersActivity.data || {}
 
 	return (<>
 
@@ -87,27 +112,27 @@ const StatisticsPage: NextPage<Props> = ({ bots }) => {
 
 				<StatCard 
 					title='Total commands' 
-					value='1291'
+					value={stats.totals.data?.stats.totalCommands}
 					icon={<HiOutlineCode />}
 				/>
                 <StatCard 
 					title='Total guilds' 
-					value='256'
+					value={stats.totals.data?.stats.totalGuilds}
 					icon={<SiClubhouse />}
 				/>
                 <StatCard 
 					title='Total Users' 
-					value='10721'
+					value={stats.totals.data?.stats.totalUsers}
 					icon={<FaUserFriends />}
 				/>
                 <StatCard 
-					title='Total Real Users' 
-					value='354'
+					title='Total Active Users' 
+					value={stats.totals.data?.stats.totalActiveUsers}
 					icon={<FaUserCheck />}
 				/>
                 <StatCard 
 					title='Last Interaction' 
-					value='3s ago'
+					value={stats.lastInteraction.data?.createdAt ? `${timeAgo.format(new Date(stats.lastInteraction.data?.createdAt).getTime(), 'mini')} ago` : ''}
 					icon={<BiTimeFive />}
 				/>
                 <StatCard 
@@ -125,20 +150,12 @@ const StatisticsPage: NextPage<Props> = ({ bots }) => {
                         id: 'barChart',
                         component: <>
                             <BarChart 
-                                series={[
-                                    {
-                                        name: "Simple commands",
-                                        data: [50, 64, 48, 66, 49, 68, 50],
-                                    },
-                                    {
-                                        name: "Context menus",
-                                        data: [17, 19, 25, 33, 45, 50, 50],
-                                    },
-                                    {
-                                        name: "Slash commands",
-                                        data: [150, 152, 160, 161, 170, 200, 50],
-                                    },
-                                ]}
+                                series={commandsUsageSeries}
+                                options={{
+                                    xaxis: {
+                                        categories: stats.commandsUsage.data?.map((commandUsage: { [key: string]: any }) => commandUsage.date.split('/').slice(0, -1).join('/')).reverse(),
+                                    }
+                                }}
                             />
                         </>,
                         icon: MdBarChart
@@ -147,20 +164,12 @@ const StatisticsPage: NextPage<Props> = ({ bots }) => {
                         id: 'lineChart',
                         component: <>
                             <LineChart 
-                                series={[
-                                    {
-                                        name: "Simple commands",
-                                        data: [50, 64, 48, 66, 49, 68, 50],
-                                    },
-                                    {
-                                        name: "Context menus",
-                                        data: [17, 19, 25, 33, 45, 50, 50],
-                                    },
-                                    {
-                                        name: "Slash commands",
-                                        data: [150, 152, 160, 161, 170, 200, 50],
-                                    },
-                                ]}
+                                series={commandsUsageSeries}
+                                options={{
+                                    xaxis: {
+                                        categories: stats.commandsUsage.data?.map((commandUsage: { [key: string]: any }) => commandUsage.date.split('/').slice(0, -1).join('/')).reverse(),
+                                    }
+                                }}
                             />
                         </>,
                         icon: MdMultilineChart
@@ -169,9 +178,13 @@ const StatisticsPage: NextPage<Props> = ({ bots }) => {
 
                 <SimpleTable
                     title='Top commands'
-                    columnsData={mockupData.topCommandsTable.columns} 
-                    tableData={mockupData.topCommandsTable.data}
-                    cellsResolvers={mockupData.topCommandsTable.cellsResolvers}   
+                    columnsData={tables.topCommands.columns} 
+                    tableData={stats.topCommands.data?.map((command: { name: string, type: string, count: number}) => ({
+                        name: command.name,
+                        type: typeResolver[command.type as keyof typeof typeResolver],
+                        count: command.count,
+                    })) || []}
+                    cellsResolvers={tables.topCommands.cellsResolvers}   
                 />
 				
                 <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap='20px' mb='20px'>
@@ -180,54 +193,28 @@ const StatisticsPage: NextPage<Props> = ({ bots }) => {
                         subtitle='Part of active users of the bot inside all the known users'
                     >
                         <PieChart 
-                            series={[
-                                25, 75
-                            ]}
+                            series={Object.values(usersActivity) as number[]}
                             options={{
                                 fill: {
-                                    colors: ['#0088FE', '#e0e0e0'],
+                                    colors: colors,
+                                },
+                                stroke: {
+                                    width: 1,
+                                    colors: [useColorModeValue('#fff', '#000')],
+                                },
+                                labels: Object.keys(usersActivity),
+                                dataLabels: {
+                                    enabled: true
                                 }
                             }}
-                        >
-
-                            <Card
-                                bg={useColorModeValue("white", "gray.600")}
-                                flexDirection='row'
-                                justifyContent='space-around'
-                                boxShadow={useColorModeValue("0px 18px 40px rgba(112, 144, 176, 0.12)", "unset")}
-                            >
-                                <Flex direction='column' py='5px' alignItems={{ xl: 'center', '2xl': 'start' }}>
-                                    <Flex align='center' flexDir={{ xl: 'column', '2xl': 'row' }}>
-                                        <Box h='8px' w='8px' bg='#0088FE' borderRadius='50%' me='5px' mb={{ xl: '1em', '2xl': '0' }} />
-                                        <Text fontSize='xs' color='secondaryGray.600' fontWeight='700'>
-                                            Active users
-                                        </Text>
-                                    </Flex>
-                                    <Text fontSize='lg' color={useColorModeValue("secondaryGray.900", "white")} fontWeight='700'>
-                                        25%
-                                    </Text>
-                                </Flex>
-                                <VSeparator />
-                                <Flex direction='column' py='5px' me='10px' alignItems={{ xl: 'center', '2xl': 'start' }}>
-                                    <Flex align='center' flexDir={{ xl: 'column', '2xl': 'row' }}>
-                                        <Box h='8px' w='8px' bg='#e0e0e0' borderRadius='50%' me='5px' mb={{ xl: '1em', '2xl': '0' }} />
-                                        <Text fontSize='xs' color='secondaryGray.600' fontWeight='700'>
-                                            Total users
-                                        </Text>
-                                    </Flex>
-                                    <Text fontSize='lg' color={useColorModeValue("secondaryGray.900", "white")} fontWeight='700'>
-                                        10721
-                                    </Text>
-                                </Flex>
-                            </Card>
-                        </PieChart>
+                        />
                     </ChartCard >
 
                     <SimpleTable 
                         title='Top guilds'
-                        columnsData={mockupData.topGuildsTable.columns} 
-                        tableData={mockupData.topGuildsTable.data}
-                        cellsResolvers={mockupData.topGuildsTable.cellsResolvers}   
+                        columnsData={tables.topGuilds.columns} 
+                        tableData={stats.topGuilds.data || []}
+                        cellsResolvers={tables.topGuilds.cellsResolvers}   
                     />
 
                 </SimpleGrid>
@@ -237,13 +224,18 @@ const StatisticsPage: NextPage<Props> = ({ bots }) => {
                         series={[
                             {
                                 name: "Guilds",
-                                data: [17, 19, 25, 33, 45, 50, 50],
+                                data: stats.usersAndGuilds.data?.guilds.map((guild: any) => guild.count).reverse() || [],
                             },
                             {
                                 name: "Users",
-                                data: [150, 152, 160, 161, 170, 200, 50],
+                                data: stats.usersAndGuilds.data?.users.map((user: any) => user.count).reverse() || [],
                             },
                         ]}
+                        options={{
+                            xaxis: {
+                                categories: stats.usersAndGuilds.data?.users.map((user: any) => user.date.split('/').slice(0, -1).join('/')).reverse() || []
+                            }
+                        }}
                     />
                 </ChartCard>
                 

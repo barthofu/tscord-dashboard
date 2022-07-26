@@ -16,8 +16,14 @@ const proxyHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         return
     }
 
-    const url = req.query.path instanceof Array ? req.query.path.join('/') : req.query.path
-    const baseURL = botsConfig.find(botConfig => botConfig.id === req.query.botId)?.apiUrl
+    const { path, botId } = req.query
+    
+    // sanitize query params
+    delete req.query.path
+    delete req.query.botId
+
+    const url = path instanceof Array ?path.join('/') : path
+    const baseURL = botsConfig.find(botConfig => botConfig.id === botId)?.apiUrl
     if (!baseURL) {
         res.status(404).send('Bot not found')
         return
