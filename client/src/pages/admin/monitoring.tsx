@@ -2,7 +2,6 @@ import { Box, Flex, SimpleGrid, Text } from '@chakra-ui/react'
 import type { GetServerSideProps, NextPage } from 'next'
 import { FaPowerOff, FaTools } from 'react-icons/fa'
 import { BsFillBarChartFill } from 'react-icons/bs'
-import dayjs from 'dayjs'
 
 import { AdminDashboard } from '@layouts'
 import { Card, StatCard, CircularProgressBar, LineChart, ChartCard, SkeletonLayout } from '@elements'
@@ -11,7 +10,7 @@ import { useEffect, useState } from 'react'
 import { Logs } from '@modules'
 import { unstable_getServerSession } from 'next-auth/next'
 import { authOptions } from '../api/auth/[...nextauth]'
-import { botsConfig, getSanitizedBotsConfig } from '@config/bots'
+import { getSanitizedBotsConfig } from '@config/bots'
 
 type Props = {
     bots: SanitizededBotsConfig

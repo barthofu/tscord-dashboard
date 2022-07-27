@@ -32,7 +32,7 @@ const Logo: React.FC = () => {
 const SidebarContent: React.FC<Props> = ({ tabs }) => {
 
     return (
-        <Flex direction='column' height='100%' pt='25px' borderRadius='30px'>
+        <Flex direction='column' height='100%' pt='25px' borderRadius='30px' bg={useColorModeValue('white', 'gray.700')}>
 
             <Logo />
 
@@ -156,7 +156,7 @@ export const Sidebar: React.FC<Props> = ({ tabs }) => {
 
 	return (<>
     
-        <Box display={{ sm: 'none', xl: 'block' }} position='fixed' minH='100%'>
+        <Box display={['none', null, null, null, 'block']} position='fixed' minH='100%'>
             <Box
                 bg={useColorModeValue('white', 'gray.700')}
                 transition={'0.2s linear'}

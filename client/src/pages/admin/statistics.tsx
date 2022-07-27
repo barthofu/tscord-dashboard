@@ -1,15 +1,13 @@
 import type { GetServerSideProps, NextPage } from 'next'
-import { useSession } from 'next-auth/react'
 import { unstable_getServerSession } from 'next-auth/next'
 import { FaUserFriends, FaUserCheck } from 'react-icons/fa'
 import { BiTimeFive } from 'react-icons/bi'
 import { HiOutlineCode } from 'react-icons/hi'
 import { SiClubhouse } from 'react-icons/si'
 import { MdBarChart, MdMultilineChart } from 'react-icons/md'
-import { Box, Flex, SimpleGrid, Text, useColorModeValue } from '@chakra-ui/react'
+import { SimpleGrid, Text, useColorModeValue } from '@chakra-ui/react'
 import { type Cell } from 'react-table'
 import useSWR from 'swr'
-import axios from 'axios'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 
@@ -20,8 +18,9 @@ import { authOptions } from '../api/auth/[...nextauth]'
 
 import { AdminDashboard } from '@layouts'
 import { StatCard, LineChart, SimpleTable, BarChart, ChartCard, SimpleSwitcher, PieChart, Card, VSeparator } from '@elements'
-import { botsConfig, getSanitizedBotsConfig } from '@config/bots'
+import { getSanitizedBotsConfig } from '@config/bots'
 import { colors } from '@config/charts'
+import { fetcher } from '@core/utils/functions'
 
 const typeResolver = {
     'CHAT_INPUT_COMMAND_INTERACTION': 'Command',
@@ -57,16 +56,6 @@ const tables = {
     }
 }
 
-const fetcher = (url: string, args: { [key: string]: any }) => {
-
-    return axios.get(`/api/bot/${botsConfig[0].id}` + url, {
-        params: {
-            logIgnore: true,
-            ...args,
-        }
-    }).then(res => JSON.parse(res.data))
-}
-
 type Props = {
     bots: SanitizededBotsConfig
 }
@@ -86,15 +75,15 @@ const StatisticsPage: NextPage<Props> = ({ bots }) => {
     const commandsUsageSeries = [
         {
             name: "Simple commands",
-            data: stats.commandsUsage.data?.map((commandUsage: { [key: string]: any }) => commandUsage.simpleCommands).reverse(),
+            data: stats.commandsUsage.data?.map((commandUsage: { [key: string]: any }) => commandUsage.simpleCommands).reverse() || [],
         },
         {
             name: "Context menus",
-            data: stats.commandsUsage.data?.map((commandUsage: { [key: string]: any }) => commandUsage.contextMenus).reverse(),
+            data: stats.commandsUsage.data?.map((commandUsage: { [key: string]: any }) => commandUsage.contextMenus).reverse() || [],
         },
         {
             name: "Slash commands",
-            data: stats.commandsUsage.data?.map((commandUsage: { [key: string]: any }) => commandUsage.slashCommands).reverse(),
+            data: stats.commandsUsage.data?.map((commandUsage: { [key: string]: any }) => commandUsage.slashCommands).reverse() || [],
         },
     ]
 

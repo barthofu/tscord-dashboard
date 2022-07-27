@@ -16,9 +16,10 @@ type Props = {
     columnsData: Column<object>[],
     tableData: object[]
     cellsResolvers?: { [key: string]: (cell: Cell<object, any>) => React.ReactNode }
+    additionalProps?: any
 }
 
-export const SimpleTable: React.FC<Props> = ({ title, columnsData, tableData, cellsResolvers }) => {
+export const SimpleTable: React.FC<Props> = ({ title, columnsData, tableData, cellsResolvers, additionalProps }) => {
     
     const columns = useMemo(() => columnsData, [columnsData])
     const data = useMemo(() => tableData, [tableData])
@@ -42,6 +43,7 @@ export const SimpleTable: React.FC<Props> = ({ title, columnsData, tableData, ce
             h='450px'
             overflowY='auto'
             overflowX='hidden'
+            {...additionalProps}
         >
 
             <Flex px='25px' justify='space-between' alignItems='center' my='1.5em'>
