@@ -15,8 +15,6 @@
 		"isolatedModules": true,
 		"jsx": "preserve",
 		"incremental": true,
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
 
 		"baseUrl": ".",
 		"paths": {
