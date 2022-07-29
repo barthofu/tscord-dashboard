@@ -1,12 +1,11 @@
 type BotConfig = {
-    name: string
     id: string
+    name: string
+    avatar?: string | null
     apiUrl: string
     secret: string
 }
 
 type BotsConfig = BotConfig[]
 
-// type BotsConfigEnv = Omit<BotConfig, 'name'>[]
-
-type SanitizededBotsConfig = Omit<BotConfig, 'apiUrl' | 'secret'>[]
+type SanitizededBotConfig = Omit<BotConfig, 'apiUrl' | 'secret'>

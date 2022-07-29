@@ -20,27 +20,27 @@ export const sidebarConfig: SidebarConfigType = {
     tabs: [
         {
             name: 'Monitoring',
-            href: '/admin/monitoring',
+            href: 'monitoring',
             icon: <AiFillPieChart />,
         },
         {
             name: 'Statistics',
-            href: '/admin/statistics',
+            href: 'statistics',
             icon: <BiStats />,
         },
         {
             name: 'Users',
-            href: '/admin/users',
+            href: 'users',
             icon: <FaUserFriends />,
         },
         {
             name: 'Guilds',
-            href: '/admin/guilds',
+            href: 'guilds',
             icon: <SiClubhouse />,
         },
         {
             name: 'Database',
-            href: '/admin/database',
+            href: 'database',
             icon: <TbDatabase />,
         }
     ]

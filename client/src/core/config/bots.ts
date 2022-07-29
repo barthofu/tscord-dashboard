@@ -9,10 +9,11 @@ export const botsConfig: BotsConfig = [
 
 // utilities functions
 
-export const getSanitizedBotsConfig = () => {
+export const getSanitizedBotsConfig= (): SanitizededBotConfig[] => {
 
     return botsConfig.map(botConfig => ({
+        id: botConfig.id,
         name: botConfig.name,
-        id: botConfig.id
+        avatar: botConfig.avatar ?? null
     }))
 }

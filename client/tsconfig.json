@@ -19,7 +19,6 @@
 		"baseUrl": ".",
 		"paths": {
 
-			"@services": ["src/core/services"],
 			"@elements": ["./src/components/elements"],
 			"@layouts": ["./src/components/layouts"],
 			"@modules": ["./src/components/modules"],

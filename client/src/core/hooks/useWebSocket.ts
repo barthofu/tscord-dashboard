@@ -2,7 +2,7 @@ import { useSession } from 'next-auth/react'
 import { useEffect, useRef, useState } from 'react'
 import io, { Socket } from 'socket.io-client'
 
-export const useSocket = (url: string) => {
+export const useWebSocket = (url: string) => {
 		
 	const [webSocket, setWebSocket] = useState<Socket | null>(null)
 	const [bots, setBots] = useState<BotsList>([])

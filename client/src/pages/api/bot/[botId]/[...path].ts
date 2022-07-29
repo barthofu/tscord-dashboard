@@ -5,8 +5,8 @@ import { getToken } from "next-auth/jwt"
 import { unstable_getServerSession } from "next-auth/next"
 import { getSession } from "next-auth/react"
 import { authOptions } from '../../auth/[...nextauth]'
-
-// const baseURL = process.env['NODE_ENV'] === 'production' ? process.env['BOT_API_URL_PROD'] : process.env['BOT_API_URL_DEV']
+import { URLSearchParams } from 'url' 
+import { FetchError } from "@core/utils/classes"
 
 const proxyHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 
@@ -22,36 +22,74 @@ const proxyHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     delete req.query.path
     delete req.query.botId
 
-    const url = path instanceof Array ?path.join('/') : path
-    const baseURL = botsConfig.find(botConfig => botConfig.id === botId)?.apiUrl
+    const uri = path instanceof Array ?path.join('/') : path as string
+    const baseURL = botsConfig.find(botConfig => botConfig.id === botId)?.apiUrl.replace(/\/+$/, '')
     if (!baseURL) {
         res.status(404).send('Bot not found')
         return
     }
-    const token = session.access_token
 
+    // create the url from the baseURL and the uri, and set the query params
+    const url = new URL(uri, baseURL)
+    Object.keys(req.query).forEach(key => url.searchParams.append(key, <string>req.query[key]))
+    
+    // authorization
+    const token = session.access_token
     const headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
     }
 
     try {
 
-        const response = await axios({
-            url,
-            baseURL,
+        const options = {
             method: req.method,
-            data: req.body,
-            params: req.query,
-            headers
-        })
+            headers,
+            ...(req.method === 'POST' || req.method === 'PUT') ? { body: req.body } : {},
+        }
+        console.log(options)
 
-        return res.json(JSON.stringify(response.data))
+        const response = await fetch(url, options)
 
-    } catch (error) {
+        // get the response json body while handling errors
+        if (response.status === 200) {
+            const json = await response.json()
+            res.status(response.status).send(json)
+            return
+        } else {
+            const error = new FetchError(await response.text())
+            error.status = response.status
+            error.info = await response.json()
+            throw error
+        }
 
-        console.log(error)
-        if (error instanceof Error) return res.json(error.message)
+    } catch (err) {
+
+        if (err instanceof Error) {
+            res.status(500).send(err.message)
+            return
+        }
     }
+
+    // try {
+
+    //     const response = await axios({
+    //         url,
+    //         baseURL,
+    //         method: req.method,
+    //         data: req.body,
+    //         params: req.query,
+    //         headers
+    //     })
+
+    //     return res.json(JSON.stringify(response.data))
+
+    // } catch (error) {
+
+    //     // console.log(error)
+    //     if (error instanceof Error) return res.json(error.message)
+    // }
 
 }
 

@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react"
-import { io, Socket } from "socket.io-client"
-import { useSocket } from "./useWebSocket"
+import { useContext, useEffect, useState } from "react"
+
+import { useWebSocket } from "@core/hooks"
+import { AdminDashboardContext } from "@core/contexts"
 
 export const useMonitoringData = () => {
 
-    const { webSocket, bots } = useSocket('ws://localhost:3001')
+    const { currentBot } = useContext(AdminDashboardContext)
+
+    const { webSocket, bots } = useWebSocket('ws://localhost:3001')
 
     const [monitoringData, setMonitoringData] = useState<MonitoringData[] | null>(null)
     const [logs, setLogs] = useState<LogsData[] | null>(null)
@@ -13,7 +16,7 @@ export const useMonitoringData = () => {
 
         if (!webSocket) return
 
-        if (bots?.[0]) webSocket.emit('request', { socketId: bots[0].socketId, event: 'getHealth'})
+        if (bots?.[0]) webSocket.emit('request', { socketId: bots.find(bot => bot.id === currentBot.id)?.socketId, event: 'getHealth'})
 
         console.log('events subscribed')
 

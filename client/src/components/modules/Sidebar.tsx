@@ -2,10 +2,11 @@ import { Box, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerOverla
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
 import Image from 'next/image'
-import React from 'react'
+import React, { useContext } from 'react'
 import { IoMenuOutline } from "react-icons/io5"
 
 import { HSeparator } from '@elements'
+import { AdminDashboardContext } from '@core/contexts'
 
 type Props = {
     tabs: {
@@ -17,13 +18,15 @@ type Props = {
 
 const Logo: React.FC = () => {
 
+    const { currentBot } = useContext(AdminDashboardContext)
+
     return (
         <Flex align='center' direction='column'>
             <Text
                 fontSize='2xl'
                 fontWeight='bold'
                 mb='1em'
-            >TSCord Template</Text>
+            >{currentBot.name}</Text>
             <HSeparator mb='20px' w='80%'/>
         </Flex>
     )
@@ -50,6 +53,8 @@ const SidebarContent: React.FC<Props> = ({ tabs }) => {
 
 const Tabs: React.FC<Props> = ({ tabs }) => {
 
+    const { currentBot } = useContext(AdminDashboardContext)
+
     const router = useRouter()
     const isActiveTab = (route: string) => router.pathname.includes(route.toLowerCase())
 
@@ -61,7 +66,7 @@ const Tabs: React.FC<Props> = ({ tabs }) => {
     return (<>
         {tabs.map((tab, index) => (
 
-            <Link as={NextLink} href={tab.href} key={index}>
+            <Link as={NextLink} href={`/admin/${currentBot.id}/${tab.href}`} key={index}>
                 <Box  _hover={{ cursor: 'pointer' }}>
                     <HStack
                         spacing={isActiveTab(tab.href) ? '22px' : '26px'}

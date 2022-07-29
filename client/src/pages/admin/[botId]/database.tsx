@@ -1,32 +1,33 @@
+import { useContext, useState } from 'react'
 import type { GetServerSideProps, NextPage } from 'next'
 import { unstable_getServerSession } from 'next-auth/next'
 import { Box, Button, css, Flex, SimpleGrid, Spinner, Text, useColorModeValue, useToast } from '@chakra-ui/react'
 import { type Cell } from 'react-table'
+import axios from 'axios'
 import useSWR, { useSWRConfig  } from 'swr'
 import { BsFileEarmarkZipFill, BsPlusLg } from 'react-icons/bs'
+import { MdSettingsBackupRestore } from 'react-icons/md'
 
-import { authOptions } from '../api/auth/[...nextauth]'
+import { authOptions } from '../../api/auth/[...nextauth]'
 
 import { AdminDashboard } from '@layouts'
 import { getSanitizedBotsConfig } from '@config/bots'
-import { fetcher } from '@core/utils/functions'
+import { fetcher, adminDashboardServerSideProps, successToast, errorToast } from '@core/utils/functions'
 import { Card, SimpleTable, StatCard } from '@elements'
-import axios from 'axios'
-import { MdSettingsBackupRestore } from 'react-icons/md'
-import { useState } from 'react'
 
 type Props = {
-    bots: SanitizededBotsConfig
+    bots: SanitizededBotConfig[]
+    currentBot: SanitizededBotConfig
 }
 
-const DatabasePage: NextPage<Props> = ({ bots }) => {
+const DatabasePage: NextPage<Props> = ({ bots, currentBot }) => {
 
     const [newBackupLoading, setNewBackupLoading] = useState<boolean>(false)
 
     const toast = useToast()
 
-    const backupList = useSWR('/database/backup/list', fetcher)
-    const databaseSize = useSWR('/database/size', fetcher)
+    const backupList = useSWR('/database/backup/list', url => fetcher(url, currentBot.id))
+    const databaseSize = useSWR('/database/size', url => fetcher(url, currentBot.id))
     const { mutate } = useSWRConfig()
 
     const tables = {
@@ -39,18 +40,20 @@ const DatabasePage: NextPage<Props> = ({ bots }) => {
                 name: (cell: Cell) => <Text fontSize='lg' fontWeight='bold'>{cell.value}</Text>,
                 restore: (cell: Cell) => <>
                     <Button onClick={() => {
-                        axios.post(
-                            `/api/bot/${bots[0].id}/database/restore`, 
-                            { snapshotName: cell.value }
-                        )
-                            .then(() => {
-                                toast({
-                                    title: 'Backup restored successfuly',
-                                    status: 'success',
-                                    duration: 6000,
-                                    isClosable: true,
-                                    position: 'bottom-right'
-                                })
+                        
+                        fetch(`/api/bot/${currentBot.id}/database/restore`, {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                snapshotName: cell.value
+                            })
+                        })
+                            .then(res => {
+
+                                if (res.status === 200) successToast(toast, 'Backup restored successfuly')
+                                else throw new Error()
+                            })
+                            .catch(err => {
+                                errorToast(toast, 'Couldn\'t restore backup')
                             })
                     }} fontSize='sm' fontWeight='regular'>Restore</Button>
                 </>
@@ -61,24 +64,29 @@ const DatabasePage: NextPage<Props> = ({ bots }) => {
     const createNewBackup = async () => {
 
         setNewBackupLoading(true)
-        axios.post(`/api/bot/${bots[0].id}/database/backup`)
-            .then(() => {
-                mutate('/database/backup/list')
-                setNewBackupLoading(false)
 
-                toast({
-                    title: 'New backup created successfuly',
-                    status: 'success',
-                    duration: 6000,
-                    isClosable: true,
-                    position: 'bottom-right'
-                })
+        fetch(`/api/bot/${currentBot.id}/database/backup`, { 
+            method: 'POST'
+        })
+            .then(res => {
+
+                if (res.status === 200) {
+                    mutate('/database/backup/list')
+                    setNewBackupLoading(false)
+                    successToast(toast, 'Backup created successfuly')
+                } else {
+                    throw new Error()
+                }
+            })
+            .catch(() => {
+                setNewBackupLoading(false)
+                errorToast(toast, 'Backup failed')
             })
     }
 
 	return (<>
 
-		<AdminDashboard breadcrumbs={['Database']} bots={bots}>
+		<AdminDashboard breadcrumbs={['Database']} bots={bots} currentBot={currentBot}>
 
 			<SimpleGrid
 				columns={[1, 1, 1, 1, 1, 3, 3]}
@@ -150,12 +158,10 @@ const DatabasePage: NextPage<Props> = ({ bots }) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
-    return {
-        props: {
-            session: await unstable_getServerSession(ctx.req, ctx.res, authOptions),
-            bots: getSanitizedBotsConfig()
-        }
-    }
+    const { botId } = ctx.query
+    const session = await unstable_getServerSession(ctx.req, ctx.res, authOptions)
+
+    return await adminDashboardServerSideProps(botId as string, session)
 }
 
 export default DatabasePage

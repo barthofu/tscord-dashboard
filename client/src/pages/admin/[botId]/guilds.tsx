@@ -1,13 +1,12 @@
 import type { GetServerSideProps, NextPage } from 'next'
 import { unstable_getServerSession } from 'next-auth/next'
-import { Text, Flex, GridItem, HStack, Icon, InputGroup, InputLeftAddon, Select, SimpleGrid, StackDivider, Tag, useBreakpointValue, VStack, Spinner, Box } from '@chakra-ui/react'
+import useSWR from 'swr'
+import { Text, Flex, GridItem, HStack, Icon, InputGroup, InputLeftAddon, Select, SimpleGrid, Tag, useBreakpointValue, VStack, Spinner, Box, useToast } from '@chakra-ui/react'
 
-import { authOptions } from '../api/auth/[...nextauth]'
+import { authOptions } from '../../api/auth/[...nextauth]'
 
 import { AdminDashboard } from '@layouts'
-import { getSanitizedBotsConfig } from '@config/bots'
-import { fetcher } from '@core/utils/functions'
-import useSWR from 'swr'
+import { adminDashboardServerSideProps, errorToast, fetcher } from '@core/utils/functions'
 import { GuildCard } from '@elements'
 import { useState } from 'react'
 import { SearchBar } from '@modules'
@@ -15,7 +14,8 @@ import { FaSortAmountDownAlt } from 'react-icons/fa'
 import { IoIosArrowDown } from 'react-icons/io'
 
 type GuildsPageProps = {
-    bots: SanitizededBotsConfig
+    bots: SanitizededBotConfig[]
+    currentBot: SanitizededBotConfig
 }
 
 const sortByOptions = [
@@ -25,27 +25,47 @@ const sortByOptions = [
 ] as const
 type SortByOptionsType = typeof sortByOptions[number]
 
-const GuildsPage: NextPage<GuildsPageProps> = ({ bots }) => {
+const GuildsPage: NextPage<GuildsPageProps> = ({ bots, currentBot }) => {
+
+    const toast = useToast()
 
     const [sortBy, setSortBy] = useState<SortByOptionsType>('members')
     const [search, setSearch] = useState<string>('')
 
     const { 
         data: guildsData, 
-        error, 
-        isValidating: isLoading 
-    } = useSWR('/bot/guilds', fetcher, {
+        error,
+        isValidating: isLoading
+    } = useSWR('/bot/guilds', url => fetcher(url, currentBot.id), {
         dedupingInterval: 60000 // 1 minute
     })
+
+    if (error) errorToast(toast, 'Error fetching guilds')
 
     const sortByIcon = useBreakpointValue({
         base: <Icon as={IoIosArrowDown} />,
         md: <Icon as={FaSortAmountDownAlt} pr="1" mr="1" />,
     })
 
+    const processedGuildsData = guildsData ? guildsData
+        .filter((guild: any) => {
+            return search ? guild.discord.name.toLowerCase().includes(search.toLowerCase()) : true
+        })
+        .sort((a: any, b: any) => {
+        
+            if (sortBy === 'name') {
+                return a.discord.name.toLowerCase().localeCompare(b.discord.name.toLowerCase())
+            } else if (sortBy === 'members') {
+                return b.discord.memberCount - a.discord.memberCount
+            } else if (sortBy === 'activity') {
+                return new Date(b.database.lastInteract).getTime() - new Date(a.database.lastInteract).getTime()
+            }
+        })
+        : []
+
 	return (<>
 
-		<AdminDashboard breadcrumbs={['Guilds']} bots={bots}>
+		<AdminDashboard breadcrumbs={['Guilds']} bots={bots} currentBot={currentBot}>
 
             <Flex w='100%' justifyContent='center'>
 
@@ -103,7 +123,7 @@ const GuildsPage: NextPage<GuildsPageProps> = ({ bots }) => {
                             {isLoading ? 
                                 <Spinner size="md" />
                                 : 
-                                <Tag size="md" fontWeight='bold'>{guildsData?.length}</Tag>
+                                <Tag size="md" fontWeight='bold'>{processedGuildsData.length}</Tag>
                             }
                         </HStack>
 
@@ -113,19 +133,7 @@ const GuildsPage: NextPage<GuildsPageProps> = ({ bots }) => {
                             mb='20px'
                         >
 
-                            {guildsData?.filter((guild: any) => {
-                                    return search ? guild.discord.name.toLowerCase().includes(search.toLowerCase()) : true
-                                })
-                                .sort((a: any, b: any) => {
-                                
-                                    if (sortBy === 'name') {
-                                        return a.discord.name.toLowerCase().localeCompare(b.discord.name.toLowerCase())
-                                    } else if (sortBy === 'members') {
-                                        return b.discord.memberCount - a.discord.memberCount
-                                    } else if (sortBy === 'activity') {
-                                        return new Date(b.database.lastInteract).getTime() - new Date(a.database.lastInteract).getTime()
-                                    }
-                                })
+                            {processedGuildsData
                                 .map((guild: any) => (
 
                                     <GuildCard
@@ -147,12 +155,10 @@ const GuildsPage: NextPage<GuildsPageProps> = ({ bots }) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
-    return {
-        props: {
-            session: await unstable_getServerSession(ctx.req, ctx.res, authOptions),
-            bots: getSanitizedBotsConfig()
-        }
-    }
+    const { botId } = ctx.query
+    const session = await unstable_getServerSession(ctx.req, ctx.res, authOptions)
+
+    return await adminDashboardServerSideProps(botId as string, session)
 }
 
 export default GuildsPage

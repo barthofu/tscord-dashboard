@@ -1,22 +1,24 @@
+import { useEffect, useState } from 'react'
 import { Box, Flex, SimpleGrid, Text } from '@chakra-ui/react'
 import type { GetServerSideProps, NextPage } from 'next'
+import { unstable_getServerSession } from 'next-auth/next'
 import { FaPowerOff, FaTools } from 'react-icons/fa'
 import { BsFillBarChartFill } from 'react-icons/bs'
+
+import { authOptions } from '../../api/auth/[...nextauth]'
 
 import { AdminDashboard } from '@layouts'
 import { Card, StatCard, CircularProgressBar, LineChart, ChartCard, SkeletonLayout } from '@elements'
 import { useMonitoringData } from '@core/hooks'
-import { useEffect, useState } from 'react'
 import { Logs } from '@modules'
-import { unstable_getServerSession } from 'next-auth/next'
-import { authOptions } from '../api/auth/[...nextauth]'
-import { getSanitizedBotsConfig } from '@config/bots'
+import { adminDashboardServerSideProps } from '@core/utils/functions'
 
 type Props = {
-    bots: SanitizededBotsConfig
+    bots: SanitizededBotConfig[]
+	currentBot: SanitizededBotConfig
 }
 
-const MonitoringPage: NextPage<Props> = ({ bots }) => {
+const MonitoringPage: NextPage<Props> = ({ bots, currentBot }) => {
 
 	const [loading, setLoading] = useState(true)
 	const { monitoringData, logs } = useMonitoringData()
@@ -33,7 +35,7 @@ const MonitoringPage: NextPage<Props> = ({ bots }) => {
 
 	return (<>
 
-		<AdminDashboard breadcrumbs={['Monitoring']} bots={bots}>
+		<AdminDashboard breadcrumbs={['Monitoring']} bots={bots} currentBot={currentBot}>
 
 			{(monitoringData && monitoringData.length > 0) || loading ? <>
 			
@@ -180,12 +182,10 @@ const MonitoringPage: NextPage<Props> = ({ bots }) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
-    return {
-        props: {
-            session: await unstable_getServerSession(ctx.req, ctx.res, authOptions),
-			bots: getSanitizedBotsConfig()
-        }
-    }
+    const { botId } = ctx.query
+    const session = await unstable_getServerSession(ctx.req, ctx.res, authOptions)
+
+    return await adminDashboardServerSideProps(botId as string, session)
 }
 
 export default MonitoringPage

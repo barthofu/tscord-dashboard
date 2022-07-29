@@ -11,16 +11,16 @@ import useSWR from 'swr'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 
-TimeAgo.addLocale(en)
-const timeAgo = new TimeAgo('en-US')
-
-import { authOptions } from '../api/auth/[...nextauth]'
+import { authOptions } from '../../api/auth/[...nextauth]'
 
 import { AdminDashboard } from '@layouts'
 import { StatCard, LineChart, SimpleTable, BarChart, ChartCard, SimpleSwitcher, PieChart, Card, VSeparator } from '@elements'
 import { getSanitizedBotsConfig } from '@config/bots'
 import { colors } from '@config/charts'
-import { fetcher } from '@core/utils/functions'
+import { fetcher, adminDashboardServerSideProps } from '@core/utils/functions'
+
+TimeAgo.addLocale(en)
+const timeAgo = new TimeAgo('en-US')
 
 const typeResolver = {
     'CHAT_INPUT_COMMAND_INTERACTION': 'Command',
@@ -57,19 +57,20 @@ const tables = {
 }
 
 type Props = {
-    bots: SanitizededBotsConfig
+    bots: SanitizededBotConfig[]
+    currentBot: SanitizededBotConfig
 }
 
-const StatisticsPage: NextPage<Props> = ({ bots }) => {
+const StatisticsPage: NextPage<Props> = ({ bots, currentBot }) => {
 
     const stats = {
-        totals: useSWR('/stats/totals', fetcher),
-        topCommands: useSWR('/stats/topCommands', fetcher),
-        topGuilds: useSWR('/stats/topGuilds', fetcher),
-        lastInteraction: useSWR('/stats/lastInteraction', fetcher),
-        commandsUsage: useSWR('/stats/commandsUsage', url => fetcher(url, { numberOfDays: 7 })),
-        usersActivity: useSWR('/stats/usersActivity', fetcher),
-        usersAndGuilds: useSWR('/stats/usersAndGuilds', url => fetcher(url, { numberOfDays: 7 })),
+        totals: useSWR('/stats/totals', url => fetcher(url, currentBot.id)),
+        topCommands: useSWR('/stats/topCommands', url => fetcher(url, currentBot.id)),
+        topGuilds: useSWR('/stats/topGuilds', url => fetcher(url, currentBot.id)),
+        lastInteraction: useSWR('/stats/lastInteraction', url => fetcher(url, currentBot.id)),
+        commandsUsage: useSWR('/stats/commandsUsage', url => fetcher(url, currentBot.id, { numberOfDays: 7 })),
+        usersActivity: useSWR('/stats/usersActivity', url => fetcher(url, currentBot.id)),
+        usersAndGuilds: useSWR('/stats/usersAndGuilds', url => fetcher(url, currentBot.id, { numberOfDays: 7 })),
     }
 
     const commandsUsageSeries = [
@@ -94,7 +95,7 @@ const StatisticsPage: NextPage<Props> = ({ bots }) => {
 
 	return (<>
 
-		<AdminDashboard breadcrumbs={['Statistics']} bots={bots}>
+		<AdminDashboard breadcrumbs={['Statistics']} bots={bots} currentBot={currentBot}>
 
 			<SimpleGrid
 				columns={{ base: 2, md: 2, lg: 3, "2xl": 6 }}
@@ -145,7 +146,7 @@ const StatisticsPage: NextPage<Props> = ({ bots }) => {
                                 series={commandsUsageSeries}
                                 options={{
                                     xaxis: {
-                                        categories: stats.commandsUsage.data?.map((commandUsage: { [key: string]: any }) => commandUsage.date.split('/').slice(0, -1).join('/')).reverse(),
+                                        categories: stats.commandsUsage.data?.map((commandUsage: { [key: string]: any }) => commandUsage.date.split('/').slice(0, -1).join('/')).reverse() || [],
                                     }
                                 }}
                             />
@@ -159,7 +160,7 @@ const StatisticsPage: NextPage<Props> = ({ bots }) => {
                                 series={commandsUsageSeries}
                                 options={{
                                     xaxis: {
-                                        categories: stats.commandsUsage.data?.map((commandUsage: { [key: string]: any }) => commandUsage.date.split('/').slice(0, -1).join('/')).reverse(),
+                                        categories: stats.commandsUsage.data?.map((commandUsage: { [key: string]: any }) => commandUsage.date.split('/').slice(0, -1).join('/')).reverse() || [],
                                     }
                                 }}
                             />
@@ -168,16 +169,18 @@ const StatisticsPage: NextPage<Props> = ({ bots }) => {
                     }}
                 />
 
-                <SimpleTable
-                    title='Top commands'
-                    columnsData={tables.topCommands.columns} 
-                    tableData={stats.topCommands.data?.map((command: { name: string, type: string, count: number}) => ({
-                        name: command.name,
-                        type: typeResolver[command.type as keyof typeof typeResolver],
-                        count: command.count,
-                    })) || []}
-                    cellsResolvers={tables.topCommands.cellsResolvers}   
-                />
+                {stats.topCommands.data && <>
+                    <SimpleTable
+                        title='Top commands'
+                        columnsData={tables.topCommands.columns} 
+                        tableData={stats.topCommands.data.map((command: { name: string, type: string, count: number}) => ({
+                            name: command.name,
+                            type: typeResolver[command.type as keyof typeof typeResolver],
+                            count: command.count,
+                        }))}
+                        cellsResolvers={tables.topCommands.cellsResolvers}   
+                    />
+                </>}
 				
                 <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap='20px' mb='20px'>
                     <ChartCard 
@@ -202,12 +205,14 @@ const StatisticsPage: NextPage<Props> = ({ bots }) => {
                         />
                     </ChartCard >
 
-                    <SimpleTable 
-                        title='Top guilds'
-                        columnsData={tables.topGuilds.columns} 
-                        tableData={stats.topGuilds.data || []}
-                        cellsResolvers={tables.topGuilds.cellsResolvers}   
-                    />
+                    {stats.topGuilds.data && <>
+                        <SimpleTable 
+                            title='Top guilds'
+                            columnsData={tables.topGuilds.columns} 
+                            tableData={stats.topGuilds.data}
+                            cellsResolvers={tables.topGuilds.cellsResolvers}   
+                        />
+                    </>}
 
                 </SimpleGrid>
 
@@ -239,12 +244,10 @@ const StatisticsPage: NextPage<Props> = ({ bots }) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
-    return {
-        props: {
-            session: await unstable_getServerSession(ctx.req, ctx.res, authOptions),
-            bots: getSanitizedBotsConfig()
-        }
-    }
+    const { botId } = ctx.query
+    const session = await unstable_getServerSession(ctx.req, ctx.res, authOptions)
+
+    return await adminDashboardServerSideProps(botId as string, session)
 }
 
 export default StatisticsPage
