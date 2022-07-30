@@ -11,7 +11,6 @@ import { MdSettingsBackupRestore } from 'react-icons/md'
 import { authOptions } from '../../api/auth/[...nextauth]'
 
 import { AdminDashboard } from '@layouts'
-import { getSanitizedBotsConfig } from '@config/bots'
 import { fetcher, adminDashboardServerSideProps, successToast, errorToast } from '@core/utils/functions'
 import { Card, SimpleTable, StatCard } from '@elements'
 

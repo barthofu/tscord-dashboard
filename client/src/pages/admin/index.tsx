@@ -1,7 +1,10 @@
-import { getSanitizedBotsConfig } from '@config/bots'
+import { HStack, Image, Text } from '@chakra-ui/react'
 import type { GetServerSideProps, NextPage } from 'next'
 import { unstable_getServerSession } from 'next-auth/next'
+
 import { authOptions } from '../api/auth/[...nextauth]'
+import { getSanitizedBotsConfig } from '@core/utils/functions'
+import { BotCard } from '@elements'
 
 type Props = {
     bots: SanitizededBotConfig[]
@@ -12,7 +15,10 @@ const DashboardPage: NextPage<Props> = ({ bots, authorizedBots }) => {
 
 	return (<>
         {bots.map(bot => (<>
-            [${authorizedBots.includes(bot.id) ? 'authorized' : 'unauthorized'}] {bot.name} ({bot.id})
+            <BotCard 
+                bot={bot}
+                authorizedBots={authorizedBots}
+            />
         </>))}
 	</>)
 }

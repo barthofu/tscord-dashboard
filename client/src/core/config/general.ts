@@ -7,5 +7,10 @@ export const generalConfig = {
         description: 'Here goes my bot\'s description',
 
         // keywords: 'my, super, bot, keywords',
+    },
+
+    dashboard: {
+
+        fallbackBotIconUrl: 'https://cdn.discordapp.com/embed/avatars/0.png',
     }
 }

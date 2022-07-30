@@ -1,4 +1,5 @@
-import { botsConfig, getSanitizedBotsConfig } from "@config/bots"
+import { botsConfig } from "@config/bots"
+import { getSanitizedBotsConfig } from "@core/utils/functions"
 import { Session } from "next-auth"
 
 const cache: Map<string, string[]> = new Map()

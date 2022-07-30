@@ -1,19 +1,10 @@
 export const botsConfig: BotsConfig = [
     {
-        name: 'TSCord',
         id: '943804890143133736',
+        name: 'TSCord',
+        iconUrl: '',
         apiUrl: process.env['TSCORD_API_URL']!,
+        apiToken: process.env['TSCORD_API_TOKEN']!,
         secret: process.env['TSCORD_SECRET']!
     }
 ]
-
-// utilities functions
-
-export const getSanitizedBotsConfig= (): SanitizededBotConfig[] => {
-
-    return botsConfig.map(botConfig => ({
-        id: botConfig.id,
-        name: botConfig.name,
-        avatar: botConfig.avatar ?? null
-    }))
-}

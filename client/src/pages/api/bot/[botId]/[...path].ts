@@ -48,7 +48,6 @@ const proxyHandler = async (req: NextApiRequest, res: NextApiResponse) => {
             headers,
             ...(req.method === 'POST' || req.method === 'PUT') ? { body: req.body } : {},
         }
-        console.log(options)
 
         const response = await fetch(url, options)
 
