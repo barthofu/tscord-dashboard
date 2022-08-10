@@ -1,22 +1,75 @@
-import { botsConfig } from '@config/bots'
+import { Flex, HStack, SimpleGrid, VStack } from '@chakra-ui/react'
 import type { GetStaticProps, NextPage } from 'next'
-
-import { useSession, signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/router'
+import { useSession, signIn, signOut } from 'next-auth/react'
+
+import { TextSideImage } from '@elements'
+import { HeroBanner, HomeStat, LandingSection } from '@modules'
+import { HomePageContext } from '@core/contexts'
+import { botsConfig } from '@config/bots'
+import { HiOutlineCode } from 'react-icons/hi'
+import { FaUserFriends } from 'react-icons/fa'
+import { SiClubhouse } from 'react-icons/si'
 
 type Props = {
-	botsData: BotsData 
+	botData: BotData 
 }
 
-const HomePage: NextPage<Props> = ({ botsData }) => {
-
-	const router = useRouter()
-	const botId: string = (router.query.bot as string | undefined) || Object.keys(botsData)[0]
-	const bot = botsData[botId]
+const HomePage: NextPage<Props> = ({ botData }) => {
 
 	const { data: session } = useSession()
 
 	return (<>
+		<HomePageContext.Provider value={{
+			botData
+		}}>
+
+			<VStack spacing={10}
+				direction="column"
+				justifyContent="center"
+				alignItems="center"
+			>
+				<HeroBanner />
+
+				<SimpleGrid columns={{ base: 1, xl: 3 }} gap='100px'>
+
+					<HomeStat
+						label='Guilds'
+						value={botData.totals.stats.totalGuilds}
+						icon={<SiClubhouse />}
+						color='#5768EA'
+					/>
+
+					<HomeStat
+						label='Users'
+						value={botData.totals.stats.totalUsers}
+						icon={<FaUserFriends />}
+						color='#5768EA'
+					/>
+
+					<HomeStat
+						label={<>Commands used</>}
+						value={botData.totals.stats.totalCommands}
+						icon={<HiOutlineCode />}	
+						color='#5768EA'
+					/>
+							
+				</SimpleGrid>
+
+				<LandingSection
+					title='Platform-agnostic communities'
+					image='https://guild.xyz/landing/platform-agnostic-communities.png'
+					alt='Test'
+					text='Bring your community to your favourite communication platforms, management tools or games.'
+				/>
+
+
+			</VStack>
+
+
+		</HomePageContext.Provider>
+
+
 
 		{/* <h1>Hello world!</h1>
 		{!session && 
@@ -46,55 +99,48 @@ const HomePage: NextPage<Props> = ({ botsData }) => {
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
 
-	const botsData: BotsData = {}
+	let botData: BotData
 
-	for (const { id, apiUrl, apiToken } of botsConfig) {
+	const { apiUrl, apiToken,  } = botsConfig[0]
 
-		try {
+	const infoRes = await fetch(new URL('/bot/info?logIgnore=true', apiUrl), {
+		headers: { Authorization: `Bearer ${apiToken}` }
+	})
+	if (!infoRes.ok) throw new Error(infoRes.statusText)
+	const info = await infoRes.json()
 
-			const infoRes = await fetch(new URL('/bot/info?logIgnore=true', apiUrl), {
-				headers: { Authorization: `Bearer ${apiToken}` }
-			})
-			if (!infoRes.ok) throw new Error(infoRes.statusText)
-			const info = await infoRes.json()
+	const totalsRes = await fetch(new URL('/stats/totals?logIgnore=true', apiUrl), {
+		headers: { 'Authorization' : `Bearer ${apiToken}` }
+	})
+	if (!totalsRes.ok) throw new Error(totalsRes.statusText)
+	const totals = await totalsRes.json()
 
-			const totalsRes = await fetch(new URL('/stats/totals?logIgnore=true', apiUrl), {
-				headers: { 'Authorization' : `Bearer ${apiToken}` }
-			})
-			if (!totalsRes.ok) throw new Error(totalsRes.statusText)
-			const totals = await totalsRes.json()
-		
-			const commandsRes = await fetch(new URL('/bot/commands?logIgnore=true', apiUrl), {
-				headers: { 'Authorization' : `Bearer ${apiToken}` }
-			})
-			if (!commandsRes.ok) throw new Error(commandsRes.statusText)
-			const commands = await commandsRes.json()
+	const commandsRes = await fetch(new URL('/bot/commands?logIgnore=true', apiUrl), {
+		headers: { 'Authorization' : `Bearer ${apiToken}` }
+	})
+	if (!commandsRes.ok) throw new Error(commandsRes.statusText)
+	const commands = await commandsRes.json()
 
-			botsData[id] = {
-				info: {
-					name: info.name,
-					discriminator: info.discriminator,
-					iconUrl: info.iconURL
-				},
-				totals: totals,
-				commands: commands.map((c: any) => ({
-					name: c.name,
-					description: c.description
-				}))
-			}
-
-		} catch (err) {
-			console.log(err)
-		}
+	botData = {
+		info: {
+			name: info.user.username,
+			discriminator: info.user.discriminator,
+			iconUrl: info.user.displayAvatarURL
+		},
+		totals: totals,
+		commands: commands.map((c: any) => ({
+			name: c.name,
+			description: c.description
+		}))
 	}
 
-	if (Object.keys(botsData).length === 0) throw new Error('No bot is available, couldn\'t generate the home page')
+	console.log(botData)
 
 	return {
 		props: {
-			botsData
+			botData
 		},
-		revalidate: 60 * 60 // each 1 hour
+		revalidate: 24 * 60 * 60 // each 24 hour
 	}
 }
 

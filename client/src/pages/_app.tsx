@@ -3,6 +3,7 @@ import { SessionProvider } from "next-auth/react"
 
 import '@fontsource/dm-sans'
 import '@styles/main.scss'
+import '@styles/fonts.scss'
 
 import { ChakraProvider } from '@chakra-ui/react'
 import { theme } from '@core/theme'
