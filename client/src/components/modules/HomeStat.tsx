@@ -1,6 +1,7 @@
-import { HStack, VStack, Text, Heading, Box, Flex } from '@chakra-ui/react'
-import React, { useEffect, useRef } from 'react'
-import CountUp, { useCountUp } from 'react-countup'
+import { VStack, Text, Heading, Box } from '@chakra-ui/react'
+import { Card, PopBox } from '@elements'
+import React, { useEffect, useRef, useState } from 'react'
+import { useCountUp } from 'react-countup'
 import { useInView } from 'react-intersection-observer'
 
 type HomeStatProps = {
@@ -10,11 +11,10 @@ type HomeStatProps = {
     color?: string 
 }
 
-let initialized = false
-
 export const HomeStat: React.FC<HomeStatProps> = ({ label, value, icon, color }) => {
 
     const { ref: viewRef, inView } = useInView({ threshold: 0, triggerOnce: false })
+    const [ initialized, setInitialized ] = useState(false)
 
     const countUpRef = useRef(null)
     const { start } = useCountUp({
@@ -27,46 +27,50 @@ export const HomeStat: React.FC<HomeStatProps> = ({ label, value, icon, color })
 
     useEffect(() => {
 
-        console.log('inView', inView)
-
         if (inView && !initialized) {
+            console.log('animation started for ', label)
             start()
-            initialized = true
+            setInitialized(true)
         }
-    }, [inView])
+
+    }, [inView, start, label])
 
 	return (<>
-        <Box position='relative' ref={viewRef}>
-            <VStack spacing={5}>
-                <Text fontSize='7xl'>{icon}</Text>
-                <Flex fontFamily="Dystopian" fontWeight='bold' flexDir='row' alignItems='center' justifyContent='center'>
-                    <Text as='span' mr='.5em' fontSize='3xl'>
+        <PopBox>
+            <Card
+                bg='#29292C'
+                position="relative"
+                px={{ base: 5, sm: 6 }}
+                py={7}
+                w="100%"
+                overflow="visible"
+                _hover={{ bg: "#333336" }}
+                transition="background 0.2s ease"
+                boxShadow="var(--chakra-shadows-md)"
+            >
+                <VStack spacing={3} alignItems="center" w="full" mt="-1">
+
+                    <Box fontSize={{ base: '16px', sm: '36px', md: '44px' }}>
+                        {icon}
+                    </Box>
+                    
+                    <Heading
+                        as="h4"
+                        fontFamily="Dystopian"
+                        fontSize={{ base: "lg", md: "2xl" }}
+                        fontWeight="bold"
+                        letterSpacing="wide"
+                    >
+                        {label}
+                    </Heading>
+
+                    <Text as='span' mr='.5em' fontSize='3xl' ref={viewRef}>
                         <div ref={countUpRef} />
                     </Text>
-                    <Text fontSize='2xl' color='gray.400'>
-                        {label}
-                    </Text>
-                </Flex>
-            </VStack>
-            {/* <VStack 
-                opacity='.5' 
-                position='absolute' 
-                left='5px' top='5px' 
-                spacing={5} 
-                zIndex='-10' 
-                width='100%'
-            >
-                <Text fontSize='7xl' color={color || 'gray.300'}>{icon}</Text>
-                <Heading color={color || 'gray.300'} as='h3' fontSize='3xl' fontWeight='bold' display='flex' flexDir='row' justifyContent='center'>
-                    <Text as='span' mr='.5em'>
-                        <CountUp 
-                            end={value} 
-                            duration={5}
-                            suffix='+'    
-                        /></Text>
-                    {label}
-                </Heading>
-            </VStack> */}
-        </Box>
+
+                </VStack>
+
+            </Card>
+        </PopBox>
     </>)
 }

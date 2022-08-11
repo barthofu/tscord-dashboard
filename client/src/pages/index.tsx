@@ -1,15 +1,15 @@
-import { Flex, HStack, SimpleGrid, VStack } from '@chakra-ui/react'
+import { Box, Flex, GridItem, Heading, HStack, SimpleGrid, VStack } from '@chakra-ui/react'
 import type { GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useSession, signIn, signOut } from 'next-auth/react'
-
-import { TextSideImage } from '@elements'
-import { HeroBanner, HomeStat, LandingSection } from '@modules'
-import { HomePageContext } from '@core/contexts'
-import { botsConfig } from '@config/bots'
 import { HiOutlineCode } from 'react-icons/hi'
 import { FaUserFriends } from 'react-icons/fa'
 import { SiClubhouse } from 'react-icons/si'
+
+import { TextSideImage } from '@elements'
+import { HeroBanner, HomeStat, LandingSection, Commands } from '@modules'
+import { HomePageContext } from '@core/contexts'
+import { botsConfig } from '@config/bots'
 
 type Props = {
 	botData: BotData 
@@ -24,37 +24,14 @@ const HomePage: NextPage<Props> = ({ botData }) => {
 			botData
 		}}>
 
-			<VStack spacing={10}
+			<VStack 
+				spacing='10em'
 				direction="column"
 				justifyContent="center"
 				alignItems="center"
+				pb='5em'
 			>
 				<HeroBanner />
-
-				<SimpleGrid columns={{ base: 1, xl: 3 }} gap='100px'>
-
-					<HomeStat
-						label='Guilds'
-						value={botData.totals.stats.totalGuilds}
-						icon={<SiClubhouse />}
-						color='#5768EA'
-					/>
-
-					<HomeStat
-						label='Users'
-						value={botData.totals.stats.totalUsers}
-						icon={<FaUserFriends />}
-						color='#5768EA'
-					/>
-
-					<HomeStat
-						label={<>Commands used</>}
-						value={botData.totals.stats.totalCommands}
-						icon={<HiOutlineCode />}	
-						color='#5768EA'
-					/>
-							
-				</SimpleGrid>
 
 				<LandingSection
 					title='Platform-agnostic communities'
@@ -63,6 +40,67 @@ const HomePage: NextPage<Props> = ({ botData }) => {
 					text='Bring your community to your favourite communication platforms, management tools or games.'
 				/>
 
+				<LandingSection
+					title='Platform-agnostic communities'
+					image='https://guild.xyz/landing/platform-agnostic-communities.png'
+					alt='Test'
+					text='Bring your community to your favourite communication platforms, management tools or games.'
+					isImgFirst={true}
+				/>
+
+				<LandingSection
+					title='Platform-agnostic communities'
+					image='https://guild.xyz/landing/platform-agnostic-communities.png'
+					alt='Test'
+					text='Bring your community to your favourite communication platforms, management tools or games.'
+				/>
+
+				<Box>
+
+					<Flex justifyContent="center" alignItems="center" mb='5em'>
+						<Heading display='flex' alignItems='center' fontFamily='Dystopian' as="h2" size="2xl" mx='1em'>
+							Some stats
+						</Heading>
+					</Flex>
+
+					<SimpleGrid columns={3} gap={{ base: 6, lg: 20 }}>
+
+						<HomeStat
+							label='Guilds'
+							value={botData.totals.stats.totalGuilds}
+							icon={<SiClubhouse />}
+							color='#7A4069'
+						/>
+
+						<HomeStat
+							label='Users'
+							value={botData.totals.stats.totalUsers}
+							icon={<FaUserFriends />}
+							color='#513252'
+						/>
+
+						<HomeStat
+							label='Commands'
+							value={botData.totals.stats.totalCommands}
+							icon={<HiOutlineCode />}	
+							color='#CA4E79'
+						/>
+								
+					</SimpleGrid>
+				</Box>
+
+				<Box>
+
+					<Flex justifyContent="center" alignItems="center" mb='5em !important'>
+						<Heading display='flex' alignItems='center' fontFamily='Dystopian' as="h2" size="2xl" mx='1em'>
+							Commands
+						</Heading>
+					</Flex>
+
+					<Commands 
+						commands={botData.commands}
+					/>
+				</Box>
 
 			</VStack>
 
