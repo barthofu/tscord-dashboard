@@ -4,7 +4,7 @@ import { unstable_getServerSession } from 'next-auth/next'
 
 import { authOptions } from '../api/auth/[...nextauth]'
 import { getSanitizedBotsConfig } from '@core/utils/functions'
-import { BotCard } from '@elements'
+import { BotCard } from '@components/shared'
 
 type Props = {
     bots: SanitizededBotConfig[]

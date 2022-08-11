@@ -5,7 +5,7 @@ import Image from 'next/image'
 import React, { useContext } from 'react'
 import { IoMenuOutline } from "react-icons/io5"
 
-import { HSeparator } from '@elements'
+import { HSeparator } from '@components/shared'
 import { AdminDashboardContext } from '@core/contexts'
 
 type Props = {

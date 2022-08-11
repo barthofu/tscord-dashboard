@@ -3,7 +3,7 @@ import { Flex, Text, useColorModeValue } from '@chakra-ui/react'
 import stripAnsi from 'strip-ansi'
 import reactStringReplace from 'react-string-replace'
 
-import { Card} from '@elements'
+import { Card} from '@components/shared'
 
 type LogsProps = {
     logs: LogsData[]

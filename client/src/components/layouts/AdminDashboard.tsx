@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box } from '@chakra-ui/react'
 
-import { Sidebar, AdminNavbar } from '@modules'
+import { Sidebar, AdminNavbar } from '@components/modules'
 import { sidebarConfig } from '@config/sidebar'
 import { AdminDashboardContext } from '@core/contexts'
 

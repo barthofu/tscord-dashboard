@@ -1,7 +1,7 @@
 import { Text, Box, Container, GridItem, Heading, SimpleGrid, VStack, Flex, Img } from "@chakra-ui/react"
 import { useInView } from "react-intersection-observer"
 import React, { useEffect } from 'react'
-import { ImageResolver, PopBox } from "@elements"
+import { ImageResolver, PopBox } from "@components/shared"
 
 type LandingSectionProps = {
     title: string

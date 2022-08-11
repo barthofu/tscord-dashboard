@@ -4,12 +4,12 @@ import { FiUsers } from 'react-icons/fi'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 
-import { Card, DisplayCard, TextSection } from '@elements'
+import { Card, DisplayCard, TextSection } from '@components/shared'
 import axios from 'axios'
 import { AdminDashboardContext } from '@core/contexts'
 import { mutate } from 'swr'
 import { errorToast, successToast, getActivityColor } from '@core/utils/functions'
-import { DetailedGuild } from '@modules'
+import { DetailedGuild } from '@components/modules'
 
 
 type GuildCardProps = {

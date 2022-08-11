@@ -13,8 +13,8 @@ import en from 'javascript-time-ago/locale/en'
 
 import { authOptions } from '../../api/auth/[...nextauth]'
 
-import { AdminDashboard } from '@layouts'
-import { StatCard, LineChart, SimpleTable, BarChart, ChartCard, SimpleSwitcher, PieChart, Card, VSeparator } from '@elements'
+import { AdminDashboard } from '@components/layouts'
+import { StatCard, LineChart, SimpleTable, BarChart, ChartCard, SimpleSwitcher, PieChart } from '@components/shared'
 import { colors } from '@config/charts'
 import { fetcher, adminDashboardServerSideProps } from '@core/utils/functions'
 

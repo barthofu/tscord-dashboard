@@ -5,7 +5,7 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import { FiUsers } from 'react-icons/fi'
 
-import { TextSection } from '@elements'
+import { TextSection } from '@components/shared'
 import { AdminDashboardContext } from '@core/contexts'
 import { errorToast, getActivityColor, successToast } from '@core/utils/functions'
 

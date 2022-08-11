@@ -1,7 +1,7 @@
 import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Flex, Link, useColorModeValue } from '@chakra-ui/react'
 import React from 'react'
 
-import { AdminNavbarLinks } from '@modules'
+import { AdminNavbarLinks } from '@components/modules'
 
 type Props = {
     breadcrumbs: string[]

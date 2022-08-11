@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Card } from '@elements'
+import { Card } from '@components/shared'
 import { Flex, Stat, StatLabel, StatNumber, Text, useColorModeValue } from '@chakra-ui/react'
 
 type Props = {

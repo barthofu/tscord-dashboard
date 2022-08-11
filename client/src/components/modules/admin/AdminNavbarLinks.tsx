@@ -4,7 +4,7 @@ import { MdNotificationsNone, MdInfoOutline } from "react-icons/md"
 import { IoMdMoon, IoMdSunny } from "react-icons/io"
 import NextLink from 'next/link'
 
-import { SidebarResponsive } from '@modules'
+import { SidebarResponsive } from '@components/modules'
 import { sidebarConfig } from '@config/sidebar'
 import { useSession } from 'next-auth/react'
 

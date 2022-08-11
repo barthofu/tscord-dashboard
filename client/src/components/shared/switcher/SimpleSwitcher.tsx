@@ -1,6 +1,6 @@
 import { As, Button, Icon, useColorModeValue } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import { ChartCard } from '@elements'
+import { ChartCard } from '@components/shared'
 import { IconType } from 'react-icons'
 
 type ChartProp = {

@@ -1,5 +1,5 @@
 import { VStack, Text, Heading, Box } from '@chakra-ui/react'
-import { Card, PopBox } from '@elements'
+import { Card, PopBox } from '@components/shared'
 import React, { useEffect, useRef, useState } from 'react'
 import { useCountUp } from 'react-countup'
 import { useInView } from 'react-intersection-observer'

@@ -5,11 +5,11 @@ import { Text, Flex, GridItem, HStack, Icon, InputGroup, InputLeftAddon, Select,
 
 import { authOptions } from '../../api/auth/[...nextauth]'
 
-import { AdminDashboard } from '@layouts'
+import { AdminDashboard } from '@components/layouts'
 import { adminDashboardServerSideProps, errorToast, fetcher } from '@core/utils/functions'
-import { GuildCard } from '@elements'
+import { GuildCard } from '@components/shared'
 import { useState } from 'react'
-import { SearchBar } from '@modules'
+import { SearchBar } from '@components/modules'
 import { FaSortAmountDownAlt } from 'react-icons/fa'
 import { IoIosArrowDown } from 'react-icons/io'
 

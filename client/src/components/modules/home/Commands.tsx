@@ -2,7 +2,7 @@ import { Box, Code, Heading, Table, Tbody, Td, Th as ChakraTh, Thead, Tr, Text }
 import React, { useEffect } from 'react'
 import { motion, useAnimation } from "framer-motion"
 import { useInView } from 'react-intersection-observer'
-import { variants } from '@elements'
+import { variants } from '@components/shared'
 
 const Th: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 

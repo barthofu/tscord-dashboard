@@ -19,18 +19,17 @@
 		"baseUrl": ".",
 		"paths": {
 
-			"@elements": ["./src/components/elements"],
-			"@layouts": ["./src/components/layouts"],
-			"@modules": ["./src/components/modules"],
-			"@store": ["./src/core/store.ts"],
-			// "@templates": ["./src/components/templates"],
+			"@components/*": ["src/components/*"],
+			"@modules/*": ["src/components/modules/*"],
+
+			"@store": ["src/core/store.ts"],
 			
 			"@config/*": ["src/core/config/*"],
 			"@core/*": ["src/core/*"],
-			"@hooks/*": ["./src/hooks/*"],
+			"@hooks/*": ["src/hooks/*"],
 			"@utils/*": ["src/core/utils/*"],
-			"@styles/*": ["./public/styles/*"],
-			"@assets/*": ["./public/assets/*"]
+			"@styles/*": ["public/styles/*"],
+			"@assets/*": ["public/assets/*"]
 		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

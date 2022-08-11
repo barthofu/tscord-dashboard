@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 const ApexChart = dynamic(() => import('react-apexcharts'), { ssr: false })
 import { ApexOptions } from 'apexcharts'
 
-import { Card } from '@elements'
+import { Card } from '@components/shared'
 import { Box, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 
 type Props = {

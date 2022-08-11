@@ -1,5 +1,5 @@
 import { Flex, Text } from '@chakra-ui/react'
-import { Card } from '@elements'
+import { Card } from '@components/shared'
 import React from 'react'
 
 type Props = {

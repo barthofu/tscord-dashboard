@@ -8,7 +8,7 @@ import {
     usePagination
 } from 'react-table'
 
-import { Card } from '@elements'
+import { Card } from '@components/shared'
 import { Checkbox, Flex, Table, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from '@chakra-ui/react'
 
 type Props = {

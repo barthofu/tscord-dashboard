@@ -7,10 +7,10 @@ import { BsFillBarChartFill } from 'react-icons/bs'
 
 import { authOptions } from '../../api/auth/[...nextauth]'
 
-import { AdminDashboard } from '@layouts'
-import { Card, StatCard, CircularProgressBar, LineChart, ChartCard, SkeletonLayout } from '@elements'
+import { AdminDashboard } from '@components/layouts'
+import { Card, StatCard, CircularProgressBar, LineChart, ChartCard, SkeletonLayout } from '@components/shared'
 import { useMonitoringData } from '@core/hooks'
-import { Logs } from '@modules'
+import { Logs } from '@components/modules'
 import { adminDashboardServerSideProps } from '@core/utils/functions'
 
 type Props = {

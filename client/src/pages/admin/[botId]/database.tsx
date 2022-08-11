@@ -10,9 +10,9 @@ import { MdSettingsBackupRestore } from 'react-icons/md'
 
 import { authOptions } from '../../api/auth/[...nextauth]'
 
-import { AdminDashboard } from '@layouts'
+import { AdminDashboard } from '@components/layouts'
 import { fetcher, adminDashboardServerSideProps, successToast, errorToast } from '@core/utils/functions'
-import { Card, SimpleTable, StatCard } from '@elements'
+import { Card, SimpleTable, StatCard } from '@components/shared'
 
 type Props = {
     bots: SanitizededBotConfig[]

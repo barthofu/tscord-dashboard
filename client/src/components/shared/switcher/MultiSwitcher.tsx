@@ -1,7 +1,7 @@
 import { Flex, Icon, Menu as ChakraMenu,MenuButton, MenuItem, MenuList, useColorModeValue, useDisclosure, Text } from '@chakra-ui/react'
 import React, { useState } from 'react'
 
-import { ChartCard } from '@elements'
+import { ChartCard } from '@components/shared'
 import { MdOutlineMoreHoriz } from 'react-icons/md'
 import { IconType } from 'react-icons'
 
