@@ -6,7 +6,16 @@ import { variants } from '@elements'
 
 const Th: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
-    return <ChakraTh fontSize='1.2em' fontWeight='600' fontFamily='Inter var,Inter,sans-serif' color='gray.200'>{children}</ChakraTh>
+    return <ChakraTh 
+        textTransform='none' 
+        fontSize='1.2em' 
+        letterSpacing='normal'
+        fontWeight='600' 
+        fontFamily='Inter var,Inter,sans-serif' 
+        color='gray.200'
+    >
+        {children}
+    </ChakraTh>
 }
 
 const MotionTr = motion(Tr)
@@ -61,7 +70,7 @@ const CommandRow: React.FC<{ command: any }> = ({ command }) => {
             ref={viewRef}
         >
             <Td>
-                <Code p='.5em' borderRadius='8px' fontSize='1.2em'>
+                <Code p='.25em .4em' borderRadius='8px' fontSize='1.2em' bg='#3f3f3f'>
                     /{command.name}
                 </Code>
             </Td>

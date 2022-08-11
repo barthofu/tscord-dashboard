@@ -10,6 +10,7 @@ import { TextSideImage } from '@elements'
 import { HeroBanner, HomeStat, LandingSection, Commands } from '@modules'
 import { HomePageContext } from '@core/contexts'
 import { botsConfig } from '@config/bots'
+import { getAbsoluteUrl } from '@core/utils/functions'
 
 type Props = {
 	botData: BotData 
@@ -172,7 +173,9 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 		}))
 	}
 
-	console.log(botData)
+	const articlesRes = await fetch(getAbsoluteUrl('/api/articles'))
+	const articles = await articlesRes.json()
+	console.log(articles)
 
 	return {
 		props: {
