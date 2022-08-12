@@ -14,17 +14,15 @@ type LatestArticlesProps = {
 
 export const LatestArticles: React.FC<LatestArticlesProps> = ({ articles }) => {
 
-    const [sectionHeight, setSectionHeight] = useState<'80vh' | 'auto'>('80vh')
+    const [expanded, setExpanded] = useState(false)
+    const getHeight = () => expanded ? '100 %' : '80vh'
 
 	return (<>
-        <MotionBox
+        <Box
             position="relative"
-            initial={{
-                height: "80vh",
-            }}
-            animate={{ height: sectionHeight }}
             overflow="hidden"
             maxW={{ base: "container.sm", md: "container.md", lg: "container.lg" }}
+            height={getHeight()}
         >
             <PopBox
                 gap={{ base: 6, lg: 8 }}
@@ -47,18 +45,18 @@ export const LatestArticles: React.FC<LatestArticlesProps> = ({ articles }) => {
                 zIndex="1"
                 pointerEvents="none"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: sectionHeight === "auto" ? 0 : 1 }}
+                animate={{ opacity: expanded ? 0 : 1 }}
             />
 
-        </MotionBox>
+        </Box>
 
         <Flex alignItems="center" justifyContent="center" mt='5em' z-index='1'>
             <Button
                 mb={8}
-                onClick={() => setSectionHeight(sectionHeight !== "auto" ? "auto" : "80vh")}
-                rightIcon={sectionHeight !== "auto" ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                onClick={() => setExpanded(!expanded)}
+                rightIcon={expanded ? <IoIosArrowUp /> : <IoIosArrowDown />}
             >
-                {sectionHeight !== "auto" ? "Show more" : "Show less"}
+                {expanded ? "Show less" : "Show more"}
             </Button>
         </Flex>
     </>)
@@ -85,7 +83,8 @@ export const ArticlePreview: React.FC<ArticlePreviewProps> = ({ article }) => {
                 my={{ base: 2, md: 3, lg: 4 }}
                 w="full"
                 transition='background 0.5s linear'
-                _hover={{ bg: useColorModeValue('gray.100', 'gray.700'), transition: 'background 0.5s linear' }}
+                _hover={{ bg: useColorModeValue('gray.100', 'gray.900'), transition: 'background 0.5s linear' }}
+                display='inline-flex'
                 flexDirection='column'
                 justifyContent='start'
                 alignItems='center'
