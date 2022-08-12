@@ -82,15 +82,16 @@ export const ArticlePreview: React.FC<ArticlePreviewProps> = ({ article }) => {
                 role="group"
                 my={{ base: 2, md: 3, lg: 4 }}
                 w="full"
-                transition='background 0.5s linear'
+                transition='background 0.2s linear'
                 _hover={{ bg: useColorModeValue('gray.100', 'gray.900'), transition: 'background 0.5s linear' }}
                 display='inline-flex'
                 flexDirection='column'
                 justifyContent='start'
-                alignItems='center'
+                alignItems='start'
                 p={0}
                 borderRadius='2xl'
                 overflow="hidden"
+                bg='#29292C'
             >
                 {article.coverUrl && (
                     <Image
@@ -102,8 +103,8 @@ export const ArticlePreview: React.FC<ArticlePreviewProps> = ({ article }) => {
                         borderTopRightRadius="2xl"
                     />
                 )}
-                <Stack px={{ base: 5, sm: 6 }} py={7}>
-                    <Heading as="h4" fontSize="xl" fontFamily="Dystopian" my='.5em'>
+                <Stack px={{ base: 8, sm: 10 }} py={7}>
+                    <Heading as="h4" fontSize="2xl" fontFamily="Dystopian" my='.5em'>
                         {article.title}
                     </Heading>
                     {article.description && (
