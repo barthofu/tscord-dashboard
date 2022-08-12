@@ -47,6 +47,8 @@ export const HomeStat: React.FC<HomeStatProps> = ({ label, value, icon, color })
                 _hover={{ bg: "#333336" }}
                 transition="background 0.2s ease"
                 boxShadow="var(--chakra-shadows-xl)"
+                cursor='default'
+                userSelect='none'
             >
                 <VStack spacing={3} alignItems="center" w="full" mt="-1">
 
