@@ -1,8 +1,9 @@
 import { VStack, Text, Heading, Box } from '@chakra-ui/react'
-import { Card, PopBox } from '@components/shared'
 import React, { useEffect, useRef, useState } from 'react'
 import { useCountUp } from 'react-countup'
 import { useInView } from 'react-intersection-observer'
+
+import { Card, PopBox } from '@components/shared'
 
 type HomeStatProps = {
     label: string | React.ReactNode
@@ -13,7 +14,7 @@ type HomeStatProps = {
 
 export const HomeStat: React.FC<HomeStatProps> = ({ label, value, icon, color }) => {
 
-    const { ref: viewRef, inView } = useInView({ threshold: 0, triggerOnce: false })
+    const { ref: viewRef, inView } = useInView({ threshold: 0.1, triggerOnce: false })
     const [ initialized, setInitialized ] = useState(false)
 
     const countUpRef = useRef(null)
@@ -28,12 +29,11 @@ export const HomeStat: React.FC<HomeStatProps> = ({ label, value, icon, color })
     useEffect(() => {
 
         if (inView && !initialized) {
-            console.log('animation started for ', label)
             start()
             setInitialized(true)
         }
 
-    }, [inView, start, label])
+    }, [inView])
 
 	return (<>
         <PopBox>
@@ -46,7 +46,7 @@ export const HomeStat: React.FC<HomeStatProps> = ({ label, value, icon, color })
                 overflow="visible"
                 _hover={{ bg: "#333336" }}
                 transition="background 0.2s ease"
-                boxShadow="var(--chakra-shadows-md)"
+                boxShadow="var(--chakra-shadows-xl)"
             >
                 <VStack spacing={3} alignItems="center" w="full" mt="-1">
 

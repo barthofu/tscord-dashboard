@@ -6,16 +6,17 @@ import { HiOutlineCode } from 'react-icons/hi'
 import { FaUserFriends } from 'react-icons/fa'
 import { SiClubhouse } from 'react-icons/si'
 
-import { HeroBanner, HomeStat, LandingSection, Commands } from '@components/modules'
+import { HeroBanner, HomeStat, LandingSection, Commands, LatestArticles, Footer } from '@components/modules'
 import { HomePageContext } from '@core/contexts'
 import { botsConfig } from '@config/bots'
 import { getAbsoluteUrl } from '@core/utils/functions'
 
 type Props = {
-	botData: BotData 
+	botData: BotData
+	articles: ArticleData[]
 }
 
-const HomePage: NextPage<Props> = ({ botData }) => {
+const HomePage: NextPage<Props> = ({ botData, articles }) => {
 
 	const { data: session } = useSession()
 
@@ -29,7 +30,13 @@ const HomePage: NextPage<Props> = ({ botData }) => {
 				direction="column"
 				justifyContent="center"
 				alignItems="center"
-				pb='5em'
+				overflowX="hidden"
+				overflowY="scroll"
+				sx={{
+				  perspective: "2px",
+				  transformStyle: "preserve-3d",
+				  scrollBehavior: "smooth",
+				}}
 			>
 				<HeroBanner />
 
@@ -102,36 +109,26 @@ const HomePage: NextPage<Props> = ({ botData }) => {
 					/>
 				</Box>
 
+				<Box>
+
+					<Flex justifyContent="center" alignItems="center" mb='5em !important'>
+						<Heading display='flex' alignItems='center' fontFamily='Dystopian' as="h2" size="2xl" mx='1em'>
+							Discover latest news
+						</Heading>
+					</Flex>
+
+					<LatestArticles
+						articles={articles}
+					/>
+				</Box>
+
+				<Footer />
+
 			</VStack>
 
 
 		</HomePageContext.Provider>
 
-
-
-		{/* <h1>Hello world!</h1>
-		{!session && 
-			<a 
-				href="#" 
-				onClick={(e) => { e.preventDefault(); signIn("discord") }}
-				className="btn-signin"
-			>
-				Sign in
-			</a>
-		}
-		{session && <>
-			<p style={{ marginBottom: '10px' }}>
-				Welcome, {(session.user?.name ?? session.user?.email) ?? "unknow"}
-			</p>
-			<a 
-				href="#" 
-				onClick={(e) => { e.preventDefault(); signOut() }}
-				className="btn-signin"
-			>
-				Sign out
-			</a>
-		</>}  */}
-			
 	</>)
 }
 
@@ -174,11 +171,11 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 
 	const articlesRes = await fetch(getAbsoluteUrl('/api/articles'))
 	const articles = await articlesRes.json()
-	console.log(articles)
 
 	return {
 		props: {
-			botData
+			botData,
+			articles
 		},
 		revalidate: 24 * 60 * 60 // each 24 hour
 	}

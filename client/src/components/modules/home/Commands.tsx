@@ -4,6 +4,8 @@ import { motion, useAnimation } from "framer-motion"
 import { useInView } from 'react-intersection-observer'
 import { variants } from '@components/shared'
 
+const MotionTr = motion(Tr)
+
 const Th: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
     return <ChakraTh 
@@ -18,42 +20,10 @@ const Th: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     </ChakraTh>
 }
 
-const MotionTr = motion(Tr)
-
-type CommandsProps = {
-    commands: any[]
-}
-
-export const Commands: React.FC<CommandsProps> = ({ commands }) => {
-
-	return (<>
-        <Box 
-            maxW='95vw' 
-            m='50px auto' 
-            bg='#29292C'
-            borderRadius='8px' 
-        >
-
-            <Table>
-                <Thead>
-                    <Tr h='4em'>
-                        <Th>Command</Th>
-                        <Th>Description</Th>
-                    </Tr>
-                </Thead>
-
-                <Tbody>
-                    {commands.map((command, i) => <CommandRow key={i} command={command}/>)}
-                </Tbody>
-            </Table>
-        </Box>
-    </>)
-}
-
-const CommandRow: React.FC<{ command: any }> = ({ command }) => {
+const CommandRow: React.FC<{ command: any, index: number }> = ({ command, index }) => {
 
     const controls = useAnimation()
-    const { ref: viewRef, inView } = useInView({ threshold: 0.1, triggerOnce: false })
+    const { ref: viewRef, inView } = useInView({ threshold: 0.2, delay: 1 * index, triggerOnce: false })
 
     useEffect(() => {
 
@@ -76,5 +46,35 @@ const CommandRow: React.FC<{ command: any }> = ({ command }) => {
             </Td>
             <Td fontSize='1.2em' fontFamily='Inter var,Inter,sans-serif'>{command.description}</Td>
         </MotionTr>
+    </>)
+}
+
+type CommandsProps = {
+    commands: any[]
+}
+
+export const Commands: React.FC<CommandsProps> = ({ commands }) => {
+
+	return (<>
+        <Box 
+            maxW='95vw' 
+            m='50px auto' 
+            bg='#29292C'
+            borderRadius='8px' 
+            boxShadow="var(--chakra-shadows-xl)"
+        >
+            <Table>
+                <Thead>
+                    <Tr h='4em'>
+                        <Th>Command</Th>
+                        <Th>Description</Th>
+                    </Tr>
+                </Thead>
+
+                <Tbody>
+                    {commands.map((command, i) => <CommandRow key={i} index={i} command={command}/>)}
+                </Tbody>
+            </Table>
+        </Box>
     </>)
 }

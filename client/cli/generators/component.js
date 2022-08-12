@@ -1,8 +1,6 @@
 const fs = require('fs')
 
 module.exports = (plop) => {
-
-    const categories = fs.readdirSync('./src/components/elements').filter(file => fs.statSync(`./src/components/elements/${file}`).isDirectory())
     
     plop.setHelper('ifNotEquals', function(arg1, arg2, options) {
         return (arg1 != arg2) ? options.fn(this) : options.inverse(this);
@@ -23,7 +21,7 @@ module.exports = (plop) => {
                 name: 'type',
                 message: 'What is the type of the component?',
                 choices: [
-                    'elements',
+                    'shared',
                     'modules',
                     'layouts',
                 ]
@@ -32,30 +30,43 @@ module.exports = (plop) => {
                 type: 'list',
                 name: 'category',
                 message: 'What is the category of the component?',
-                choices: [
-                    ...categories,
-                    new plop.inquirer.Separator(),
-                    'No Category'
-                ]
+                when: (answers) => answers.type !== 'layouts',
+                choices: (answers) => {
+
+                    const categories = fs.readdirSync(`./src/components/${answers.type}`).filter(file => fs.statSync(`./src/components/${answers.type}/${file}`).isDirectory())
+                    
+                    return [
+                        ...categories,
+                        new plop.inquirer.Separator(),
+                        'No Category'
+                    ]
+                },
+
             }
         ],
 
-        actions: [
-            {
-                type: 'add',
-                path: '../src/components/{{camelCase type}}/{{#ifNotEquals category "No Category" }}{{category}}/{{/ifNotEquals}}{{pascalCase name}}.tsx',
-                templateFile: 'templates/component.tsx.hbs',
-            },
-            // {
-            //     type: 'add',
-            //     path: '../src/components/{{camelCase category}}/{{pascalCase name}}/{{pascalCase name}}.module.scss',
-            //     template: '',
-            // },
-            {
+        actions: (answers) => {
+
+            const actions = [
+                {
+                    type: 'add',
+                    path: '../src/components/{{camelCase type}}/{{#ifNotEquals category "No Category" }}{{category}}/{{/ifNotEquals}}{{pascalCase name}}.tsx',
+                    templateFile: 'templates/component.tsx.hbs',
+                }
+            ]
+
+            if (answers.type !== 'modules') actions.push({
                 type: 'append',
                 path: '../src/components/{{camelCase type}}/index.ts',
                 template: 'export * from \'./{{#ifNotEquals category "No Category" }}{{category}}/{{/ifNotEquals}}{{pascalCase name}}\'',
-            }
-        ]
+            }) 
+            else actions.push({
+                type: 'append',
+                path: '../src/components/{{camelCase type}}/{{camelCase category}}/index.ts',
+                template: 'export * from \'./{{pascalCase name}}\'',
+            })
+
+            return actions
+        }
     })
 }

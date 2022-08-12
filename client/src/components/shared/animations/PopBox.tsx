@@ -18,9 +18,9 @@ export const variants = {
 
 type PopBoxProps = {
     children: React.ReactNode
-}
+} & Rest
 
-export const PopBox: React.FC<PopBoxProps> = ({ children }) => {
+export const PopBox: React.FC<PopBoxProps> = ({ children, ...rest }) => {
 
     const controls = useAnimation()
     const { ref: viewRef, inView } = useInView({ threshold: 0, triggerOnce: false })
@@ -38,6 +38,7 @@ export const PopBox: React.FC<PopBoxProps> = ({ children }) => {
             animate={controls}
             variants={variants}
             ref={viewRef}
+            {...rest}
         >
             {children}
         </MotionBox>
