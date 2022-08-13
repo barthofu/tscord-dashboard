@@ -1,8 +1,7 @@
 import { tokenToCSSVar } from "@chakra-ui/react";
 import { botsConfig } from "@config/bots";
 import NextAuth, { NextAuthOptions } from "next-auth"
-import DiscordProvider from "next-auth/providers/discord";
-
+import DiscordProvider from "next-auth/providers/discord"
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -14,12 +13,12 @@ export const authOptions: NextAuthOptions = {
     session: { strategy: "jwt" },
     callbacks: {
         async jwt({ token, user, account, profile, isNewUser }) {
-            if (account?.access_token) token.access_token = account.access_token;
-            return token;
+            if (account?.access_token) token.access_token = account.access_token
+            return token
         },
         async session({ session, user, token }) {
-            if(token.access_token) session.access_token = token.access_token;
-            return session;
+            if(token.access_token) session.access_token = token.access_token
+            return session
         }
     }
 }

@@ -1,5 +1,6 @@
 import { botsConfig } from "@config/bots"
 import { FetchError } from "../classes"
+import { getAbsoluteUrl } from "./url"
 
 export const fetcher = async (uri: string, botId: string, args?: { [key: string]: any }) => {
 
@@ -11,7 +12,7 @@ export const fetcher = async (uri: string, botId: string, args?: { [key: string]
     }
 
     // prepare the elements for the request
-    const url = new URL(`/api/bot/${botId}${uri}`, 'http://localhost:3000')
+    const url = new URL(getAbsoluteUrl(`/api/bot/${botId}${uri}`))
     const query = {
         logIgnore: 'true',
         ...args

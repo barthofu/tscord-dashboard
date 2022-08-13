@@ -23,5 +23,3 @@ export * from './text/TextSection'
 export * from './text/TextSideImage'
 
 export * from './image/ImageResolver'
-
-export * from './animations/PopBox'

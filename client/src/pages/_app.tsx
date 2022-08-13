@@ -7,16 +7,13 @@ import '@styles/fonts.scss'
 
 import { ChakraProvider } from '@chakra-ui/react'
 import { theme } from '@core/theme'
-import { ParallaxProvider } from 'react-scroll-parallax'
 
 function App({ Component, pageProps }: AppProps) {
 
 	return (
 		<SessionProvider session={pageProps.session}>
 			<ChakraProvider theme={theme}>
-				<ParallaxProvider>
-					<Component {...pageProps} />
-				</ParallaxProvider>
+				<Component {...pageProps} />
 			</ChakraProvider>
 		</SessionProvider>
 	)
