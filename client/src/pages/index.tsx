@@ -1,15 +1,16 @@
-import { Box, Flex, GridItem, Heading, HStack, SimpleGrid, VStack } from '@chakra-ui/react'
+import { Box, Flex, Heading, HStack, SimpleGrid, VStack } from '@chakra-ui/react'
 import type { GetStaticProps, NextPage } from 'next'
-import { useRouter } from 'next/router'
-import { useSession, signIn, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { HiOutlineCode } from 'react-icons/hi'
 import { FaUserFriends } from 'react-icons/fa'
 import { SiClubhouse } from 'react-icons/si'
+import matter from 'gray-matter'
+import fs from 'fs'
 
 import { HeroBanner, HomeStat, LandingSection, Commands, LatestArticles, Footer } from '@components/modules'
 import { HomePageContext } from '@core/contexts'
 import { botsConfig } from '@config/bots'
-import { getAbsoluteUrl } from '@core/utils/functions'
+import { articlesConfig } from '@config/articles'
 
 type Props = {
 	botData: BotData
@@ -17,8 +18,6 @@ type Props = {
 }
 
 const HomePage: NextPage<Props> = ({ botData, articles }) => {
-
-	const { data: session } = useSession()
 
 	return (<>
 		<HomePageContext.Provider value={{
@@ -169,8 +168,25 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 		}))
 	}
 
-	const articlesRes = await fetch(getAbsoluteUrl('/api/articles'))
-	const articles = await articlesRes.json()
+    const files = fs.readdirSync(articlesConfig.path).filter(file => !file.startsWith('.') || !file.startsWith('_'))
+
+    const articles = files.map((fileName: string) => {
+
+        const slug = fileName.replace(/\.mdx?$/, '')
+
+        const filePath = `${articlesConfig.path}/${fileName}`
+        const fileContents = fs.readFileSync(filePath, 'utf8')
+        const { data, content } = matter(fileContents)
+
+        const article = {
+            slug,
+            fileName,
+            content,
+            ...data
+        } as ArticleData
+
+        return article
+    })
 
 	return {
 		props: {

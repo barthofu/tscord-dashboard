@@ -1,4 +1,3 @@
-import { getAbsoluteUrl } from "@core/utils/functions"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
@@ -7,6 +6,10 @@ import ChakraUIRenderer from "chakra-ui-markdown-renderer"
 import { Box, Flex, Image, Text } from "@chakra-ui/react"
 import { AiFillHome } from "react-icons/ai"
 import Link from "next/link"
+import fs from 'fs'
+
+import { articlesConfig } from "@config/articles"
+import matter from "gray-matter"
 
 type ArticlePageProps = {
     article: ArticleData
@@ -88,11 +91,29 @@ export default ArticlePage
 export const getStaticProps: GetStaticProps = async ({ params })=> {
 
     const { slug } = params!
+    if (!slug) throw new Error('Bad parameters: no \'slug\'')
 
-    const articleRes = await fetch(getAbsoluteUrl(`/api/articles/${slug}`))
-    if (!articleRes.ok) throw new Error("Article not found")
-    const article = await articleRes.json()
+    const filePath = `${articlesConfig.path}/${slug}`
+    let fileContent: string
+    try {
+        fileContent = fs.readFileSync(filePath + '.md', 'utf8')
+    } catch (e) {
+        try {
+            fileContent = fs.readFileSync(filePath + '.mdx', 'utf8')
+        }
+        catch (e) {
+            throw new Error('Article not found')
+        }
+    }
 
+    const { data, content } = matter(fileContent)
+    
+    const article = {
+        slug,
+        content,
+        ...data
+    } as ArticleData
+    
     return {
         props: {
             article
@@ -102,12 +123,12 @@ export const getStaticProps: GetStaticProps = async ({ params })=> {
 
 export const getStaticPaths: GetStaticPaths = async () => {
 
-    const articlesRes = await fetch(getAbsoluteUrl('/api/articles'))
-    const articles: ArticleData[] = await articlesRes.json()
+    const files = fs.readdirSync(articlesConfig.path).filter(file => !file.startsWith('.') || !file.startsWith('_'))
+    const slugs = files.map((fileName: string) => fileName.replace(/\.mdx?$/, ''))
 
-    const paths = articles.map(article => ({
+    const paths = slugs.map(slug => ({
         params: {
-            slug: article.slug
+            slug
         }
     }))
 
