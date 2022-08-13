@@ -108,18 +108,21 @@ const HomePage: NextPage<Props> = ({ botData, articles }) => {
 					/>
 				</Box>
 
-				<Box>
+				{articles.length > 0 &&
+				
+					<Box>
 
-					<Flex justifyContent="center" alignItems="center" mb='5em !important'>
-						<Heading display='flex' alignItems='center' fontFamily='Dystopian' as="h2" size="2xl" mx='1em'>
-							Discover latest news
-						</Heading>
-					</Flex>
+						<Flex justifyContent="center" alignItems="center" mb='5em !important'>
+							<Heading display='flex' alignItems='center' fontFamily='Dystopian' as="h2" size="2xl" mx='1em'>
+								Discover latest news
+							</Heading>
+						</Flex>
 
-					<LatestArticles
-						articles={articles}
-					/>
-				</Box>
+						<LatestArticles
+							articles={articles}
+						/>
+					</Box>
+				}
 
 				<Footer />
 

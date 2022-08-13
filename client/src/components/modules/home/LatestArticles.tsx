@@ -22,7 +22,7 @@ export const LatestArticles: React.FC<LatestArticlesProps> = ({ articles }) => {
             position="relative"
             overflow="hidden"
             maxW={{ base: "container.sm", md: "container.md", lg: "container.lg" }}
-            height={getHeight()}
+            maxH={getHeight()}
         >
             <PopBox
                 gap={{ base: 6, lg: 8 }}
