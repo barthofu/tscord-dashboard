@@ -48,6 +48,8 @@ export const HeroBanner: React.FC<HeroBannerProps> = () => {
             />
 
             <Flex
+                as={Parallax}
+                speed={parallaxSpeed / 2}
                 position="relative"
                 direction="column"
                 alignItems="center"

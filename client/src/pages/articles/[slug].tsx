@@ -1,11 +1,12 @@
 import { getAbsoluteUrl } from "@core/utils/functions"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
-import NextImage from 'next/image'
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeRaw from "rehype-raw"
 import ChakraUIRenderer from "chakra-ui-markdown-renderer"
-import { Box, Flex, Image } from "@chakra-ui/react"
+import { Box, Flex, Image, Text } from "@chakra-ui/react"
+import { AiFillHome } from "react-icons/ai"
+import Link from "next/link"
 
 type ArticlePageProps = {
     article: ArticleData
@@ -14,7 +15,20 @@ type ArticlePageProps = {
 const ArticlePage: NextPage<ArticlePageProps> = ({ article }) => {
 
     return (<>
-        <Flex w='full' justifyContent='center' py='5em'>
+        <Flex w='full' flexDirection='column' alignItems='center' justifyContent='center' py='5em'>
+
+            <Link href='/'>
+                <Text 
+                    fontSize='3xl' 
+                    mb='1em' 
+                    color='gray.200' 
+                    cursor='pointer'
+                    transition='.2s linear'
+                    _hover={{ opacity: '.7' }}
+                >
+                    <AiFillHome />
+                </Text>
+            </Link>
 
             <Box 
                 w='60vw' 
@@ -38,6 +52,24 @@ const ArticlePage: NextPage<ArticlePageProps> = ({ article }) => {
                 }
 
                 <Box p='2em 4em 4em 4em'>
+
+                    <Text as='h1' fontSize='5xl' fontWeight='bold'>
+                        {article.title}
+                    </Text>
+                    <Text as='h3' fontSize='lg' fontWeight='regular' mb='2em' opacity='.7' fontStyle='italic'>
+                        By {article.authorUrl ? 
+                                <Text as='a' 
+                                    href={article.authorUrl} 
+                                    color='#fff' fontWeight='semibold'
+                                    _hover={{
+                                        textDecoration: 'underline',
+                                    }}    
+                                >{article.author}</Text>
+                            : article.author
+                        }
+                        {article.date && ` - ${article.date}`}
+                    </Text>
+
                     <ReactMarkdown 
                         rehypePlugins={[rehypeRaw]}
                         remarkPlugins={[remarkGfm]}
