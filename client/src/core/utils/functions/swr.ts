@@ -1,4 +1,3 @@
-import { botsConfig } from "@config/bots"
 import { FetchError } from "../classes"
 import { getAbsoluteUrl } from "./url"
 
@@ -23,6 +22,8 @@ export const fetcher = async (uri: string, botId: string, args?: { [key: string]
     const res = await fetch(url, {
         method: 'GET'
     })
+
+    console.log(res)
 
     // handle bad response status 
     if (!res.ok) {

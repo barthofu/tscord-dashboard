@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         }
     }
 
-    const res = await fetch(getAbsoluteUrl(`/api/bot/authorizedList?token=${session.access_token}`), { method: 'GET' })
+    const res = await fetch(getAbsoluteUrl(`/api/bot/authorizedList?token=${session.access_token}`, ctx.req), { method: 'GET' })
     const authorizedBots = await res.json()
 
     return {

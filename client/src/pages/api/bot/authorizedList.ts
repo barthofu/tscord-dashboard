@@ -1,8 +1,5 @@
 import { botsConfig } from "@config/bots"
 import type { NextApiRequest, NextApiResponse } from "next"
-import { getToken } from "next-auth/jwt"
-import { unstable_getServerSession } from "next-auth/next"
-import { authOptions } from "../auth/[...nextauth]"
 
 const authorizationCache: Map<string, string[]> = new Map()
 
