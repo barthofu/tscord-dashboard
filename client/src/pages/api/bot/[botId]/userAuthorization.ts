@@ -16,8 +16,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     // first, we check in the cache
     const isAuthorized = await isUserAuthorizedForBot(userId, botId)
 
-    console.log('[isAuthorized]', isAuthorized)
-
     if (!isAuthorized) res.status(401).send('Unauthorized')
     else res.status(200).send('Authorized')
 }

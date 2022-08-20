@@ -23,8 +23,6 @@ export const fetcher = async (uri: string, botId: string, args?: { [key: string]
         method: 'GET'
     })
 
-    console.log(res)
-
     // handle bad response status 
     if (!res.ok) {
     

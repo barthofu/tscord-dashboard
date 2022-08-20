@@ -24,7 +24,6 @@ export const authorizationCache: {
         for (const { id, apiUrl, apiToken } of botsConfig) {
     
             try {
-                console.log(`[authorizationCache] Fetching authorized users for bot ${id}`)
                 const response = await fetch(new URL('/bot/devs', apiUrl), {
                     headers: { 'Authorization': `Bearer ${apiToken}` }
                 })

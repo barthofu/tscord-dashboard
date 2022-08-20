@@ -5,8 +5,6 @@ export const getAuthorizedBotsForUser = async (userId: string) => {
     const authorizedBots: { [key: string]: boolean | null } = {}
     const cacheData = await authorizationCache.get()
 
-    console.log('[cacheData]', cacheData)
-
     cacheData.forEach((authorizedUsers, botId) => {
 
         if (!authorizedUsers) authorizedBots[botId] = null

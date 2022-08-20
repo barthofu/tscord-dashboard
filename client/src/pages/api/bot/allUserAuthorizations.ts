@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
-import { authorizationCache } from "@core/utils/cache"
 import { getAuthorizedBotsForUser } from "@core/utils/functions"
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {

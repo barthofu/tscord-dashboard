@@ -18,8 +18,6 @@ export const useMonitoringData = () => {
 
         if (bots?.[0]) webSocket.emit('request', { socketId: bots.find(bot => bot.id === currentBot.id)?.socketId, event: 'getHealth'})
 
-        console.log('events subscribed')
-
         webSocket.on('monitoring', (data: MonitoringData) => {
 
             data.fetchedAt = new Date()

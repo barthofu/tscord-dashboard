@@ -34,8 +34,6 @@ export const SimpleTable: React.FC<Props> = ({ title, columnsData, tableData, ce
     const textColor = useColorModeValue('secondaryGray.900', 'white')
     const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100')
 
-    console.log(1)
-
 	return (<>
         <Card
             justifyContent='flex-start'

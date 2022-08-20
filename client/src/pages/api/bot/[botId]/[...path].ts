@@ -7,8 +7,6 @@ import { FetchError } from "@core/utils/classes"
 
 const proxyHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 
-    console.log('[proxyHandler]', req.url)
-
     const session = await unstable_getServerSession(req, res, authOptions)
     if (!session) {
         res.status(401).send('Unauthorized')
@@ -69,25 +67,6 @@ const proxyHandler = async (req: NextApiRequest, res: NextApiResponse) => {
             return
         }
     }
-
-    // try {
-
-    //     const response = await axios({
-    //         url,
-    //         baseURL,
-    //         method: req.method,
-    //         data: req.body,
-    //         params: req.query,
-    //         headers
-    //     })
-
-    //     return res.json(JSON.stringify(response.data))
-
-    // } catch (error) {
-
-    //     // console.log(error)
-    //     if (error instanceof Error) return res.json(error.message)
-    // }
 
 }
 
