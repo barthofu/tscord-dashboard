@@ -8,7 +8,7 @@ import { BotCard } from '@components/shared'
 
 type Props = {
     bots: SanitizededBotConfig[]
-    authorizedBots: string[]
+    authorizedBots: { [key: string]: boolean | null }
 }
 
 const DashboardPage: NextPage<Props> = ({ bots, authorizedBots }) => {
@@ -16,6 +16,7 @@ const DashboardPage: NextPage<Props> = ({ bots, authorizedBots }) => {
 	return (<>
         {bots.map(bot => (<>
             <BotCard 
+                key={bot.id}
                 bot={bot}
                 authorizedBots={authorizedBots}
             />
@@ -31,16 +32,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             redirect: {
                 destination: '/',
                 permanent: false,
-            },
+            }
         }
     }
 
-    const res = await fetch(getAbsoluteUrl(`/api/bot/authorizedList?token=${session.access_token}`, ctx.req), { method: 'GET' })
+    const res = await fetch(getAbsoluteUrl(`/api/bot/allUserAuthorizations?userId=${session.userId}`, ctx.req), { method: 'GET' })
     const authorizedBots = await res.json()
 
     return {
         props: {
-            authorizedBots,
+            authorizedBots: authorizedBots,
             bots: getSanitizedBotsConfig()
         }
     }

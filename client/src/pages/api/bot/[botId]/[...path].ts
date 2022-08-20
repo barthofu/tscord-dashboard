@@ -1,14 +1,13 @@
-import { botsConfig } from "@config/bots"
-import axios from "axios"
 import { NextApiRequest, NextApiResponse } from "next"
-import { getToken } from "next-auth/jwt"
 import { unstable_getServerSession } from "next-auth/next"
-import { getSession } from "next-auth/react"
+
 import { authOptions } from '../../auth/[...nextauth]'
-import { URLSearchParams } from 'url' 
+import { botsConfig } from "@config/bots"
 import { FetchError } from "@core/utils/classes"
 
 const proxyHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+
+    console.log('[proxyHandler]', req.url)
 
     const session = await unstable_getServerSession(req, res, authOptions)
     if (!session) {

@@ -21,8 +21,6 @@
 
 			"@components/*": ["src/components/*"],
 			"@modules/*": ["src/components/modules/*"],
-
-			"@store": ["src/core/store.ts"],
 			
 			"@config/*": ["src/core/config/*"],
 			"@core/*": ["src/core/*"],

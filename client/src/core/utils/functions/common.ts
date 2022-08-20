@@ -1,10 +1,9 @@
 import { botsConfig } from "@config/bots"
-import { getSanitizedBotsConfig } from "@core/utils/functions"
+import { getAbsoluteUrl, getSanitizedBotsConfig } from "@core/utils/functions"
+import { IncomingMessage } from "http"
 import { Session } from "next-auth"
 
-const cache: Map<string, string[]> = new Map()
-
-export const adminDashboardServerSideProps = async (botId: string, session: Session | null) => {
+export const adminDashboardServerSideProps = async (botId: string, session: Session | null, req: IncomingMessage) => {
 
     if (!session) return {
         redirect: {
@@ -12,36 +11,14 @@ export const adminDashboardServerSideProps = async (botId: string, session: Sess
             permanent: false,
         }
     }
-    const { access_token: token } = <Session & { access_token: string }>session 
-
-    let authorized = false
-
-    // first, we check in the cache 
-    if (cache.get(token)?.includes(botId)) authorized = true
-    else {
-        // if the access token is not found in cache, we make a request to the bot and update the cache
-        try {
-            const response = await fetch(new URL('/bot/test', botsConfig.find(bot => bot.id === botId)?.apiUrl), {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
     
-            if (response.status === 200) {
+    try {
+        const response = await fetch(getAbsoluteUrl(`/api/bot/${botId}/userAuthorization?userId=${session.userId}`, req), { method: 'GET' })
 
-                authorized = true
-
-                const currCache = cache.get(token) || []
-                cache.set(token, [...currCache, botId])
-                    setTimeout(() => {
-                        const currCache = cache.get(token)
-                        if (currCache) cache.set(token, currCache.filter(el => el !== botId))
-                    }, 60 * 60 * 1000) // delete the token from the cache after 1 hour
-                }
-        } catch (err) {}
-    }
-
-    if (!authorized) {
+        if (response.status !== 200) {
+            throw new Error()
+        }
+    } catch (err) {
         return {
             redirect: {
                 destination: '/',
@@ -49,7 +26,7 @@ export const adminDashboardServerSideProps = async (botId: string, session: Sess
             }
         }
     }
-    
+
     return {
         props: {
             session,

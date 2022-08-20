@@ -6,12 +6,12 @@ import { generalConfig } from '@config/general'
 
 type BotCardProps = {
     bot: SanitizededBotConfig
-    authorizedBots: string[]
+    authorizedBots: { [key: string]: boolean | null }
 }
 
 export const BotCard: React.FC<BotCardProps> = ({ bot, authorizedBots }) => {
 
-    const isAuthorized = authorizedBots.includes(bot.id)
+    const isAuthorized = authorizedBots[bot.id]
 
 	return (<>
         <LinkBox 
