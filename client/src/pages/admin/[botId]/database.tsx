@@ -138,15 +138,17 @@ const DatabasePage: NextPage<Props> = ({ bots, currentBot }) => {
                     gridColumn={{ md: '2', lg: '2 / 4' }}
                     h='500px'
                 >
-                    <SimpleTable
-                        title='Backups'
-                        columnsData={tables.backupList.columns}
-                        tableData={backupList.data?.map((backup: string) => ({ name: backup, restore: backup })).reverse() || []}
-                        cellsResolvers={tables.backupList.cellsResolvers}
-                        additionalProps={{
-                            h: '80vh'
-                        }}
-                    />
+                    {backupList.data &&
+                        <SimpleTable
+                            title='Backups'
+                            columnsData={tables.backupList.columns}
+                            tableData={backupList.data.map((backup: string) => ({ name: backup, restore: backup })).reverse()}
+                            cellsResolvers={tables.backupList.cellsResolvers}
+                            additionalProps={{
+                                h: '80vh'
+                            }}
+                        />
+                    }
                 </Box>
                 
 			</SimpleGrid>
