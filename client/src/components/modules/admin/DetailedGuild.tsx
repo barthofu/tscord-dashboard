@@ -1,4 +1,4 @@
-import { Image, Text, HStack, Modal, ModalContent, ModalHeader, ModalOverlay, useToast, Tag, TagLeftIcon, TagLabel, ModalCloseButton, ModalBody, VStack, Wrap, Circle, useColorModeValue, ModalFooter, Button } from '@chakra-ui/react'
+import { Image, Text, HStack, Modal, ModalContent, ModalHeader, ModalOverlay, useToast, Tag, TagLeftIcon, TagLabel, ModalCloseButton, ModalBody, VStack, Wrap, Circle, useColorModeValue, ModalFooter, Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useDisclosure } from '@chakra-ui/react'
 import React, { useContext } from 'react'
 import { mutate } from 'swr'
 import TimeAgo from 'javascript-time-ago'
@@ -23,6 +23,9 @@ export const DetailedGuild: React.FC<DetailedGuildProps> = ({ isOpen, onClose, g
     const toast = useToast()
 
     const { currentBot } = useContext(AdminDashboardContext)
+
+    const { isOpen: isConfirmOpen, onOpen: onConfirmOpen, onClose: onConfirmClose } = useDisclosure()
+    const cancelConfirmRef = React.useRef(null)
 
     const { name, iconURL, memberCount, description, preferredLocale } = guild.discord
     const { lastInteract } = guild.database
@@ -123,7 +126,7 @@ export const DetailedGuild: React.FC<DetailedGuildProps> = ({ isOpen, onClose, g
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme='red' mr={3} onClick={() => deleteGuild()}>
+                    <Button colorScheme='red' mr={3} onClick={() => onConfirmOpen()}>
                         Delete guild
                     </Button>
                     <Button colorScheme='blue' mr={3} onClick={() => getInviteLink()}>
@@ -134,5 +137,35 @@ export const DetailedGuild: React.FC<DetailedGuildProps> = ({ isOpen, onClose, g
             </ModalContent>
 
         </Modal>
+
+        <AlertDialog
+            isOpen={isConfirmOpen}
+            leastDestructiveRef={cancelConfirmRef}
+            onClose={onConfirmClose}
+        >
+            <AlertDialogOverlay>
+                <AlertDialogContent>
+                    <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                        Delete Guild
+                    </AlertDialogHeader>
+
+                    <AlertDialogBody>
+                        Are you sure? You cannot undo this action afterwards.
+                    </AlertDialogBody>
+
+                    <AlertDialogFooter>
+                        <Button ref={cancelConfirmRef} onClick={onConfirmClose}>
+                            Cancel
+                        </Button>
+                        <Button colorScheme='red' onClick={() => {
+                            deleteGuild()
+                            onConfirmClose()
+                        }} ml={3}>
+                            Delete
+                        </Button>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialogOverlay>
+        </AlertDialog>
     </>)
 }
