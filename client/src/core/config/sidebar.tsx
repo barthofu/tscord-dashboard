@@ -28,11 +28,11 @@ export const sidebarConfig: SidebarConfigType = {
             href: 'statistics',
             icon: <BiStats />,
         },
-        {
-            name: 'Users',
-            href: 'users',
-            icon: <FaUserFriends />,
-        },
+        // {
+        //     name: 'Users',
+        //     href: 'users',
+        //     icon: <FaUserFriends />,
+        // },
         {
             name: 'Guilds',
             href: 'guilds',
