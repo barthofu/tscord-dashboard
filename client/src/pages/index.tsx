@@ -1,35 +1,47 @@
+import { Box, Flex, Heading } from '@chakra-ui/react'
+import { AvailableBots, LoggedIn, SignIn } from '@components/modules/home'
+import { ThemeToggler } from '@components/shared'
 import type { NextPage } from 'next'
 
-import { useSession, signIn, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 
 const HomePage: NextPage = () => {
 
 	const { data: session } = useSession()
 
 	return (<>
-			<h1>Hello world!</h1>
-			{!session && 
-				<a 
-					href="#" 
-					onClick={(e) => { e.preventDefault(); signIn("discord") }}
-					className="btn-signin"
+
+		<Flex w='100%' minH='100vh' justifyContent='center'>
+
+			<ThemeToggler
+				position='absolute'
+				top='1em' right='1em'
+				w='25px' h='25px'
+			/>
+
+			<Flex 
+				w='50vw' minH='100%' 
+				flexDirection='column' 
+				justifyContent='center' alignItems='center'
+			>
+
+				<Heading as='h1' 
+					size='4xl' 
+					fontFamily='Mosk'
+					mb='1em'	
 				>
-					Sign in
-				</a>
-			}
-			{session && <>
-				<p style={{ marginBottom: '10px' }}>
-					Welcome, {(session.user?.name ?? session.user?.email) ?? "unknow"}
-				</p>
-				<a 
-					href="#" 
-					onClick={(e) => { e.preventDefault(); signOut() }}
-					className="btn-signin"
-				>
-					Sign out
-				</a>
-			</>} 
-			
+					Dashboard
+				</Heading>
+				
+				{session ? <>
+					<LoggedIn session={session}/>
+					<AvailableBots userId={session.userId as string}/>
+				</> :
+					<SignIn />
+				}
+			</Flex>
+		</Flex>
+
 	</>)
 }
 

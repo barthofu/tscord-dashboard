@@ -1,38 +1,58 @@
-import { LinkBox , Image, Text, HStack, VStack} from '@chakra-ui/react'
+import { LinkBox , Image, Text, HStack, VStack, Circle, Box} from '@chakra-ui/react'
 import Link from 'next/link'
 import React from 'react'
 
 import { generalConfig } from '@config/general'
+import { Card } from './Card'
 
 type BotCardProps = {
-    bot: SanitizededBotConfig
-    authorizedBots: { [key: string]: boolean | null }
+    bot: SanitizededBotConfig & { state: BotState }
 }
 
-export const BotCard: React.FC<BotCardProps> = ({ bot, authorizedBots }) => {
+export const BotCard: React.FC<BotCardProps> = ({ bot }) => {
 
-    const isAuthorized = authorizedBots[bot.id]
+    const isAuthorized = bot.state === 'authorized'
 
 	return (<>
         <LinkBox 
             as={Link} 
-            href={isAuthorized ? `/admin/${bot.id}/monitoring` : '#'}
-            cursor={isAuthorized ? 'pointer' : 'default'}   
+            href={isAuthorized ? `/admin/${bot.id}/monitoring` : ''}
         >
-            <VStack>
-                <Image 
-                    src={bot.iconUrl || generalConfig.dashboard.fallbackBotIconUrl} 
-                    alt='bot avatar'
-                    w='100px' h='100px'
-                    borderRadius='50%'
-                    {...(isAuthorized ? {} : { opacity: 0.5 })}
-                />
+            <Card
+                _hover={{
+                    transform: 'scale(1.05)',
+                }}
+                transition='.3s linear'
+                cursor={isAuthorized ? 'pointer' : 'default'}
+                width='unset'
+                flexDir='column'
+                p='2em'
+            >
+                <Box position='relative' mb='2em'>
+
+                    <Image 
+                        src={bot.iconUrl || generalConfig.dashboard.fallbackBotIconUrl} 
+                        alt='bot avatar'
+                        w='75px' h='75px'
+                        borderRadius='50%'
+                        {...(isAuthorized ? {} : { opacity: 0.3 })}
+                    >
+                    </Image>
+                    <Circle
+                        size='20px'
+                        bg='green.300'
+                        position='absolute'
+                        right='.15em' bottom='.15em'
+                    />
+
+                </Box>
                 <Text
                     {...(isAuthorized ? {} : { color: 'gray.500' })}
+                    fontWeight='bold'
                 >
                     {bot.name}
                 </Text>
-            </VStack>
+            </Card>
 
         </LinkBox>
     </>)

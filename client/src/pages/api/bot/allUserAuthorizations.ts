@@ -7,11 +7,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const { userId } = <{ userId: string }>req.query 
 
     if (!userId) {
-        res.status(401).send('Unauthorized')
+        res.status(400).send('Bad request: missing `userId` query parameter')
         return
     }
 
-    let authorizedBots = await getAuthorizedBotsForUser(userId)
+    let authorizedBots = await getAuthorizedBotsForUser(userId.replace(/"/g, ''))
+
+    console.log(authorizedBots)
 
     res.status(200).json(authorizedBots)
 }

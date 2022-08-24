@@ -1,7 +1,7 @@
 import { FetchError } from "../classes"
 import { getAbsoluteUrl } from "./url"
 
-export const fetcher = async (uri: string, botId: string, args?: { [key: string]: any }) => {
+export const fetcher = async (uri: string, botId?: string, args?: { [key: string]: any }) => {
 
     // stringify all values of the args object
     if (args) {
@@ -11,7 +11,7 @@ export const fetcher = async (uri: string, botId: string, args?: { [key: string]
     }
 
     // prepare the elements for the request
-    const url = new URL(getAbsoluteUrl(`/api/bot/${botId}${uri}`))
+    const url = new URL(getAbsoluteUrl(`/api/bot${botId ? `/${botId}` : ''}${uri}`))
     const query = {
         logIgnore: 'true',
         ...args

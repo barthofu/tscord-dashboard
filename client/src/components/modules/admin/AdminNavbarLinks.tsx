@@ -1,20 +1,17 @@
-import { Image, Button, Flex, Icon, Link, Menu, MenuButton, MenuItem, MenuList, Text, useColorMode, useColorModeValue } from '@chakra-ui/react'
+import { Image, Flex, Icon, Menu, MenuButton, MenuItem, MenuList, Text, useColorModeValue } from '@chakra-ui/react'
 import React from 'react'
-import { MdNotificationsNone, MdInfoOutline } from "react-icons/md"
-import { IoMdMoon, IoMdSunny } from "react-icons/io"
-import NextLink from 'next/link'
+import { MdNotificationsNone } from "react-icons/md"
 
 import { SidebarResponsive } from '@components/modules'
 import { sidebarConfig } from '@config/sidebar'
 import { useSession } from 'next-auth/react'
+import { ThemeToggler } from '@components/shared'
 
 type Props = {}
 
 export const AdminNavbarLinks: React.FC<Props> = () => {
 
     const { data: session } = useSession()
-
-    const { colorMode, toggleColorMode } = useColorMode()
 
     let menuBg = useColorModeValue("white", "gray.800");
     const navbarIcon = useColorModeValue("gray.400", "white");
@@ -94,24 +91,7 @@ export const AdminNavbarLinks: React.FC<Props> = () => {
 
             {/* Dark/Light mode toggler button */}
 
-            <Button
-                variant='no-hover'
-                bg='transparent'
-                p='0px'
-                minW='unset'
-                minH='unset'
-                h='18px'
-                w='max-content'
-                onClick={toggleColorMode}
-            >
-                <Icon
-                    me='10px'
-                    h='18px'
-                    w='18px'
-                    color={navbarIcon}
-                    as={colorMode === "light" ? IoMdMoon : IoMdSunny}
-                />
-            </Button>
+            <ThemeToggler />
 
             {/* User */}
 
