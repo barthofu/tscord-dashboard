@@ -24,7 +24,7 @@ export const authorizationCache: {
         for (const { id, apiUrl, apiToken } of botsConfig) {
     
             try {
-                const response = await fetch(new URL('/bot/devs', apiUrl), {
+                const response = await fetch(new URL('/bot/devs?logIgnore=true', apiUrl), {
                     headers: { 'Authorization': `Bearer ${apiToken}` }
                 })
        

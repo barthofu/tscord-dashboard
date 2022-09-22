@@ -62,10 +62,13 @@ const StatisticsPage: NextPage<AdminDashboardProps> = ({ bots, authorizedBots, c
         topCommands: useSWR('/stats/topCommands', url => fetcher(url, currentBot.id)),
         topGuilds: useSWR('/stats/topGuilds', url => fetcher(url, currentBot.id)),
         lastInteraction: useSWR('/stats/lastInteraction', url => fetcher(url, currentBot.id)),
+        lastGuildAdded: useSWR('/stats/lastGuildAdded', url => fetcher(url, currentBot.id)),
         commandsUsage: useSWR('/stats/commandsUsage', url => fetcher(url, currentBot.id, { numberOfDays: 7 })),
         usersActivity: useSWR('/stats/usersActivity', url => fetcher(url, currentBot.id)),
         usersAndGuilds: useSWR('/stats/usersAndGuilds', url => fetcher(url, currentBot.id, { numberOfDays: 7 })),
     }
+
+    console.log('[lastGuildAdded]', stats.lastGuildAdded)
 
     const commandsUsageSeries = [
         {
@@ -119,12 +122,12 @@ const StatisticsPage: NextPage<AdminDashboardProps> = ({ bots, authorizedBots, c
 				/>
                 <StatCard 
 					title='Last Interaction' 
-					value={stats.lastInteraction.data?.createdAt ? `${timeAgo.format(new Date(stats.lastInteraction.data?.createdAt).getTime(), 'mini')} ago` : ''}
+					value={stats.lastInteraction.data?.createdAt ? `${timeAgo.format(new Date(stats.lastInteraction.data.createdAt).getTime(), 'mini')} ago` : ''}
 					icon={<BiTimeFive />}
 				/>
                 <StatCard 
 					title='Last Guild added' 
-					value='1h ago'
+					value={stats.lastGuildAdded.data?.createdAt ? `${timeAgo.format(new Date(stats.lastGuildAdded.data.createdAt).getTime(), 'mini')} ago` : ''}
 					icon={<BiTimeFive />}
 				/>
 			</SimpleGrid>
@@ -203,7 +206,7 @@ const StatisticsPage: NextPage<AdminDashboardProps> = ({ bots, authorizedBots, c
                         <SimpleTable 
                             title='Top guilds'
                             columnsData={tables.topGuilds.columns} 
-                            tableData={stats.topGuilds.data}
+                            tableData={stats.topGuilds.data.slice(0, 10)}
                             cellsResolvers={tables.topGuilds.cellsResolvers}   
                         />
                     </>}
