@@ -6,6 +6,8 @@ declare global {
 
             PORT: string
             BASE_URL: string
+
+            WEBSOCKET_PROXY_URL: string
         }
     }
 }
