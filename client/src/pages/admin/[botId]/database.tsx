@@ -14,12 +14,7 @@ import { AdminDashboard } from '@components/layouts'
 import { fetcher, adminDashboardServerSideProps, successToast, errorToast } from '@core/utils/functions'
 import { Card, SimpleTable, StatCard } from '@components/shared'
 
-type Props = {
-    bots: SanitizededBotConfig[]
-    currentBot: SanitizededBotConfig
-}
-
-const DatabasePage: NextPage<Props> = ({ bots, currentBot }) => {
+const DatabasePage: NextPage<AdminDashboardProps> = ({ bots, authorizedBots, currentBot }) => {
 
     const [newBackupLoading, setNewBackupLoading] = useState<boolean>(false)
 
@@ -85,7 +80,7 @@ const DatabasePage: NextPage<Props> = ({ bots, currentBot }) => {
 
 	return (<>
 
-		<AdminDashboard breadcrumbs={['Database']} bots={bots} currentBot={currentBot}>
+		<AdminDashboard breadcrumbs={['Database']} bots={bots} authorizedBots={authorizedBots} currentBot={currentBot}>
 
 			<SimpleGrid
 				columns={[1, 1, 1, 1, 1, 3, 3]}

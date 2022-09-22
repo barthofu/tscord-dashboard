@@ -4,12 +4,17 @@ import React from 'react'
 
 type SignInProps = {}
 
+const signInHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    signIn('discord')
+}
+
 export const SignIn: React.FC<SignInProps> = () => {
 
 	return (<>
         <Button 
             size='lg'
-            onClick={(e) => { e.preventDefault(); signIn('discord') }}
+            onClick={signInHandler}
             className="btn-signin"
         >
             Sign in

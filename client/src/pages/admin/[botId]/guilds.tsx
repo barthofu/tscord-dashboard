@@ -13,11 +13,6 @@ import { SearchBar } from '@components/modules'
 import { FaSortAmountDownAlt } from 'react-icons/fa'
 import { IoIosArrowDown } from 'react-icons/io'
 
-type GuildsPageProps = {
-    bots: SanitizededBotConfig[]
-    currentBot: SanitizededBotConfig
-}
-
 const sortByOptions = [
     'members',
     'name',
@@ -25,7 +20,7 @@ const sortByOptions = [
 ] as const
 type SortByOptionsType = typeof sortByOptions[number]
 
-const GuildsPage: NextPage<GuildsPageProps> = ({ bots, currentBot }) => {
+const GuildsPage: NextPage<AdminDashboardProps> = ({ bots, authorizedBots, currentBot }) => {
 
     const toast = useToast()
 
@@ -65,7 +60,7 @@ const GuildsPage: NextPage<GuildsPageProps> = ({ bots, currentBot }) => {
 
 	return (<>
 
-		<AdminDashboard breadcrumbs={['Guilds']} bots={bots} currentBot={currentBot}>
+		<AdminDashboard breadcrumbs={['Guilds']} bots={bots} authorizedBots={authorizedBots} currentBot={currentBot}>
 
             <Flex w='100%' justifyContent='center'>
 

@@ -16,7 +16,7 @@ export const BotCard: React.FC<BotCardProps> = ({ bot }) => {
 	return (<>
         <LinkBox 
             as={Link} 
-            href={isAuthorized ? `/admin/${bot.id}/monitoring` : ''}
+            href={isAuthorized ? `/admin/${bot.id}/monitoring` : 'https://google.com'}
         >
             <Card
                 _hover={{

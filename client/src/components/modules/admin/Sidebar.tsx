@@ -1,12 +1,13 @@
-import { Box, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerOverlay, Flex, HStack, Icon, Link, Stack, Text, useColorModeValue, useDisclosure } from '@chakra-ui/react'
+import { Box, Image, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerOverlay, Flex, HStack, Icon, IconButton, Link, LinkBox, Menu, MenuButton, MenuItem, MenuList, Stack, Text, useColorModeValue, useDisclosure } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
-import Image from 'next/image'
 import React, { useContext } from 'react'
 import { IoMenuOutline } from "react-icons/io5"
 
 import { HSeparator } from '@components/shared'
 import { AdminDashboardContext } from '@core/contexts'
+import { BsChevronDown } from 'react-icons/bs'
+import { generalConfig } from '@config/general'
 
 type Props = {
     tabs: {
@@ -18,17 +19,59 @@ type Props = {
 
 const Logo: React.FC = () => {
 
-    const { currentBot } = useContext(AdminDashboardContext)
+    const { currentBot, authorizedBots } = useContext(AdminDashboardContext)
 
     return (
+
         <Flex align='center' direction='column'>
-            <Text
-                fontSize='2xl'
-                fontWeight='bold'
-                mb='1em'
-            >{currentBot.name}</Text>
-            <HSeparator mb='20px' w='80%'/>
-        </Flex>
+
+            <Menu>
+                <Flex 
+                    w='100%' px={10} mb='1em'
+                    direction='row'
+                    justify='space-between' align='center' 
+                >
+
+                        <Text
+                            fontSize='2xl'
+                            fontWeight='bold'
+                        >
+                            {currentBot.name}
+                        </Text>
+
+                        <MenuButton as={Box} 
+                            position='absolute' 
+                            w='80%' h='2.5em' 
+                            display='flex' justifyContent='space-between' 
+                            cursor='pointer'
+                        />
+                                
+                        <BsChevronDown />
+
+                        <MenuList position='absolute' top='100%'>
+                            {authorizedBots.authorized.map(bot => (
+                                <MenuItem key={bot.id}>
+                                    <LinkBox as={Link} href={`/admin/${bot.id}/monitoring`}>
+                                        <Flex>
+                                            <Image 
+                                                src={bot.iconUrl || generalConfig.dashboard.fallbackBotIconUrl} 
+                                                alt='bot avatar'
+                                                w='25px' h='25px'
+                                                borderRadius='50%'
+                                            />
+                                            <Text ml={3}>{bot.name}</Text>
+                                        </Flex>
+                                    </LinkBox>
+                                </MenuItem>
+                            ))}
+                        </MenuList>
+
+                </Flex>
+                    </Menu>
+
+                <HSeparator mb='20px' w='80%'/>
+            </Flex>
+
     )
 }
 

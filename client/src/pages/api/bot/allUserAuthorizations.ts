@@ -13,8 +13,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     let authorizedBots = await getAuthorizedBotsForUser(userId.replace(/"/g, ''))
 
-    console.log(authorizedBots)
-
     res.status(200).json(authorizedBots)
 }
 

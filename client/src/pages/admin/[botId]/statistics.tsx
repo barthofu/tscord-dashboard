@@ -55,12 +55,7 @@ const tables = {
     }
 }
 
-type Props = {
-    bots: SanitizededBotConfig[]
-    currentBot: SanitizededBotConfig
-}
-
-const StatisticsPage: NextPage<Props> = ({ bots, currentBot }) => {
+const StatisticsPage: NextPage<AdminDashboardProps> = ({ bots, authorizedBots, currentBot }) => {
 
     const stats = {
         totals: useSWR('/stats/totals', url => fetcher(url, currentBot.id)),
@@ -94,7 +89,7 @@ const StatisticsPage: NextPage<Props> = ({ bots, currentBot }) => {
 
 	return (<>
 
-		<AdminDashboard breadcrumbs={['Statistics']} bots={bots} currentBot={currentBot}>
+		<AdminDashboard breadcrumbs={['Statistics']} bots={bots} authorizedBots={authorizedBots} currentBot={currentBot}>
 
 			<SimpleGrid
 				columns={{ base: 2, md: 2, lg: 3, "2xl": 6 }}

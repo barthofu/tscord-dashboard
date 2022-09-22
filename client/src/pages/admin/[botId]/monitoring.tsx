@@ -13,12 +13,7 @@ import { useMonitoringData } from '@core/hooks'
 import { Logs } from '@components/modules'
 import { adminDashboardServerSideProps } from '@core/utils/functions'
 
-type Props = {
-    bots: SanitizededBotConfig[]
-	currentBot: SanitizededBotConfig
-}
-
-const MonitoringPage: NextPage<Props> = ({ bots, currentBot }) => {
+const MonitoringPage: NextPage<AdminDashboardProps> = ({ bots, authorizedBots, currentBot }) => {
 
 	const [loading, setLoading] = useState(true)
 	const { monitoringData, logs } = useMonitoringData()
@@ -35,7 +30,7 @@ const MonitoringPage: NextPage<Props> = ({ bots, currentBot }) => {
 
 	return (<>
 
-		<AdminDashboard breadcrumbs={['Monitoring']} bots={bots} currentBot={currentBot}>
+		<AdminDashboard breadcrumbs={['Monitoring']} bots={bots} authorizedBots={authorizedBots} currentBot={currentBot}>
 
 			{(monitoringData && monitoringData.length > 0) || loading ? <>
 			

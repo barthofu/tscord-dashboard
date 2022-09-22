@@ -8,15 +8,17 @@ import { AdminDashboardContext } from '@core/contexts'
 type Props = {
     breadcrumbs: string[]
     bots: SanitizededBotConfig[]
+    authorizedBots: BotsState
     currentBot: SanitizededBotConfig
     children: React.ReactNode
 }
 
-export const AdminDashboard: React.FC<Props> = ({ breadcrumbs, bots, currentBot, children }) => {
+export const AdminDashboard: React.FC<Props> = ({ breadcrumbs, bots, authorizedBots, currentBot, children }) => {
 
 	return (<>
         <AdminDashboardContext.Provider value={{
-            currentBot
+            currentBot,
+            authorizedBots
         }}>
             <Box>
                 <Sidebar tabs={sidebarConfig.tabs}/>
