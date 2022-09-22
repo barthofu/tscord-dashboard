@@ -1,11 +1,15 @@
-import { Image, Flex, Icon, Menu, MenuButton, MenuItem, MenuList, Text, useColorModeValue } from '@chakra-ui/react'
 import React from 'react'
-import { MdNotificationsNone } from "react-icons/md"
+import { Image, Flex, Menu, MenuButton, MenuItem, MenuList, Text, useColorModeValue } from '@chakra-ui/react'
+import { signOut, useSession } from 'next-auth/react'
 
 import { SidebarResponsive } from '@components/modules'
 import { sidebarConfig } from '@config/sidebar'
-import { useSession } from 'next-auth/react'
 import { ThemeToggler } from '@components/shared'
+
+const signOutHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    signOut()
+}
 
 type Props = {}
 
@@ -48,7 +52,7 @@ export const AdminNavbarLinks: React.FC<Props> = () => {
 
             {/* Notifications */}
 
-            <Menu>
+            {/* <Menu>
                 <MenuButton p='0px'>
                     <Icon
                         mt='6px'
@@ -87,11 +91,11 @@ export const AdminNavbarLinks: React.FC<Props> = () => {
                     </Flex>
 
                 </MenuList>
-            </Menu>
+            </Menu> */}
 
             {/* Dark/Light mode toggler button */}
 
-            <ThemeToggler />
+            <ThemeToggler mx='1em !important'/>
 
             {/* User */}
 
@@ -136,18 +140,10 @@ export const AdminNavbarLinks: React.FC<Props> = () => {
                         <MenuItem
                             _hover={{ bg: "none" }}
                             _focus={{ bg: "none" }}
-                            borderRadius='8px'
-                            px='14px'
-                        >
-                            <Text fontSize='sm'>Profile Settings</Text>
-                        </MenuItem>
-
-                        <MenuItem
-                            _hover={{ bg: "none" }}
-                            _focus={{ bg: "none" }}
                             color='red.400'
                             borderRadius='8px'
                             px='14px'
+                            onClick={signOutHandler}
                         >
                             <Text fontSize='sm'>Log out</Text>
                         </MenuItem>
