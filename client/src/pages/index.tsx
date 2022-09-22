@@ -4,12 +4,18 @@ import { ThemeToggler } from '@components/shared'
 import type { NextPage } from 'next'
 
 import { useSession } from 'next-auth/react'
+import Head from 'next/head'
 
 const HomePage: NextPage = () => {
 
 	const { data: session } = useSession()
 
 	return (<>
+
+		<Head>
+			<title>Dashboard</title>
+			<link rel='icon' href='/assets/images/tscord-icon.png'/>
+		</Head>
 
 		<Flex w='100%' minH='100vh' justifyContent='center'>
 

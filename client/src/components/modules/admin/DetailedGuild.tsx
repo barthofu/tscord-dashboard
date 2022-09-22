@@ -1,4 +1,4 @@
-import { Image, Text, HStack, Modal, ModalContent, ModalHeader, ModalOverlay, useToast, Tag, TagLeftIcon, TagLabel, ModalCloseButton, ModalBody, VStack, Wrap, Circle, useColorModeValue, ModalFooter, Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useDisclosure } from '@chakra-ui/react'
+import { Image, Text, HStack, Modal, ModalContent, ModalHeader, ModalOverlay, useToast, Tag, TagLeftIcon, TagLabel, ModalCloseButton, ModalBody, VStack, Wrap, Circle, useColorModeValue, ModalFooter, Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useDisclosure, Stack } from '@chakra-ui/react'
 import React, { useContext } from 'react'
 import { mutate } from 'swr'
 import TimeAgo from 'javascript-time-ago'
@@ -64,22 +64,25 @@ export const DetailedGuild: React.FC<DetailedGuildProps> = ({ isOpen, onClose, g
     return (<>
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay />
-            <ModalContent position='relative' minH='500px' minW='800px' w='50vw'>
+            <ModalContent position='relative' minH='500px' minW={['unset', 'unset', 'unset', '800px', '800px', '800px']} w={['90vw', '90vw', '90w', '50vw', '50vw', '50vw']}>
 
                 <ModalHeader>
 
-                    <HStack spacing='1em' zIndex="1" display='flex' alignItems='center'>
-                        <Image
-                            src={iconURL}
-                            alt={name}
-                            w='100px'
-                            h='100px'
-                            borderRadius="50%"
-                        />
+                    <Stack direction={['column', 'column', 'column', 'row', 'row', 'row']} spacing='1em' zIndex="1" display='flex' alignItems='center'>
 
-                        <Text as="span" fontSize="3xl" fontWeight="bold">
-                            {name}
-                        </Text>
+                        <HStack spacing='1em'>
+                            <Image
+                                src={iconURL}
+                                alt={name}
+                                w='100px'
+                                h='100px'
+                                borderRadius="50%"
+                            />
+
+                            <Text as="span" fontSize="3xl" fontWeight="bold">
+                                {name}
+                            </Text>
+                        </HStack>
 
                         <HStack spacing='1em' zIndex="1" display='flex' alignItems='center'>
                             <Tag as="li">
@@ -87,7 +90,7 @@ export const DetailedGuild: React.FC<DetailedGuildProps> = ({ isOpen, onClose, g
                                 <TagLabel>{memberCount} members</TagLabel>
                             </Tag>
                         </HStack>
-                    </HStack>
+                    </Stack>
 
                     <ModalCloseButton _focusVisible={{ display: 'none' }}></ModalCloseButton>
                     

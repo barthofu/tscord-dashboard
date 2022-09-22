@@ -4,6 +4,8 @@ import { Box } from '@chakra-ui/react'
 import { Sidebar, AdminNavbar } from '@components/modules'
 import { sidebarConfig } from '@config/sidebar'
 import { AdminDashboardContext } from '@core/contexts'
+import Head from 'next/head'
+import { generalConfig } from '@config/general'
 
 type Props = {
     breadcrumbs: string[]
@@ -16,6 +18,12 @@ type Props = {
 export const AdminDashboard: React.FC<Props> = ({ breadcrumbs, bots, authorizedBots, currentBot, children }) => {
 
 	return (<>
+
+        <Head>
+            <title>Dashboard - {currentBot.name}</title>
+            <link rel='icon' href={currentBot.iconUrl || generalConfig.dashboard.fallbackBotIconUrl} />
+        </Head>
+
         <AdminDashboardContext.Provider value={{
             currentBot,
             authorizedBots
