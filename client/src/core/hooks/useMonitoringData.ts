@@ -7,7 +7,7 @@ export const useMonitoringData = () => {
 
     const { currentBot } = useContext(AdminDashboardContext)
 
-    const { webSocket, bots } = useWebSocket(process.env['WEBSOCKET_PROXY_URL'])
+    const { webSocket, bots } = useWebSocket(process.env['NEXT_PUBLIC_WEBSOCKET_PROXY_URL'])
 
     const [monitoringData, setMonitoringData] = useState<MonitoringData[] | null>(null)
     const [logs, setLogs] = useState<LogsData[] | null>(null)

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Box, Flex, SimpleGrid, Text } from '@chakra-ui/react'
+import { useEffect, useRef, useState } from 'react'
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Flex, SimpleGrid, Spinner, Text, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react'
 import type { GetServerSideProps, NextPage } from 'next'
 import { unstable_getServerSession } from 'next-auth/next'
 import { FaPowerOff, FaTools } from 'react-icons/fa'
@@ -11,15 +11,25 @@ import { AdminDashboard } from '@components/layouts'
 import { Card, StatCard, CircularProgressBar, LineChart, ChartCard, SkeletonLayout } from '@components/shared'
 import { useMonitoringData } from '@core/hooks'
 import { Logs } from '@components/modules'
-import { adminDashboardServerSideProps } from '@core/utils/functions'
+import { adminDashboardServerSideProps, errorToast, successToast } from '@core/utils/functions'
 
 const MonitoringPage: NextPage<AdminDashboardProps> = ({ bots, authorizedBots, currentBot }) => {
 
 	const [loading, setLoading] = useState(true)
+	const [maintenanceLoading, setMaintenanceLoading] = useState(false)
+
 	const { monitoringData, logs } = useMonitoringData()
 
+	const { isOpen: isConfirmOpen, onOpen: onConfirmOpen, onClose: onConfirmClose } = useDisclosure()
+    const cancelConfirmRef = useRef(null)
+
+    const toast = useToast()
+
 	useEffect(() => {
+
 		if (monitoringData && loading) setLoading(false)
+		if (maintenanceLoading) setMaintenanceLoading(false)
+	
 	}, [monitoringData, loading])
 
 	setTimeout(() => {
@@ -27,6 +37,29 @@ const MonitoringPage: NextPage<AdminDashboardProps> = ({ bots, authorizedBots, c
 	}, 10 * 1000)
 
 	const getLatestData = () => monitoringData?.slice(-1)[0]
+	
+	const toggleMaintenance = (newState: boolean) => {
+		
+		fetch(`/api/bot/${currentBot.id}/bot/maintenance`, {
+            method: 'POST',
+			body: JSON.stringify({
+				maintenance: newState
+			})
+        })
+        .then(res => {
+
+            if (res.status === 200) {
+				successToast(toast, `Maintenance ${newState ? 'enabled': 'disabled'}`)
+				setMaintenanceLoading(true)
+			}
+            else throw new Error()
+        })
+        .catch(() => {
+            errorToast(toast, 'Error', `An error occured`)
+        })
+	}
+
+	const cardHoverBg = useColorModeValue('green.100', 'green.900')
 
 	return (<>
 
@@ -52,10 +85,21 @@ const MonitoringPage: NextPage<AdminDashboardProps> = ({ bots, authorizedBots, c
 							</Flex>
 						</Card>
 
-						<Card>
-							<Text fontSize='4xl' color={getLatestData()?.botStatus.maintenance ? 'green.500' : 'gray.500'}>
-								<FaTools />
-							</Text>
+						<Card 
+							onClick={() => onConfirmOpen()} 
+							cursor='pointer'
+							transition='0.2s linear'
+							_hover={{
+								bg: cardHoverBg
+							}} 
+						>
+							{maintenanceLoading ? 
+								<Spinner /> 
+								:
+								<Text fontSize='4xl' color={getLatestData()?.botStatus.maintenance ? 'green.500' : 'gray.500'}>
+									<FaTools />
+								</Text>
+							}
 							<Flex direction='column' align='center' ml='2em'>
 								<Text>Maintenance mode</Text>
 								<Text fontSize='2xl' fontWeight='bold' color={getLatestData()?.botStatus.maintenance ? 'green.500' : 'gray.500'}>{getLatestData()?.botStatus.maintenance ? 'enabled' : 'disabled'}</Text>
@@ -156,6 +200,41 @@ const MonitoringPage: NextPage<AdminDashboardProps> = ({ bots, authorizedBots, c
 				
 				</SimpleGrid>
 
+				<AlertDialog
+					isOpen={isConfirmOpen}
+					leastDestructiveRef={cancelConfirmRef}
+					onClose={onConfirmClose}
+				>
+					<AlertDialogOverlay>
+						<AlertDialogContent>
+							<AlertDialogHeader fontSize='lg' fontWeight='bold'>
+								Toggle maintenance mode
+							</AlertDialogHeader>
+
+							<AlertDialogBody>
+								Are you sure to <em>{getLatestData()?.botStatus.maintenance ? 'disable' : 'enable'}</em> maintenance mode?
+							</AlertDialogBody>
+
+							<AlertDialogFooter>
+								<Button ref={cancelConfirmRef} onClick={onConfirmClose}>
+									Cancel
+								</Button>
+								<Button colorScheme='red' onClick={() => {
+									const currentMaintenance = getLatestData()?.botStatus.maintenance
+									if (currentMaintenance !== undefined) {
+										toggleMaintenance(!currentMaintenance)
+									} else {
+										errorToast(toast, 'Error', `An error occured, retry later`)
+									}
+									onConfirmClose()
+								}} ml={3}>
+									Confirm
+								</Button>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialogOverlay>
+				</AlertDialog>
+
 			</> 
 			: 
 			<>
@@ -168,6 +247,8 @@ const MonitoringPage: NextPage<AdminDashboardProps> = ({ bots, authorizedBots, c
 						<Text fontSize='2xl' fontWeight='bold' color='red.500'>offline</Text>
 					</Flex>
 				</Card>
+
+				
 			</>}
 			
 			

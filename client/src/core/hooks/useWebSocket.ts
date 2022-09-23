@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 import io, { Socket } from 'socket.io-client'
 
 export const useWebSocket = (url: string) => {
+
+	console.log('useWebSocket', url)
 		
 	const [webSocket, setWebSocket] = useState<Socket | null>(null)
 	const [bots, setBots] = useState<BotsList>([])
