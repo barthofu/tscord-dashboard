@@ -59,12 +59,12 @@ const StatisticsPage: NextPage<AdminDashboardProps> = ({ bots, authorizedBots, c
 
     const stats = {
         totals: useSWR('/stats/totals', url => fetcher(url, currentBot.id)),
-        topCommands: useSWR('/stats/topCommands', url => fetcher(url, currentBot.id)),
-        topGuilds: useSWR('/stats/topGuilds', url => fetcher(url, currentBot.id)),
-        lastInteraction: useSWR('/stats/lastInteraction', url => fetcher(url, currentBot.id)),
-        lastGuildAdded: useSWR('/stats/lastGuildAdded', url => fetcher(url, currentBot.id)),
-        commandsUsage: useSWR('/stats/commandsUsage', url => fetcher(url, currentBot.id, { numberOfDays: 7 })),
-        usersActivity: useSWR('/stats/usersActivity', url => fetcher(url, currentBot.id)),
+        topCommands: useSWR('/stats/commands/top', url => fetcher(url, currentBot.id)),
+        topGuilds: useSWR('/stats/guilds/top', url => fetcher(url, currentBot.id)),
+        lastInteraction: useSWR('/stats/interaction/last', url => fetcher(url, currentBot.id)),
+        lastGuildAdded: useSWR('/stats/guilds/last', url => fetcher(url, currentBot.id)),
+        commandsUsage: useSWR('/stats/commands/usage', url => fetcher(url, currentBot.id, { numberOfDays: 7 })),
+        usersActivity: useSWR('/stats/users/activity', url => fetcher(url, currentBot.id)),
         usersAndGuilds: useSWR('/stats/usersAndGuilds', url => fetcher(url, currentBot.id, { numberOfDays: 7 })),
     }
 

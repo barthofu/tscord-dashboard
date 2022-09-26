@@ -20,7 +20,7 @@ const DatabasePage: NextPage<AdminDashboardProps> = ({ bots, authorizedBots, cur
 
     const toast = useToast()
 
-    const backupList = useSWR('/database/backup/list', url => fetcher(url, currentBot.id))
+    const backupList = useSWR('/database/backups', url => fetcher(url, currentBot.id))
     const databaseSize = useSWR('/database/size', url => fetcher(url, currentBot.id))
     const { mutate } = useSWRConfig()
 
@@ -65,7 +65,7 @@ const DatabasePage: NextPage<AdminDashboardProps> = ({ bots, authorizedBots, cur
             .then(res => {
 
                 if (res.status === 200) {
-                    mutate('/database/backup/list')
+                    mutate('/database/backups')
                     setNewBackupLoading(false)
                     successToast(toast, 'Backup created successfuly')
                 } else {
