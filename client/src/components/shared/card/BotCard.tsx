@@ -16,7 +16,7 @@ export const BotCard: React.FC<BotCardProps> = ({ bot }) => {
 	return (<>
         <LinkBox 
             as={Link} 
-            href={isAuthorized ? `/admin/${bot.id}/monitoring` : 'https://google.com'}
+            href={isAuthorized ? `/admin/${bot.id}/monitoring` : ''}
         >
             <Card
                 _hover={{
@@ -40,7 +40,7 @@ export const BotCard: React.FC<BotCardProps> = ({ bot }) => {
                     </Image>
                     <Circle
                         size='20px'
-                        bg='green.300'
+                        {...(isAuthorized ? { bg: 'green.300' } : { bg: 'red.500' })}
                         position='absolute'
                         right='.15em' bottom='.15em'
                     />
