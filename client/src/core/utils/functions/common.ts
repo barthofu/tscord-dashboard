@@ -16,7 +16,7 @@ export const adminDashboardServerSideProps = async (botId: string, session: Sess
     
     try {
 
-        const response = await fetch(getAbsoluteUrl(`/api/bot/allUserAuthorizations?userId=${session.userId}`, req), { method: 'GET' })
+        const response = await fetch(getAbsoluteUrl(`/api/bot/allUserAuthorizations?userId=${session.userId}`), { method: 'GET' })
         if (!response.ok) throw new Error()
 
         const authorizedBots = await response.json() as BotsState
