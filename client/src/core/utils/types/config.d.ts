@@ -1,10 +1,9 @@
 type BotConfig = {
-    id: string
     name: string
     iconUrl?: string
+    id: string
     apiUrl: string
     apiToken: string
-    secret: string
 }
 
 type BotsConfig = BotConfig[]

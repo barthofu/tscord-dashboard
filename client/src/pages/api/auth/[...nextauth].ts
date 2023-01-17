@@ -6,8 +6,8 @@ export const authOptions: NextAuthOptions = {
 
     providers: [
         DiscordProvider({
-            clientId: botsConfig[0].id,
-            clientSecret: botsConfig[0].secret
+            clientId: process.env['DISCORD_AUTH_ID'],
+            clientSecret: process.env['DISCORD_AUTH_SECRET'],
         })
     ],
     session: { strategy: "jwt" },
