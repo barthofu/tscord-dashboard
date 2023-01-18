@@ -1,4 +1,4 @@
-import { Heading } from '@chakra-ui/react'
+import { Heading, Stack } from '@chakra-ui/react'
 import { BotCard } from '@components/shared'
 import { fetcher } from '@core/utils/functions'
 import React from 'react'
@@ -19,14 +19,18 @@ export const AvailableBots: React.FC<AvailableBotsProps> = ({ userId }) => {
     const bots = useSWR<BotsState>('/allUserAuthorizations', url => fetcher(url, undefined, { userId: userId }))
 
     return (<>
+
         <Heading as='h2' mt='2em' mb='1em'>Bots</Heading>
-        {bots.data && <>            
-            {processBotList(bots.data).map((bot: any) => (<>
-                <BotCard 
-                    key={bot.id}
-                    bot={bot}
-                />
-            </>))}
-        </>}
+
+        <Stack spacing={5} direction={['column', 'column', 'row', 'row', 'row', 'row']}>
+            {bots.data && <>            
+                {processBotList(bots.data).map((bot: any) => (<>
+                    <BotCard 
+                        key={bot.id}
+                        bot={bot}
+                    />
+                </>))}
+            </>}
+        </Stack>
     </>)
 }
