@@ -7,8 +7,6 @@ declare global {
             PORT: string
             BASE_URL: string
 
-            NEXT_PUBLIC_WEBSOCKET_PROXY_URL: string
-
             NEXTAUTH_SECRET: string
             NEXTAUTH_URL: string
             DISCORD_AUTH_ID: string

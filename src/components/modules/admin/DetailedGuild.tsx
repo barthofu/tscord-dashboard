@@ -130,7 +130,7 @@ export const DetailedGuild: React.FC<DetailedGuildProps> = ({ isOpen, onClose, g
 
                 <ModalFooter>
                     <Button colorScheme='red' mr={3} onClick={() => onConfirmOpen()}>
-                        Delete guild
+                        Leave guild
                     </Button>
                     <Button colorScheme='blue' mr={3} onClick={() => getInviteLink()}>
                         Invite link
@@ -149,7 +149,7 @@ export const DetailedGuild: React.FC<DetailedGuildProps> = ({ isOpen, onClose, g
             <AlertDialogOverlay>
                 <AlertDialogContent>
                     <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                        Delete Guild
+                        Leave Guild
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
@@ -164,7 +164,7 @@ export const DetailedGuild: React.FC<DetailedGuildProps> = ({ isOpen, onClose, g
                             deleteGuild()
                             onConfirmClose()
                         }} ml={3}>
-                            Delete
+                            Leave
                         </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>
