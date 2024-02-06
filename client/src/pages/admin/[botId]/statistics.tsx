@@ -68,8 +68,6 @@ const StatisticsPage: NextPage<AdminDashboardProps> = ({ bots, authorizedBots, c
         usersAndGuilds: useSWR('/stats/usersAndGuilds', url => fetcher(url, currentBot.id, { numberOfDays: 7 })),
     }
 
-    console.log('[lastGuildAdded]', stats.lastGuildAdded)
-
     const commandsUsageSeries = [
         {
             name: "Simple commands",
