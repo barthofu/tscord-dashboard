@@ -21,6 +21,14 @@ import { fetcher, adminDashboardServerSideProps } from '@core/utils/functions'
 TimeAgo.addLocale(en)
 const timeAgo = new TimeAgo('en-US')
 
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+
+    const { botId } = ctx.query
+    const session = await unstable_getServerSession(ctx.req, ctx.res, authOptions)
+
+    return await adminDashboardServerSideProps(botId as string, session, ctx.req)
+}
+
 const typeResolver = {
     'CHAT_INPUT_COMMAND_INTERACTION': 'Command',
     'USER_CONTEXT_MENU_COMMAND_INTERACTION': 'Context Menu',
@@ -235,14 +243,6 @@ const StatisticsPage: NextPage<AdminDashboardProps> = ({ bots, authorizedBots, c
 			
 		</AdminDashboard>
 	</>)
-}
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-
-    const { botId } = ctx.query
-    const session = await unstable_getServerSession(ctx.req, ctx.res, authOptions)
-
-    return await adminDashboardServerSideProps(botId as string, session, ctx.req)
 }
 
 export default StatisticsPage

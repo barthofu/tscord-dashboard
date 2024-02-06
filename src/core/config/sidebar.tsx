@@ -1,9 +1,8 @@
 import React from "react"
 
 import { AiFillPieChart } from 'react-icons/ai'
-import { FaUserFriends } from 'react-icons/fa'
-import { SiClubhouse } from 'react-icons/si'
 import { BiStats } from 'react-icons/bi'
+import { SiClubhouse } from 'react-icons/si'
 import { TbDatabase } from 'react-icons/tb'
 
 type SidebarConfigType = {
