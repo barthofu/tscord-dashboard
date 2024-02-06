@@ -16,7 +16,7 @@ const processBotList = (bots: BotsState) => {
 
 export const AvailableBots: React.FC<AvailableBotsProps> = ({ userId }) => {
 
-    const bots = useSWR<BotsState>('/allUserAuthorizations', url => fetcher(url, undefined, { userId: userId }))
+    const bots = useSWR<BotsState>('/allUserAuthorizations', (url: string) => fetcher(url, undefined, { userId: userId }))
 
     return (<>
 

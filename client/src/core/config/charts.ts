@@ -140,25 +140,10 @@ export const lineChartOptions: ApexOptions = {
         toolbar: {
             show: false
         },
-        dropShadow: {
-            enabled: true,
-            top: 5,
-            left: 0,
-            blur: 5,
-            opacity: 0.1,
-            color: '#000000',
-        },
     },
     colors: colors,
     markers: {
         size: 0,
-        fillOpacity: 1,
-        discrete: [],
-        shape: 'circle',
-        radius: 2,
-        offsetX: 0,
-        offsetY: 0,
-        showNullDataPoints: true,
     },
     tooltip: {
         theme: 'dark',
@@ -168,7 +153,7 @@ export const lineChartOptions: ApexOptions = {
     },
     stroke: {
         curve: 'smooth',
-		width: 4,
+		width: 2,
     },
     yaxis: {
         min: 0,
