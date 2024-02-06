@@ -6,10 +6,12 @@ import reactStringReplace from 'react-string-replace'
 import { Card} from '@components/shared'
 
 type LogsProps = {
-    logs: LogsData[]
+    logs: string[]
 }
 
 export const Logs: React.FC<LogsProps> = ({ logs }) => {
+
+    const reversedLogs = logs.slice().reverse()
 
 	return (<>
         <Card
@@ -29,15 +31,15 @@ export const Logs: React.FC<LogsProps> = ({ logs }) => {
 
                 <Card 
                     bg={useColorModeValue('secondaryGray.300', 'gray.800')} 
-                    flexDir='column' 
+                    flexDir='column-reverse' 
                     alignItems='flex-start'
-                    justifyContent='flex-end' 
+                    justifyContent='flex-start' 
                     h='550px' 
-                    overflowY='auto'
+                    overflowY='scroll'
                 >
-                    {logs.map((log, index) => {
+                    {reversedLogs.map((log, index) => {
 
-                        const message = stripAnsi(log.message)
+                        const message = stripAnsi(log)
                         let textElement = reactStringReplace(message, /\n/g, (match, i, o) => <br />)
                         // textElement = reactStringReplace(textElement, /\t/g, (match, i, o) => <span style={{ marginLeft: '10px' }} />)
 

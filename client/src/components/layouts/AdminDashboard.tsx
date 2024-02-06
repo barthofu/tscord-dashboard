@@ -12,10 +12,11 @@ type Props = {
     bots: SanitizededBotConfig[]
     authorizedBots: BotsState
     currentBot: SanitizededBotConfig
+    fixedHeight?: boolean
     children: React.ReactNode
 }
 
-export const AdminDashboard: React.FC<Props> = ({ breadcrumbs, bots, authorizedBots, currentBot, children }) => {
+export const AdminDashboard: React.FC<Props> = ({ breadcrumbs, bots, authorizedBots, currentBot, fixedHeight, children }) => {
 
 	return (<>
 
@@ -28,7 +29,10 @@ export const AdminDashboard: React.FC<Props> = ({ breadcrumbs, bots, authorizedB
             currentBot,
             authorizedBots
         }}>
-            <Box>
+            <Box {...(fixedHeight ? {
+                maxH: '100vh',
+                overflow: 'hidden'
+            } : {} )}>
                 <Sidebar tabs={sidebarConfig.tabs}/>
                 <Box
                     float='right'
