@@ -14,14 +14,13 @@ This [Next.js](https://nextjs.org/) web dashboard application will take the mana
 - Nice-looking UI
 
 ## Configuration
-Before anything else, head over to your **bot** config and enable the API server and Websocket client.
+Before anything else, head over to your **bot** config and enable the API server.
 
-### Client
-1. Copy the `client/.env.example`
+1. Copy the `.env.example`
 2. Fill in all the information
     2bis. You can find your bot's secret in your [Discord Developer Portal](https://discord.com/developers/applications)
 3. Rename the file `.env`
-4. Go to the `client/src/core/config/bots.ts`
+4. Go to the `src/core/config/bots.ts` file
 5. Fill in your bot info (here is a sample)
     ```ts
         {
@@ -33,21 +32,6 @@ Before anything else, head over to your **bot** config and enable the API server
             secret: process.env['TSCORD_SECRET']!
         }
     ```
-    5bis. As you may have noticed, the bots config is an array, so you can setup multiple bots!
-6. Run `npm run build` in the `client` folder
+    5bis. As you may have noticed, the bots config is an array, so you can setup **multiple bots**!
+6. Run `npm run build`
 7. Then, run `npm run start`
-
-### Websocket
-
-In order to make the **Monitoring** dashboard page working, you must spin up the Websocket proxy server on which your bot *and* your Next.js app will connect.
-
-1. Edit the `proxy/.env.example` at your convenance
-2. Rename it `.env`
-3. Put the correct websocket url to access the proxy server both in the Next.js app and TSCord bot env files
-4. Go to the `proxy` folder
-5. Run `npm run build`
-6. Run `npm run start`
-7. Now, if your bot is running in parallel, you should see in the console: `New client connected: <name_of_your_bot>`
-
-## Todo 
-- [ ] Toggle maintenance mode
