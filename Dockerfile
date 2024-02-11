@@ -1,7 +1,7 @@
 # source: https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
 
 # Install dependencies only when needed
-FROM node:16-alpine as deps
+FROM node:20-alpine as deps
 
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
@@ -9,7 +9,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 # Rebuild the source code only when needed
-FROM node:16-alpine as builder
+FROM node:20-alpine as builder
 
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -18,7 +18,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm run build
 
 # Production image, copy all the files and run next
-FROM node:16-alpine as runner
+FROM node:20-alpine as runner
 WORKDIR /app
 
 ENV NODE_ENV production
