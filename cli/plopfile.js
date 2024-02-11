@@ -3,7 +3,7 @@
  *
  * https://github.com/amwmedia/plop
  */
-module.exports = function (plop) {
+module.exports = async function (plop) {
 
-    plop.load('./generators/component.js')
+    await plop.load('./generators/component.js')
 }

@@ -1,63 +1,52 @@
 {
   "name": "tscord-dashboard",
-  "version": "0.1.0",
+  "version": "2.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "plop": "plop --plopfile ./cli/plopfile.js"
+    "generate": "plop --plopfile ./cli/plopfile.js"
   },
   "dependencies": {
-    "@chakra-ui/color-mode": "^2.2.0",
-    "@chakra-ui/react": "^2.2.1",
+    "@chakra-ui/react": "^2.8.2",
     "@chakra-ui/theme-tools": "^2.1.2",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@fontsource/dm-sans": "^5.0.18",
     "apexcharts": "^3.45.2",
     "axios": "^1.6.7",
-    "chakra-ui-markdown-renderer": "^4.1.0",
     "color-alpha": "^1.1.3",
     "dayjs": "^1.11.10",
     "framer-motion": "^11.0.3",
-    "gray-matter": "^4.0.3",
     "javascript-time-ago": "^2.5.9",
-    "jotai": "^2.6.4",
     "lodash": "^4.17.21",
-    "next": "^12.3.4",
+    "next": "^14.1.0",
     "next-auth": "^4.24.5",
     "react": "18.2.0",
     "react-apexcharts": "^1.4.1",
-    "react-countup": "^6.5.0",
     "react-dom": "18.2.0",
     "react-icons": "^5.0.1",
-    "react-intersection-observer": "^9.7.0",
-    "react-markdown": "^8.0.7",
-    "react-parallax": "^3.5.1",
-    "react-scroll-parallax": "^3.4.5",
+    "react-intersection-observer": "^9.8.0",
     "react-string-replace": "^1.1.1",
     "react-table": "^7.8.0",
-    "rehype-raw": "^7.0.0",
-    "remark-gfm": "^4.0.0",
     "sass": "^1.70.0",
     "strip-ansi": "^7.1.0",
-    "swr": "^2.2.4",
-    "tsyringe": "^4.8.0"
+    "swr": "^2.2.4"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.202",
-    "@types/node": "18.19.14",
+    "@types/node": "20.11.17",
     "@types/react": "18.2.55",
-    "@types/react-dom": "18.2.18",
+    "@types/react-dom": "18.2.19",
     "@types/react-table": "^7.7.19",
-    "eslint": "8.47.0",
-    "eslint-config-next": "12.3.4",
-    "plop": "^2.7.6",
-    "typescript": "5.1.6"
+    "eslint": "8.56.0",
+    "eslint-config-next": "14.1.0",
+    "plop": "^4.0.1",
+    "typescript": "5.3.3"
   },
   "volta": {
-    "node": "16.17.0"
+    "node": "20.11.0"
   }
 }
