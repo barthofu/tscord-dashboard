@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename)
 const nextConfig = {
 
 	reactStrictMode: true,
-    output: standalone,
+    output: 'standalone',
 
 	sassOptions: {
         includePaths: [
